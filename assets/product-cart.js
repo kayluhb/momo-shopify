@@ -1,7 +1,12 @@
-import { morphSection, sectionRenderer } from '@theme/section-renderer';
+import { sectionRenderer } from '@theme/section-renderer';
 import { fetchConfig, onDocumentReady } from '@theme/utilities';
 import { CartAddEvent, CartErrorEvent } from '@theme/events';
-import { getCartDrawerSectionId, getCartSectionsParam } from '@theme/cart-sections';
+import {
+  getCartDrawerSectionId,
+  getCartSectionsParam,
+  getCartSectionsUrl,
+  morphCartSectionsFromResponse,
+} from '@theme/cart-sections';
 
 /**
  * @param {HTMLFormElement} form
@@ -39,16 +44,43 @@ function clearFormMessage(form) {
 }
 
 /**
- * @param {Record<string, string | null> | undefined} sections
+ * @param {unknown} data
+ * @returns {boolean}
  */
-async function morphCartSections(sections) {
-  if (!sections) return;
+function isCartAddErrorResponse(data) {
+  if (!data || typeof data !== 'object') return true;
 
-  const updates = Object.entries(sections)
-    .filter((entry) => entry[1])
-    .map(([sectionId, html]) => morphSection(sectionId, /** @type {string} */ (html)));
+  const record = /** @type {Record<string, unknown>} */ (data);
+  const status = record.status;
 
-  await Promise.all(updates);
+  if (typeof status === 'string') return true;
+  if (typeof status === 'number' && status >= 400) return true;
+
+  return false;
+}
+
+/**
+ * @param {unknown} data
+ * @returns {number}
+ */
+function getCartItemCount(data) {
+  if (!data || typeof data !== 'object') return 0;
+
+  const record = /** @type {Record<string, unknown>} */ (data);
+
+  if (typeof record.item_count === 'number') {
+    return record.item_count;
+  }
+
+  if (Array.isArray(record.items)) {
+    return record.items.reduce((total, item) => {
+      if (!item || typeof item !== 'object') return total;
+      const quantity = /** @type {{ quantity?: number }} */ (item).quantity;
+      return total + (quantity || 0);
+    }, 0);
+  }
+
+  return 0;
 }
 
 /**
@@ -58,14 +90,17 @@ async function refreshCartDrawerIfNeeded(data) {
   const drawer = document.querySelector('cart-drawer-component');
   if (!drawer?.querySelector('.cart-empty')) return;
 
-  const itemCount = Number(data.item_count);
-  const hasItems = itemCount > 0 || (Array.isArray(data.items) && data.items.length > 0);
-  if (!hasItems) return;
+  const itemCount = getCartItemCount(data);
+  if (itemCount <= 0) return;
 
   const sectionId = getCartDrawerSectionId();
   if (!sectionId) return;
 
-  await sectionRenderer.renderSection(sectionId, { cache: false });
+  try {
+    await sectionRenderer.renderSection(sectionId, { cache: false });
+  } catch (error) {
+    console.warn('Could not refresh cart drawer after cart add', error);
+  }
 }
 
 /**
@@ -116,7 +151,7 @@ function buildCartAddPayload(form) {
   const sections = getCartSectionsParam();
   if (sections) {
     payload.sections = sections;
-    payload.sections_url = window.location.pathname;
+    payload.sections_url = getCartSectionsUrl();
   }
 
   return payload;
@@ -180,11 +215,20 @@ async function handleProductFormSubmit(form) {
 
     const data = await response.json();
 
-    if (data.status) {
-      const message = data.description || data.message || Theme.translations.add_to_cart_error;
+    if (isCartAddErrorResponse(data)) {
+      const record = /** @type {Record<string, unknown>} */ (data);
+      const message =
+        (typeof record.description === 'string' && record.description) ||
+        (typeof record.message === 'string' && record.message) ||
+        Theme.translations.add_to_cart_error;
       showFormMessage(form, message);
       form.dispatchEvent(
-        new CartErrorEvent(form.id || '', data.message, data.description, data.errors)
+        new CartErrorEvent(
+          form.id || '',
+          typeof record.message === 'string' ? record.message : '',
+          typeof record.description === 'string' ? record.description : '',
+          record.errors
+        )
       );
       form.dispatchEvent(
         new CartAddEvent({}, form.id || '', {
@@ -196,17 +240,32 @@ async function handleProductFormSubmit(form) {
       return;
     }
 
-    await morphCartSections(data.sections);
+    const itemCount = getCartItemCount(data);
+
+    await morphCartSectionsFromResponse(
+      data && typeof data === 'object' && 'sections' in data
+        ? /** @type {Record<string, string>} */ (data).sections
+        : undefined,
+      getCartDrawerSectionId() ?? undefined
+    );
     await refreshCartDrawerIfNeeded(data);
 
     showFormMessage(form, Theme.translations.add_to_cart_success);
 
+    const cartResource =
+      data && typeof data === 'object'
+        ? { .../** @type {Record<string, unknown>} */ (data), item_count: itemCount }
+        : { item_count: itemCount };
+
     document.dispatchEvent(
-      new CartAddEvent(data, variantId, {
+      new CartAddEvent(cartResource, variantId, {
         source: 'product-cart',
-        itemCount: Number(data.item_count),
+        itemCount,
         variantId,
-        sections: data.sections,
+        sections:
+          data && typeof data === 'object' && 'sections' in data
+            ? /** @type {Record<string, string>} */ (data).sections
+            : undefined,
       })
     );
   } catch (error) {

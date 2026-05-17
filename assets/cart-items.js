@@ -1,7 +1,10 @@
 import { fetchConfig, debounce } from '@theme/utilities';
-import { morphSection } from '@theme/section-renderer';
 import { ThemeEvents, CartUpdateEvent, CartAddEvent } from '@theme/events';
-import { getCartSectionsParam } from '@theme/cart-sections';
+import {
+  getCartSectionsParam,
+  getCartSectionsUrl,
+  morphCartSectionsFromResponse,
+} from '@theme/cart-sections';
 
 class CartItemsComponent extends HTMLElement {
   /** @type {string | undefined} */
@@ -70,7 +73,7 @@ class CartItemsComponent extends HTMLElement {
       line,
       quantity,
       sections,
-      sections_url: window.location.pathname,
+      sections_url: getCartSectionsUrl(),
     });
 
     try {
@@ -90,7 +93,7 @@ class CartItemsComponent extends HTMLElement {
         return;
       }
 
-      await this.#morphFromResponse(data.sections);
+      await morphCartSectionsFromResponse(data.sections, this.sectionId);
 
       document.dispatchEvent(
         new CartUpdateEvent(data, this.sectionId, {
@@ -107,32 +110,13 @@ class CartItemsComponent extends HTMLElement {
   }
 
   /**
-   * @param {Record<string, string> | undefined} sections
-   */
-  async #morphFromResponse(sections) {
-    if (!sections) return;
-
-    const updates = Object.entries(sections)
-      .filter((entry) => entry[1])
-      .map(([sectionId, html]) => morphSection(sectionId, /** @type {string} */ (html)));
-
-    await Promise.all(updates);
-  }
-
-  /**
    * @param {CartUpdateEvent | CartAddEvent} event
    */
   #handleCartUpdate = async (event) => {
     if (event.target === this) return;
 
-    const sectionHtml = event.detail?.data?.sections?.[this.sectionId];
-    if (sectionHtml) {
-      await morphSection(this.sectionId, sectionHtml);
-      return;
-    }
-
     if (event.detail?.data?.sections) {
-      await this.#morphFromResponse(event.detail.data.sections);
+      await morphCartSectionsFromResponse(event.detail.data.sections, this.sectionId);
     }
   };
 }

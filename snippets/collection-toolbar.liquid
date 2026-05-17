@@ -1,0 +1,154 @@
+{% doc %}
+  Horizontal collection filter and sort toolbar.
+
+  @param {string} section_id - Section id for unique control ids
+  @param {boolean} [show_in_stock_toggle] - Show in-stock-only toggle (default: true)
+
+  @example
+  {% render 'collection-toolbar', section_id: section.id %}
+{% enddoc %}
+
+{% liquid
+  assign show_in_stock_toggle = show_in_stock_toggle
+  if show_in_stock_toggle == nil
+    assign show_in_stock_toggle = true
+  endif
+
+  assign availability_filter = nil
+  for filter in collection.filters
+    if filter.param_name == 'filter.v.availability'
+      assign availability_filter = filter
+      break
+    endif
+  endfor
+
+  assign in_stock_value = nil
+  if availability_filter
+    for value in availability_filter.values
+      if value.value == '1'
+        assign in_stock_value = value
+        break
+      endif
+    endfor
+  endif
+%}
+
+<div class="collection-toolbar" role="toolbar" aria-label="{{ 'collections.toolbar_label' | t }}">
+  {% if show_in_stock_toggle and in_stock_value %}
+    <label class="collection-toolbar__toggle">
+      <input
+        type="checkbox"
+        class="collection-toolbar__toggle-input"
+        name="{{ in_stock_value.param_name }}"
+        value="{{ in_stock_value.value }}"
+        {% if in_stock_value.active %}
+          checked
+        {% endif %}
+        {% if in_stock_value.count == 0 and in_stock_value.active == false %}
+          disabled
+        {% endif %}
+      >
+      <span class="collection-toolbar__toggle-track" aria-hidden="true"></span>
+      <span class="collection-toolbar__toggle-label">{{ 'collections.in_stock_only' | t }}</span>
+    </label>
+  {% endif %}
+
+  <div class="collection-toolbar__filters">
+    {% for filter in collection.filters %}
+      {% unless filter.param_name == 'filter.v.availability' %}
+        <details class="collection-filter" {% if filter.active_values.size > 0 %}open{% endif %}>
+          <summary class="collection-filter__trigger">
+            <span class="collection-filter__label">{{ filter.label }}</span>
+            {% if filter.active_values.size > 0 %}
+              <span class="collection-filter__count">{{ filter.active_values.size }}</span>
+            {% endif %}
+            <span class="collection-filter__chevron" aria-hidden="true"></span>
+          </summary>
+
+          <div class="collection-filter__panel">
+            {% case filter.type %}
+              {% when 'list' %}
+                <ul class="collection-filter__list" role="list">
+                  {% for value in filter.values %}
+                    <li>
+                      <label class="collection-filter__option">
+                        <input
+                          type="checkbox"
+                          name="{{ value.param_name }}"
+                          value="{{ value.value }}"
+                          {% if value.active %}
+                            checked
+                          {% endif %}
+                          {% if value.count == 0 and value.active == false %}
+                            disabled
+                          {% endif %}
+                        >
+                        <span class="collection-filter__option-label">{{ value.label }}</span>
+                        <span class="collection-filter__option-count">{{ value.count }}</span>
+                      </label>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% when 'boolean' %}
+                <label class="collection-filter__option">
+                  <input
+                    type="checkbox"
+                    name="{{ filter.param_name }}"
+                    value="1"
+                    {% if filter.true_value.active %}
+                      checked
+                    {% endif %}
+                  >
+                  <span class="collection-filter__option-label">{{ filter.label }}</span>
+                </label>
+              {% when 'price_range' %}
+                <div class="collection-filter__price">
+                  <label class="collection-filter__price-field">
+                    <span>{{ 'collections.price_min' | t }}</span>
+                    <input
+                      type="number"
+                      name="{{ filter.min_value.param_name }}"
+                      {% if filter.min_value.value %}
+                        value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                      {% endif %}
+                      placeholder="0"
+                      min="0"
+                    >
+                  </label>
+                  <label class="collection-filter__price-field">
+                    <span>{{ 'collections.price_max' | t }}</span>
+                    <input
+                      type="number"
+                      name="{{ filter.max_value.param_name }}"
+                      {% if filter.max_value.value %}
+                        value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                      {% endif %}
+                      placeholder="{{ filter.range_max | money_without_currency }}"
+                      min="0"
+                    >
+                  </label>
+                </div>
+            {% endcase %}
+          </div>
+        </details>
+      {% endunless %}
+    {% endfor %}
+  </div>
+
+  <div class="collection-toolbar__sort">
+    <label class="sr-only" for="CollectionSort-{{ section_id }}">{{ 'collections.sort_label' | t }}</label>
+    <select id="CollectionSort-{{ section_id }}" class="collection-toolbar__sort-select" name="sort_by">
+      {% for option in collection.sort_options %}
+        <option
+          value="{{ option.value }}"
+          {% if option.value == collection.sort_by %}
+            selected
+          {% endif %}
+        >
+          {{ option.name }}
+        </option>
+      {% endfor %}
+    </select>
+    <span class="collection-toolbar__sort-chevron" aria-hidden="true"></span>
+  </div>
+</div>

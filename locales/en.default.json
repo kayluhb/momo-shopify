@@ -24,9 +24,12 @@
     "variant_label": "Variant",
     "quantity_label": "Quantity",
     "badge": {
+      "new": "New",
       "sale": "Sale",
       "sold_out": "Sold out"
     },
+    "rating_label": "{{ rating }} out of 5 stars{% if count %}, {{ count }} reviews{% endif %}",
+    "color_options": "{{ option }} options",
     "price": {
       "sale": "Sale price"
     }
@@ -120,7 +123,13 @@
   "collections": {
     "title": "Collections",
     "filters_title": "Filters",
+    "toolbar_label": "Collection filters and sorting",
+    "in_stock_only": "In stock only",
+    "sort_label": "Sort products",
+    "sort_featured": "Featured",
     "clear_filters": "Clear all filters",
+    "empty": "No products match your filters.",
+    "pagination_label": "Collection pagination",
     "price_min": "Min price",
     "price_max": "Max price"
   },

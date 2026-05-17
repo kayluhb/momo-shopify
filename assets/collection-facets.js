@@ -12,11 +12,57 @@ class FacetsFormComponent extends Component {
     super.connectedCallback();
     this.refs.facetsForm.addEventListener('change', this.#debouncedUpdate);
     this.refs.facetsForm.addEventListener('submit', this.#onSubmit);
+    this.refs.facetsForm.addEventListener('toggle', this.#onFilterToggle, true);
+    document.addEventListener('pointerdown', this.#onDocumentPointerDown, true);
+    document.addEventListener('keydown', this.#onDocumentKeyDown);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.refs.facetsForm.removeEventListener('submit', this.#onSubmit);
+    this.refs.facetsForm.removeEventListener('toggle', this.#onFilterToggle, true);
+    document.removeEventListener('pointerdown', this.#onDocumentPointerDown, true);
+    document.removeEventListener('keydown', this.#onDocumentKeyDown);
+  }
+
+  /** @param {Event} event */
+  #onFilterToggle = (event) => {
+    const details = event.target;
+    if (!(details instanceof HTMLDetailsElement)) return;
+    if (!details.classList.contains('collection-filter')) return;
+    if (!details.open) return;
+
+    this.#getOpenFilters().forEach((filter) => {
+      if (filter !== details) filter.removeAttribute('open');
+    });
+  };
+
+  /** @param {PointerEvent} event */
+  #onDocumentPointerDown = (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+
+    this.#getOpenFilters().forEach((filter) => {
+      if (!filter.contains(target)) {
+        filter.removeAttribute('open');
+      }
+    });
+  };
+
+  /** @param {KeyboardEvent} event */
+  #onDocumentKeyDown = (event) => {
+    if (event.key !== 'Escape') return;
+    this.#closeAllFilters();
+  };
+
+  #getOpenFilters() {
+    return this.refs.facetsForm.querySelectorAll('.collection-filter[open]');
+  }
+
+  #closeAllFilters() {
+    this.#getOpenFilters().forEach((filter) => {
+      filter.removeAttribute('open');
+    });
   }
 
   /** @param {SubmitEvent} event */

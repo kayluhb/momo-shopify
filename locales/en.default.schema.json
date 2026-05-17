@@ -303,6 +303,17 @@
         }
       }
     },
+    "collection": {
+      "settings": {
+        "products_per_page_label": "Products per page",
+        "grid_gap_label": "Grid spacing",
+        "show_in_stock_toggle_label": "Show in stock only toggle",
+        "show_secondary_image_label": "Show second image on hover",
+        "show_color_swatches_label": "Show color swatches",
+        "show_rating_label": "Show product rating",
+        "show_rating_info": "Displays when a reviews.rating or custom.rating metafield is set."
+      }
+    },
     "collection_hero": {
       "name": "Collection hero",
       "settings": {

@@ -45,6 +45,29 @@ class CartItemsComponent extends HTMLElement {
   }
 
   /**
+   * @param {HTMLButtonElement} button
+   * @param {boolean} isLoading
+   */
+  #setRemoveButtonLoading(button, isLoading) {
+    if (isLoading) {
+      if (!button.dataset.cartRemoveLabel) {
+        button.dataset.cartRemoveLabel = button.textContent?.trim() || '';
+      }
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      button.textContent = Theme.translations.remove_loading;
+      return;
+    }
+
+    button.disabled = false;
+    button.setAttribute('aria-busy', 'false');
+    const label = button.dataset.cartRemoveLabel;
+    if (label) {
+      button.textContent = label;
+    }
+  }
+
+  /**
    * @param {Event} event
    */
   #onClick(event) {
@@ -62,7 +85,8 @@ class CartItemsComponent extends HTMLElement {
       domBefore: getCartDomSnapshot(),
     });
 
-    this.#updateLine(line, 0);
+    this.#setRemoveButtonLoading(removeButton, true);
+    this.#updateLine(line, 0, { removeButton });
   }
 
   /**
@@ -86,9 +110,14 @@ class CartItemsComponent extends HTMLElement {
   /**
    * @param {number} line
    * @param {number} quantity
+   * @param {{ removeButton?: HTMLButtonElement }} [options]
    */
-  async #updateLine(line, quantity) {
-    this.setAttribute('aria-busy', 'true');
+  async #updateLine(line, quantity, options = {}) {
+    const { removeButton } = options;
+
+    if (!removeButton) {
+      this.setAttribute('aria-busy', 'true');
+    }
 
     const sections = getCartSectionsParam();
     const requestBody = {
@@ -157,7 +186,11 @@ class CartItemsComponent extends HTMLElement {
     } catch (error) {
       cartDebugError('items', 'cart change threw', error);
     } finally {
-      this.removeAttribute('aria-busy');
+      if (removeButton?.isConnected) {
+        this.#setRemoveButtonLoading(removeButton, false);
+      } else if (!removeButton) {
+        this.removeAttribute('aria-busy');
+      }
     }
   }
 

@@ -101,6 +101,7 @@
     "title": "Cart",
     "update": "Update",
     "remove": "Remove",
+    "remove_loading": "Removing…",
     "empty": "Your cart is empty",
     "product": "Product",
     "quantity": "Quantity",

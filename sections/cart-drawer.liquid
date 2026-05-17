@@ -239,6 +239,27 @@
     margin: 1rem 0 0;
     font-weight: 700;
   }
+
+  .cart-items__remove-button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+  }
+
+  .cart-items__remove-button:focus-visible {
+    outline: 2px solid var(--color-brand-rust);
+    outline-offset: 2px;
+  }
+
+  .cart-items__remove-button[aria-busy='true'] {
+    cursor: wait;
+    opacity: 0.65;
+    text-decoration: none;
+  }
 {% endstylesheet %}
 
 {% schema %}

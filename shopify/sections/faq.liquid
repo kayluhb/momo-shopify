@@ -1,0 +1,549 @@
+{% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
+
+<section
+  id="shopify-section-{{ section.id }}"
+  class="faq full-width py-14 md:py-20 {{ section_bg }}"
+>
+  <div class="section-inner faq__inner">
+    <div class="faq__card">
+      <div class="faq__layout">
+        <div class="faq__intro">
+          {% if section.settings.heading != blank %}
+            <h2 class="faq__heading">{{ section.settings.heading | escape }}</h2>
+          {% endif %}
+
+          {% if section.settings.subheading != blank %}
+            <div class="faq__subheading rte">
+              {{ section.settings.subheading }}
+            </div>
+          {% endif %}
+
+          <div class="faq__support">
+            <ul class="faq__avatars" aria-label="{{ 'sections.faq.support_avatars_label' | t }}">
+              {% liquid
+                assign avatar_keys = 'avatar_1,avatar_2,avatar_3,avatar_4' | split: ','
+                assign avatar_fallbacks = '#c57639,#ea7657,#987659,#00253f' | split: ','
+              %}
+              {% for avatar_key in avatar_keys %}
+                {% assign avatar_index = forloop.index0 %}
+                {% assign avatar_image = section.settings[avatar_key] %}
+                <li
+                  class="faq__avatar"
+                  style="--faq-avatar-bg: {{ avatar_fallbacks[avatar_index] }}; z-index: {{ 5 | minus: forloop.index }};"
+                >
+                  {% if avatar_image != blank %}
+                    {{
+                      avatar_image
+                      | image_url: width: 96
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '48,96',
+                        class: 'faq__avatar-img',
+                        alt: ''
+                    }}
+                  {% else %}
+                    <span class="faq__avatar-fallback" aria-hidden="true"></span>
+                  {% endif %}
+                  {% if forloop.last and section.settings.show_online_status %}
+                    <span class="faq__avatar-status" aria-hidden="true"></span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+
+            {% if section.settings.support_hours != blank %}
+              <p class="faq__support-hours">{{ section.settings.support_hours | escape }}</p>
+            {% endif %}
+
+            {% if section.settings.support_response_time != blank %}
+              <p class="faq__support-response">{{ section.settings.support_response_time | escape }}</p>
+            {% endif %}
+
+            {% if section.settings.contact_label != blank and section.settings.contact_link != blank %}
+              <p class="faq__support-contact">
+                <a href="{{ section.settings.contact_link }}">{{ section.settings.contact_label | escape }}</a>
+              </p>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if section.blocks.size > 0 %}
+          <div
+            class="faq__panel"
+            role="region"
+            aria-label="{{ section.settings.heading | default: 'FAQ' | escape }}"
+          >
+            <div class="faq__list">
+              {% for block in section.blocks %}
+                <details
+                  class="faq__item"
+                  name="faq-{{ section.id }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <summary class="faq__question">
+                    <span class="faq__question-text">{{ block.settings.question | escape }}</span>
+                    <span class="faq__icon" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </summary>
+                  {% if block.settings.answer != blank %}
+                    <div class="faq__answer rte">{{ block.settings.answer }}</div>
+                  {% endif %}
+                </details>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+
+  .faq__inner {
+    max-width: 72rem;
+  }
+
+  .faq__card {
+    padding: 2rem;
+    border-radius: 1.25rem;
+    background: #fff;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.04),
+      0 12px 40px rgb(0 0 0 / 0.06);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__card {
+    background: rgb(255 255 255 / 0.08);
+    box-shadow: none;
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  @media (min-width: 750px) {
+    .faq__card {
+      padding: 2.5rem 3rem;
+    }
+  }
+
+  .faq__layout {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 990px) {
+    .faq__layout {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+      gap: 3.5rem;
+    }
+  }
+
+  .faq__heading {
+    margin: 0 0 1rem;
+    font-family: var(--font-display--family, var(--font-primary--family));
+    font-size: clamp(1.75rem, 3.5vw, 2.375rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .faq__subheading {
+    margin: 0 0 2rem;
+    max-width: 22rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--color-brand-steel, #00253f) 65%, transparent);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__subheading {
+    color: rgb(255 255 255 / 0.78);
+  }
+
+  .faq__subheading :where(p) {
+    margin: 0;
+  }
+
+  .faq__subheading :where(a) {
+    font-weight: 600;
+    color: var(--color-brand-rust, #c57639);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__subheading :where(a) {
+    color: #fff;
+  }
+
+  .faq__avatars {
+    display: flex;
+    align-items: center;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .faq__avatar {
+    position: relative;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-left: -0.625rem;
+    overflow: hidden;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--faq-avatar-bg);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__avatar {
+    border-color: rgb(255 255 255 / 0.2);
+  }
+
+  .faq__avatar:first-child {
+    margin-left: 0;
+  }
+
+  .faq__avatar-img,
+  .faq__avatar-fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .faq__avatar-fallback {
+    background: var(--faq-avatar-bg);
+  }
+
+  .faq__avatar-status {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0.625rem;
+    height: 0.625rem;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--color-brand-heart, #ff5e6e);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__avatar-status {
+    border-color: rgb(255 255 255 / 0.35);
+  }
+
+  .faq__support-hours {
+    margin: 0 0 0.35rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--color-brand-steel, #00253f) 80%, transparent);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__support-hours {
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  .faq__support-response {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--color-brand-earth, #987659) 55%, transparent);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__support-response {
+    color: rgb(255 255 255 / 0.55);
+  }
+
+  .faq__support-contact {
+    margin: 1rem 0 0;
+    font-size: 0.875rem;
+  }
+
+  .faq__support-contact a {
+    font-weight: 600;
+    color: var(--color-brand-rust, #c57639);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__support-contact a {
+    color: #fff;
+  }
+
+  .faq__panel {
+    padding: 0.25rem;
+    border-radius: 1rem;
+    background: var(--color-brand-surface, #f5f2ef);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__panel {
+    background: rgb(0 0 0 / 0.18);
+  }
+
+  .faq__list {
+    overflow: hidden;
+    border-radius: 0.875rem;
+    background: var(--color-brand-surface, #f5f2ef);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__list {
+    background: transparent;
+  }
+
+  .faq__item {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 12%, transparent);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__item {
+    border-bottom-color: rgb(255 255 255 / 0.12);
+  }
+
+  .faq__item:last-child {
+    border-bottom: none;
+  }
+
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.125rem 1.25rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__question-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .faq__icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-brand-earth, #987659) 18%, white);
+    color: var(--color-brand-steel, #00253f);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__icon {
+    background: rgb(255 255 255 / 0.14);
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(180deg);
+    background: var(--color-brand-rust, #c57639);
+    color: #fff;
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__item[open] .faq__icon {
+    background: var(--color-brand-warmth, #ea7657);
+    color: #fff;
+  }
+
+  .faq__answer {
+    padding: 0 1.25rem 1.125rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--color-brand-steel, #00253f) 65%, transparent);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .faq__answer {
+    color: rgb(255 255 255 / 0.78);
+  }
+
+  .faq__answer :where(p) {
+    margin: 0 0 0.75rem;
+  }
+
+  .faq__answer :where(p:last-child) {
+    margin-bottom: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.faq.name",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.shared.content_header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.shared.heading_label",
+      "default": "Have a question ? We are here to help."
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "t:sections.shared.subheading_label",
+      "default": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.faq.support_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "avatar_1",
+      "label": "t:sections.faq.avatar_1_label"
+    },
+    {
+      "type": "image_picker",
+      "id": "avatar_2",
+      "label": "t:sections.faq.avatar_2_label"
+    },
+    {
+      "type": "image_picker",
+      "id": "avatar_3",
+      "label": "t:sections.faq.avatar_3_label"
+    },
+    {
+      "type": "image_picker",
+      "id": "avatar_4",
+      "label": "t:sections.faq.avatar_4_label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_online_status",
+      "label": "t:sections.faq.show_online_status_label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "support_hours",
+      "label": "t:sections.faq.support_hours_label",
+      "default": "Our customer support is available monday to friday: 8am-8:30pm."
+    },
+    {
+      "type": "text",
+      "id": "support_response_time",
+      "label": "t:sections.faq.support_response_time_label",
+      "default": "Average answer time: 24h"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.faq.contact_header"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "t:sections.faq.contact_label"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "t:sections.faq.contact_link_label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "t:sections.faq.blocks.question.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "t:sections.faq.blocks.question.question_label",
+          "default": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "t:sections.faq.blocks.question.answer_label",
+          "default": "<p>Answer to the question goes here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.faq.presets.default_name",
+      "settings": {
+        "heading": "Have a question ? We are here to help.",
+        "subheading": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>",
+        "support_hours": "Our customer support is available monday to friday: 8am-8:30pm.",
+        "support_response_time": "Average answer time: 24h",
+        "show_online_status": true,
+        "color_scheme": "white"
+      },
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship overseas?",
+            "answer": "<p>Yes, we ship to most countries worldwide. Shipping rates and delivery times vary by destination.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do I need to setup an account to place an order?",
+            "answer": "<p>No account is required. You can check out as a guest, or create an account to track orders and save details for next time.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer gift wrapping",
+            "answer": "<p>Yes, gift wrapping is available at checkout for select items. Add a note at checkout if you would like a personalized message included.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How long will it take to get my orders?",
+            "answer": "<p>Orders typically ship within 2–4 business days. Delivery times depend on your location and selected shipping method.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of delivery on unused items in original packaging.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Any question?",
+            "answer": "<p>Reach out to our customer support team and we will get back to you as soon as possible.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

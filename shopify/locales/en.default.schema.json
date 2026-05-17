@@ -1,0 +1,343 @@
+{
+  "general": {
+    "404": "Not found",
+    "article": "Article",
+    "block": "Block",
+    "blog": "Blog",
+    "branding": "Branding",
+    "animations": "Animations",
+    "cart": "Cart",
+    "cart_drawer": "Cart drawer",
+    "collection": "Collection",
+    "collections": "Collections",
+    "collection_card": "Collection card",
+    "collections_grid": "Collections grid",
+    "colors": "Colors",
+    "column": "Column",
+    "content": "Content",
+    "custom_section": "Custom section",
+    "fonts": "Fonts",
+    "footer": "Footer",
+    "group": "Group",
+    "header": "Header",
+    "layout": "Layout",
+    "main": "Main",
+    "page": "Page",
+    "password": "Password",
+    "primary": "Primary",
+    "product": "Product",
+    "row": "Row",
+    "search": "Search",
+    "secondary": "Secondary",
+    "section": "Section",
+    "settings": "Settings",
+    "sidebar": "Sidebar",
+    "text": "Text",
+    "theme": "Theme",
+    "typography": "Typography"
+  },
+  "labels": {
+    "alignment": "Alignment",
+    "background": "Background",
+    "foreground": "Foreground",
+    "grid_gap": "Grid spacing",
+    "grid_item_width": "Grid item width",
+    "input_corner_radius": "Input corner radius",
+    "layout_direction": "Layout direction",
+    "menu": "Menu",
+    "logo": "Logo",
+    "logo_info": "Shown in the header and on gift cards. If empty, the theme logo.svg asset is used in the header.",
+    "cart_drawer_auto_open": "Open cart drawer when a product is added",
+    "customer_account_menu": "Customer account menu",
+    "page_transition_enabled": "Enable page transitions",
+    "padding": "Padding",
+    "page_margin": "Page margin",
+    "page_width": "Page width",
+    "primary_font_shopify_only_info": "Used only when Adobe Fonts (Degular) is turned off.",
+    "show_payment_icons": "Show payment icons",
+    "text_selection": "Text selection",
+    "text_selection_info": "Highlight style when customers select text on the storefront.",
+    "text_style": "Text style",
+    "text": "Text",
+    "use_adobe_degular": "Use Adobe Fonts (Degular)",
+    "use_adobe_degular_info": "Loads Degular Display for headings and Degular for body text via Typekit."
+  },
+  "options": {
+    "alignment": {
+      "left": "Left",
+      "center": "Center",
+      "right": "Right"
+    },
+    "direction": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "page_width": {
+      "narrow": "Narrow",
+      "wide": "Wide"
+    },
+    "text_selection": {
+      "brand": "Brand colors",
+      "subtle": "Subtle tint",
+      "browser": "Browser default"
+    },
+    "size": {
+      "large": "Large",
+      "small": "Small"
+    },
+    "text_style": {
+      "title": "Title",
+      "subtitle": "Subtitle",
+      "normal": "Normal text"
+    },
+    "brand_color": {
+      "white": "White",
+      "steel": "Steel",
+      "rust": "Rust",
+      "earth": "Earth",
+      "warmth": "Warmth",
+      "heart": "Heart"
+    },
+    "header_contrast": {
+      "light_scrim": "Light scrim (dark text)",
+      "inverse_scrim": "Dark scrim (light text)",
+      "solid": "Solid bar",
+      "none": "None"
+    },
+    "color_scheme": {
+      "white": "White",
+      "canvas": "Soft tint",
+      "earth": "Earth",
+      "steel": "Steel",
+      "warmth": "Warmth",
+      "heart": "Heart"
+    },
+    "button_style": {
+      "primary": "Primary",
+      "secondary": "Secondary"
+    }
+  },
+  "sections": {
+    "shared": {
+      "content_header": "Content",
+      "appearance_header": "Appearance",
+      "eyebrow_label": "Eyebrow",
+      "heading_label": "Heading",
+      "subheading_label": "Subheading",
+      "text_label": "Text",
+      "heading_alignment_label": "Heading alignment",
+      "color_scheme_label": "Color scheme",
+      "columns_desktop_label": "Columns on desktop",
+      "button_label": "Button label",
+      "button_link_label": "Button link",
+      "button_style_label": "Button style",
+      "link_label": "Link label",
+      "link_url_label": "Link"
+    },
+    "featured_collection": {
+      "name": "Featured collection",
+      "collection_header": "Collection",
+      "collection_label": "Collection",
+      "products_to_show_label": "Products to show",
+      "show_view_all_label": "Show view all button",
+      "view_all_label": "View all button label",
+      "view_all_link_label": "View all link",
+      "view_all_link_info": "Leave empty to use the collection URL.",
+      "presets": {
+        "default_name": "Featured collection"
+      }
+    },
+    "image_with_text": {
+      "name": "Image with text",
+      "image_label": "Image",
+      "image_position_label": "Image position",
+      "presets": {
+        "default_name": "Image with text"
+      }
+    },
+    "multicolumn": {
+      "name": "Multicolumn",
+      "text_alignment_label": "Column text alignment",
+      "presets": {
+        "default_name": "Multicolumn"
+      },
+      "blocks": {
+        "column": {
+          "name": "Column",
+          "image_label": "Image"
+        }
+      }
+    },
+    "testimonials": {
+      "name": "Testimonials",
+      "presets": {
+        "default_name": "Testimonials"
+      },
+      "blocks": {
+        "testimonial": {
+          "name": "Testimonial",
+          "rating_label": "Star rating",
+          "quote_label": "Quote",
+          "author_label": "Author",
+          "role_label": "Role or location",
+          "avatar_label": "Avatar"
+        }
+      }
+    },
+    "logo_list": {
+      "name": "Logo list",
+      "logo_height_label": "Logo height",
+      "grayscale_label": "Grayscale logos",
+      "presets": {
+        "default_name": "Logo list"
+      },
+      "blocks": {
+        "logo": {
+          "name": "Logo",
+          "image_label": "Logo image"
+        }
+      }
+    },
+    "faq": {
+      "name": "FAQ",
+      "support_header": "Support",
+      "avatar_1_label": "Avatar 1",
+      "avatar_2_label": "Avatar 2",
+      "avatar_3_label": "Avatar 3",
+      "avatar_4_label": "Avatar 4",
+      "show_online_status_label": "Show online indicator on last avatar",
+      "support_hours_label": "Support hours",
+      "support_response_time_label": "Average response time",
+      "contact_header": "Contact",
+      "contact_label": "Contact link label",
+      "contact_link_label": "Contact link",
+      "presets": {
+        "default_name": "FAQ"
+      },
+      "blocks": {
+        "question": {
+          "name": "Question",
+          "question_label": "Question",
+          "answer_label": "Answer"
+        }
+      }
+    },
+    "promo_banner": {
+      "name": "Promo banner",
+      "use_gradient_label": "Use gradient background",
+      "background_image_label": "Background image",
+      "overlay_opacity_label": "Image overlay darkness",
+      "presets": {
+        "default_name": "Promo banner"
+      }
+    },
+    "rich_text": {
+      "name": "Rich text",
+      "display_size_label": "Use display heading size",
+      "use_gradient_label": "Use subtle gradient background",
+      "presets": {
+        "default_name": "Rich text"
+      }
+    },
+    "header": {
+      "settings": {
+        "text_color_label": "Text and icon color",
+        "contrast_mode_label": "Contrast over imagery",
+        "contrast_mode_info": "Improves readability when the header sits over photos or dark backgrounds, such as the full screen hero."
+      }
+    },
+    "footer": {
+      "settings": {
+        "about_header": "About Us",
+        "about_text_label": "About text",
+        "instagram_url_label": "Instagram URL",
+        "tiktok_url_label": "TikTok URL",
+        "menus_header": "Menus",
+        "customer_care_menu_label": "Customer care menu",
+        "resources_menu_label": "Resources menu",
+        "newsletter_header": "Newsletter",
+        "newsletter_text_label": "Newsletter description",
+        "brand_header": "Logo",
+        "show_brand_wordmark_label": "Show large logo",
+        "legal_menu_label": "Legal links menu",
+        "legal_menu_info": "If empty, shop policies are shown when available."
+      }
+    },
+    "category_cards": {
+      "name": "Category cards",
+      "gap_label": "Space between cards",
+      "card_aspect_ratio_label": "Card height",
+      "overlay_opacity_label": "Image overlay darkness",
+      "aspect_ratio": {
+        "portrait": "Portrait (3:4)",
+        "tall": "Tall (4:5)",
+        "square": "Square (1:1)"
+      },
+      "presets": {
+        "default_name": "Category cards"
+      },
+      "blocks": {
+        "card": {
+          "name": "Card",
+          "image_label": "Image",
+          "heading_line_1_label": "Heading line 1",
+          "heading_line_2_label": "Heading line 2"
+        }
+      }
+    },
+    "bento_grid": {
+      "name": "Bento grid",
+      "gap_label": "Tile gap",
+      "corner_radius_label": "Corner radius",
+      "min_height_label": "Minimum height on desktop",
+      "presets": {
+        "default_name": "Bento grid"
+      },
+      "blocks": {
+        "tile": {
+          "name": "Tile",
+          "layout_label": "Tile size",
+          "layout_featured": "Large (left)",
+          "layout_small_left": "Small (top middle)",
+          "layout_small_right": "Small (top right)",
+          "layout_wide": "Wide (bottom)",
+          "image_label": "Image",
+          "title_label": "Title",
+          "eyebrow_info": "Shown centered on the large tile.",
+          "overlay_opacity_label": "Image overlay darkness"
+        }
+      }
+    },
+    "hero_fullscreen": {
+      "name": "Full screen hero",
+      "settings": {
+        "slides_help": "Add slide blocks for a rotating hero. Each slide can have its own image, overlay, heading, subheading, links, text color, and text placement. When no slide has an image, a placeholder is shown.",
+        "autoplay_label": "Autoplay slides",
+        "autoplay_interval_label": "Time on each slide",
+        "show_dots_label": "Show slide dots"
+      },
+      "blocks": {
+        "slide": {
+          "name": "Slide",
+          "image_label": "Image",
+          "overlay_opacity_label": "Image overlay darkness",
+          "heading_label": "Heading",
+          "subheading_label": "Subheading",
+          "button_label_label": "Button label",
+          "button_link_label": "Button link",
+          "button_2_label_label": "Second button label",
+          "button_2_link_label": "Second button link",
+          "text_color_label": "Text color",
+          "text_placement_label": "Text placement",
+          "text_placement_bl": "Bottom left",
+          "text_placement_br": "Bottom right",
+          "text_placement_bc": "Bottom center",
+          "text_placement_center": "Center"
+        }
+      },
+      "presets": {
+        "default_name": "Full screen hero"
+      }
+    }
+  }
+}

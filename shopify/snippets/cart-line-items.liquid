@@ -1,0 +1,67 @@
+{% doc %}
+  Renders cart line items for the cart page and cart drawer.
+
+  @param {string} section_id - Section ID for cart-items-component
+{% enddoc %}
+
+<cart-items-component data-section-id="{{ section_id }}">
+  {% if cart.empty? %}
+    <p class="cart-empty">{{ 'cart.empty' | t }}</p>
+  {% else %}
+    <table class="cart-items">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'cart.product' | t }}</th>
+          <th scope="col">{{ 'cart.quantity' | t }}</th>
+          <th scope="col">{{ 'cart.total' | t }}</th>
+          <th scope="col"><span class="sr-only">{{ 'cart.remove' | t }}</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.items %}
+          <tr class="cart-items__row">
+            <td class="cart-items__product">
+              {% render 'image', image: item.image, url: item.url %}
+              <div>
+                <p>
+                  <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+                </p>
+                {% unless item.variant.title == 'Default Title' %}
+                  <p class="cart-items__variant">{{ item.variant.title | escape }}</p>
+                {% endunless %}
+              </div>
+            </td>
+            <td class="cart-items__quantity">
+              <label class="sr-only" for="cart-quantity-{{ item.index | plus: 1 }}">
+                {{ 'cart.quantity' | t }}
+              </label>
+              <input
+                id="cart-quantity-{{ item.index | plus: 1 }}"
+                type="number"
+                name="updates[]"
+                value="{{ item.quantity }}"
+                min="0"
+                data-cart-quantity="{{ item.index | plus: 1 }}"
+              >
+            </td>
+            <td class="cart-items__line-total">
+              {{ item.line_price | money }}
+            </td>
+            <td class="cart-items__remove">
+              <button
+                type="button"
+                data-cart-remove="{{ item.index | plus: 1 }}"
+              >
+                {{ 'cart.remove' | t }}
+              </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <p class="cart-items__subtotal">
+      {{ 'cart.subtotal' | t }}: {{ cart.total_price | money }}
+    </p>
+  {% endif %}
+</cart-items-component>

@@ -1,0 +1,130 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_main": "Skip to main content"
+    },
+    "view_all": "View all"
+  },
+  "products": {
+    "add_to_cart": {
+      "label": "Add to cart",
+      "loading": "Adding…",
+      "success": "Added to cart",
+      "error": "Could not add to cart. Try again."
+    },
+    "variant_label": "Variant",
+    "quantity_label": "Quantity",
+    "badge": {
+      "sale": "Sale",
+      "sold_out": "Sold out"
+    },
+    "price": {
+      "sale": "Sale price"
+    }
+  },
+  "sections": {
+    "header": {
+      "main_navigation": "Main navigation"
+    },
+    "footer": {
+      "about_heading": "About Us",
+      "customer_care_heading": "Customer care",
+      "resources_heading": "Resources",
+      "newsletter_heading": "Stay in touch",
+      "newsletter_description": "Join the Momo community to receive early access to new design drops, stories of heritage, and exclusive offerings crafted for your home and hearth.",
+      "newsletter_name": "Name",
+      "newsletter_email": "Email",
+      "newsletter_submit": "Join",
+      "newsletter_success": "Thanks for subscribing.",
+      "legal_navigation": "Legal and policies",
+      "instagram": "Instagram",
+      "tiktok": "TikTok"
+    },
+    "hero_fullscreen": {
+      "default_heading": "Sleek, sculptural, striking",
+      "default_subheading": "A modern statement in form and finish, designed to stand apart.",
+      "carousel_label": "Homepage hero slideshow",
+      "carousel_roledescription": "carousel",
+      "carousel_slide_label": "slide",
+      "slide_counter": "Slide {{ current }} of {{ total }}",
+      "slide_status_named": "Slide {{ current }} of {{ total }}: {{ title }}",
+      "carousel_toolbar_label": "Hero slideshow controls",
+      "previous_slide": "Previous slide",
+      "next_slide": "Next slide",
+      "slide_navigation_label": "Choose a slide",
+      "pause_slideshow": "Pause slideshow",
+      "play_slideshow": "Play slideshow"
+    },
+    "featured_collection": {
+      "empty": "Choose a collection to show products."
+    },
+    "testimonials": {
+      "rating_label": "{{ rating }} out of 5 stars"
+    },
+    "faq": {
+      "support_avatars_label": "Customer support team"
+    }
+  },
+  "404": {
+    "title": "404",
+    "not_found": "Page not found.",
+    "back_to_shopping": "Back to shopping"
+  },
+  "blog": {
+    "article_comments": "Comments",
+    "article_metadata_html": "{{ date }} by {{ author }}",
+    "comment_form_body": "Comment",
+    "comment_form_email": "Email",
+    "comment_form_name": "Name",
+    "comment_form_submit": "Post",
+    "comment_form_title": "Add a comment"
+  },
+  "cart": {
+    "checkout": "Checkout",
+    "title": "Cart",
+    "update": "Update",
+    "remove": "Remove",
+    "empty": "Your cart is empty",
+    "product": "Product",
+    "quantity": "Quantity",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "drawer_title": "Cart",
+    "drawer_close": "Close",
+    "view_cart": "View cart"
+  },
+  "customers": {
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "title": "Login"
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "filters_title": "Filters",
+    "clear_filters": "Clear all filters",
+    "price_min": "Min price",
+    "price_max": "Max price"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Add to Apple Wallet",
+    "card": "Gift card",
+    "expired": "This gift card has expired",
+    "expires_on": "Expires on {{ expires_on }}",
+    "use_at_checkout": "Use this gift card at checkout"
+  },
+  "password": {
+    "title": "This shop is private",
+    "password": "Password",
+    "enter": "Enter"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search articles, pages, or products",
+    "submit": "Search",
+    "no_results_html": "No results found for {{ terms }}",
+    "results_for_html": "{{ count }} results found for {{ terms }}"
+  }
+}

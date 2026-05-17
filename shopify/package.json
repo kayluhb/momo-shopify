@@ -1,0 +1,14 @@
+{
+  "name": "momo-shopify-theme",
+  "private": true,
+  "scripts": {
+    "css:build": "tailwindcss -i ./src/tailwind.css -o ./assets/tailwind.css --minify",
+    "dev": "pnpm dlx concurrently \"pnpm run dev:css\" \"pnpm run dev:theme\"",
+    "dev:css": "tailwindcss -i ./src/tailwind.css -o ./assets/tailwind.css --watch",
+    "dev:theme": "shopify theme dev --store quickstart-b3509015"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "tailwindcss": "^4.3.0"
+  }
+}

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {% # Inlined CSS Variables %}
+    {% render 'css-variables' %}
+
+    {% liquid
+      if settings.type_use_adobe_degular == false
+        assign use_adobe_degular = false
+      else
+        assign use_adobe_degular = true
+      endif
+    %}
+    {% if use_adobe_degular %}
+      {% render 'typekit-fonts' %}
+    {% else %}
+      {% comment %}
+        Font preloading (Shopify font library):
+        1. Preconnect to font CDN for faster connection
+        2. Preload only the critical font variant (base weight)
+        3. Additional variants load on-demand via @font-face
+      {% endcomment %}
+      {% unless settings.type_primary_font.system? %}
+        <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+        {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+      {% endunless %}
+    {% endif %}
+
+    {% # Load and preload the critical CSS %}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {% # Tailwind utilities (build: pnpm run css:build in shopify/) %}
+    {{ 'tailwind.css' | asset_url | stylesheet_tag }}
+
+    {% # Social, title, etc. %}
+    {% render 'meta-tags' %}
+
+    {% render 'scripts' %}
+    {% render 'view-transition-styles' %}
+
+    {{ content_for_header }}
+
+    {% if settings.page_transition_enabled %}
+      <link
+        rel="expect"
+        href="#main"
+        blocking="render"
+        id="view-transition-render-blocker"
+      >
+    {% endif %}
+  </head>
+
+  <body>
+    {% render 'skip-to-main' %}
+
+    {% sections 'header-group' %}
+
+    <main id="main" tabindex="-1" style="view-transition-name: main-content;">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% section 'cart-drawer' %}
+  </body>
+</html>

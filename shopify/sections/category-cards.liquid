@@ -1,0 +1,314 @@
+{% liquid
+  assign columns = section.settings.columns
+  assign gap = section.settings.gap
+  assign overlay_opacity = section.settings.overlay_opacity
+  assign card_ratio = section.settings.card_aspect_ratio
+%}
+
+<section
+  id="shopify-section-{{ section.id }}"
+  class="category-cards full-width bg-brand-canvas py-8 md:py-10 text-brand-steel"
+>
+  <div class="section-inner">
+    {% if section.blocks.size > 0 %}
+      <ul
+        class="category-cards__grid list-none p-0 m-0"
+        style="--columns: {{ columns }}; --gap: {{ gap }}px; --card-ratio: {{ card_ratio }};"
+        role="list"
+      >
+        {% for block in section.blocks %}
+          {% liquid
+            assign card_image = block.settings.image
+            assign line_one = block.settings.heading_line_1
+            assign line_two = block.settings.heading_line_2
+            assign card_link = block.settings.link
+
+            if card_image.alt != blank
+              assign card_alt = card_image.alt
+            elsif line_one != blank
+              assign card_alt = line_one
+            else
+              assign card_alt = ''
+            endif
+
+            assign has_link = false
+            if card_link != blank
+              assign has_link = true
+            endif
+          %}
+
+          <li {{ block.shopify_attributes }}>
+            {% if has_link %}
+              <a class="category-cards__card category-cards__card--linked" href="{{ card_link }}">
+            {% else %}
+              <div class="category-cards__card">
+            {% endif %}
+              <div class="category-cards__media" aria-hidden="true">
+                {% if card_image != blank %}
+                  {{
+                    card_image
+                    | image_url: width: 1200
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '400,600,800,1000,1200',
+                      sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw',
+                      class: 'category-cards__img',
+                      alt: ''
+                  }}
+                {% else %}
+                  {{ 'collection-apparel-1' | placeholder_svg_tag: class: 'category-cards__placeholder' }}
+                {% endif %}
+                <span
+                  class="category-cards__scrim"
+                  style="--scrim-opacity: {{ overlay_opacity | divided_by: 100.0 }};"
+                  aria-hidden="true"
+                ></span>
+              </div>
+
+              {% if line_one != blank or line_two != blank %}
+                <div class="category-cards__copy">
+                  {% if line_one != blank %}
+                    <p class="category-cards__line">{{ line_one | escape }}</p>
+                  {% endif %}
+                  {% if line_two != blank %}
+                    <p class="category-cards__line">{{ line_two | escape }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if has_link and card_alt != blank %}
+                <span class="sr-only">{{ card_alt | escape }}</span>
+              {% endif %}
+            {% if has_link %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .category-cards__grid {
+    display: grid;
+    gap: var(--gap, 8px);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 750px) {
+    .category-cards__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 990px) {
+    .category-cards__grid {
+      grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+    }
+  }
+
+  .category-cards__card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    aspect-ratio: var(--card-ratio, 4 / 5);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .category-cards__card--linked:focus-visible {
+    outline: 2px solid var(--color-brand-warmth, #ea7657);
+    outline-offset: 3px;
+  }
+
+  .category-cards__card--linked:hover .category-cards__img {
+    transform: scale(1.03);
+  }
+
+  .category-cards__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .category-cards__img,
+  .category-cards__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .category-cards__placeholder {
+    display: block;
+    background: var(--color-brand-steel, #00253f);
+    fill: rgb(255 255 255 / 35%);
+  }
+
+  .category-cards__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0%) 35%,
+      color-mix(
+          in srgb,
+          var(--color-brand-steel, #00253f) calc(var(--scrim-opacity, 0.55) * 65%),
+          transparent
+        )
+        70%,
+      color-mix(
+          in srgb,
+          var(--color-brand-steel, #00253f) var(--scrim-opacity, 0.55),
+          transparent
+        )
+        100%
+    );
+    pointer-events: none;
+  }
+
+  .category-cards__copy {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 1.25rem 1.125rem;
+    pointer-events: none;
+  }
+
+  .category-cards__line {
+    margin: 0;
+    font-family: var(--font-display--family, var(--font-primary--family));
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.category_cards.name",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "t:sections.shared.columns_desktop_label",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:sections.category_cards.gap_label",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "card_aspect_ratio",
+      "label": "t:sections.category_cards.card_aspect_ratio_label",
+      "default": "4 / 5",
+      "options": [
+        { "value": "3 / 4", "label": "t:sections.category_cards.aspect_ratio.portrait" },
+        { "value": "4 / 5", "label": "t:sections.category_cards.aspect_ratio.tall" },
+        { "value": "1 / 1", "label": "t:sections.category_cards.aspect_ratio.square" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:sections.category_cards.overlay_opacity_label",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "t:sections.category_cards.blocks.card.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.category_cards.blocks.card.image_label"
+        },
+        {
+          "type": "text",
+          "id": "heading_line_1",
+          "label": "t:sections.category_cards.blocks.card.heading_line_1_label",
+          "default": "Heading line one"
+        },
+        {
+          "type": "text",
+          "id": "heading_line_2",
+          "label": "t:sections.category_cards.blocks.card.heading_line_2_label",
+          "default": "Heading line two"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.shared.link_url_label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.category_cards.presets.default_name",
+      "settings": {
+        "columns": 3,
+        "gap": 8,
+        "card_aspect_ratio": "4 / 5",
+        "overlay_opacity": 55
+      },
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "heading_line_1": "Heritage materials",
+            "heading_line_2": "Explore the collection",
+            "link": "shopify://collections/all"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "heading_line_1": "Sculptural form",
+            "heading_line_2": "Objects for everyday ritual",
+            "link": "shopify://collections/all"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "heading_line_1": "Made to last",
+            "heading_line_2": "Discover our story",
+            "link": "shopify://pages/about"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

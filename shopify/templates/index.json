@@ -1,0 +1,350 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero-fullscreen",
+      "settings": {},
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "overlay_opacity": 40,
+            "heading": "Sleek, sculptural, striking",
+            "subheading": "A modern statement in form and finish, designed to stand apart.",
+            "button_label": "Shop all",
+            "button_link": "/collections/all",
+            "text_placement": "center"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1"
+      ]
+    },
+    "bento": {
+      "type": "bento-grid",
+      "settings": {
+        "gap": 12,
+        "corner_radius": 14,
+        "min_height": 520,
+        "color_scheme": "earth"
+      },
+      "blocks": {
+        "tile_featured": {
+          "type": "tile",
+          "settings": {
+            "layout": "featured",
+            "eyebrow": "Leather ear pads",
+            "title": "MG20 gaming headphones",
+            "link": "shopify://collections/all",
+            "overlay_opacity": 25
+          }
+        },
+        "tile_small_left": {
+          "type": "tile",
+          "settings": {
+            "layout": "small_left",
+            "title": "MW08 sport",
+            "link": "shopify://collections/all",
+            "overlay_opacity": 25
+          }
+        },
+        "tile_small_right": {
+          "type": "tile",
+          "settings": {
+            "layout": "small_right",
+            "title": "Accessories",
+            "link": "shopify://collections/all",
+            "overlay_opacity": 25
+          }
+        },
+        "tile_wide": {
+          "type": "tile",
+          "settings": {
+            "layout": "wide",
+            "title": "MH40 wireless",
+            "link": "shopify://collections/all",
+            "overlay_opacity": 25
+          }
+        }
+      },
+      "block_order": [
+        "tile_featured",
+        "tile_small_left",
+        "tile_small_right",
+        "tile_wide"
+      ]
+    },
+    "promo": {
+      "type": "promo-banner",
+      "settings": {
+        "heading": "Free shipping on orders over $100",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "color_scheme": "warmth",
+        "use_gradient": true
+      }
+    },
+    "category_cards": {
+      "type": "category-cards",
+      "settings": {
+        "columns": 3,
+        "gap": 8,
+        "card_aspect_ratio": "4 / 5",
+        "overlay_opacity": 55
+      },
+      "blocks": {
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "heading_line_1": "Heritage materials",
+            "heading_line_2": "Explore the collection",
+            "link": "shopify://collections/all"
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "heading_line_1": "Sculptural form",
+            "heading_line_2": "Objects for everyday ritual",
+            "link": "shopify://collections/all"
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "heading_line_1": "Made to last",
+            "heading_line_2": "Discover our story",
+            "link": "shopify://pages/about"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ]
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Curated for you",
+        "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
+        "heading_alignment": "center",
+        "products_to_show": 4,
+        "columns": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "color_scheme": "canvas"
+      }
+    },
+    "split": {
+      "type": "image-with-text",
+      "settings": {
+        "heading": "Crafted with care",
+        "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
+        "button_label": "Our story",
+        "image_position": "left",
+        "color_scheme": "earth"
+      }
+    },
+    "columns": {
+      "type": "multicolumn",
+      "settings": {
+        "heading": "Why Momo",
+        "heading_alignment": "center",
+        "columns": 3,
+        "text_alignment": "center",
+        "color_scheme": "canvas"
+      },
+      "blocks": {
+        "column_1": {
+          "type": "column",
+          "settings": {
+            "heading": "Heritage materials",
+            "text": "<p>Thoughtfully sourced materials chosen for longevity and character.</p>"
+          }
+        },
+        "column_2": {
+          "type": "column",
+          "settings": {
+            "heading": "Sculptural form",
+            "text": "<p>Clean lines and balanced proportions that elevate everyday rituals.</p>"
+          }
+        },
+        "column_3": {
+          "type": "column",
+          "settings": {
+            "heading": "Made to last",
+            "text": "<p>Built with care so each piece becomes part of your story.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "column_1",
+        "column_2",
+        "column_3"
+      ]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "heading": "What customers say",
+        "heading_alignment": "center",
+        "color_scheme": "earth"
+      },
+      "blocks": {
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "Beautiful craftsmanship and thoughtful design in every detail.",
+            "author": "Alex M.",
+            "role": "Verified buyer"
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "The sculptural forms feel timeless — exactly what I was looking for.",
+            "author": "Jordan K.",
+            "role": "Verified buyer"
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "Elevated my space instantly. Quality you can see and feel.",
+            "author": "Sam R.",
+            "role": "Verified buyer"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3"
+      ]
+    },
+    "logos": {
+      "type": "logo-list",
+      "settings": {
+        "heading": "As seen in",
+        "columns": 5,
+        "grayscale": true,
+        "color_scheme": "canvas"
+      },
+      "blocks": {
+        "logo_1": { "type": "logo", "settings": {} },
+        "logo_2": { "type": "logo", "settings": {} },
+        "logo_3": { "type": "logo", "settings": {} },
+        "logo_4": { "type": "logo", "settings": {} },
+        "logo_5": { "type": "logo", "settings": {} }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_3",
+        "logo_4",
+        "logo_5"
+      ]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "heading": "Have a question ? We are here to help.",
+        "subheading": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>",
+        "support_hours": "Our customer support is available monday to friday: 8am-8:30pm.",
+        "support_response_time": "Average answer time: 24h",
+        "show_online_status": true,
+        "color_scheme": "canvas"
+      },
+      "blocks": {
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship overseas?",
+            "answer": "<p>Yes, we ship to most countries worldwide. Shipping rates and delivery times vary by destination.</p>"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "question": "Do I need to setup an account to place an order?",
+            "answer": "<p>No account is required. You can check out as a guest, or create an account to track orders and save details for next time.</p>"
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer gift wrapping",
+            "answer": "<p>Yes, gift wrapping is available at checkout for select items. Add a note at checkout if you would like a personalized message included.</p>"
+          }
+        },
+        "question_4": {
+          "type": "question",
+          "settings": {
+            "question": "How long will it take to get my orders?",
+            "answer": "<p>Orders typically ship within 2–4 business days. Delivery times depend on your location and selected shipping method.</p>"
+          }
+        },
+        "question_5": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of delivery on unused items in original packaging.</p>"
+          }
+        },
+        "question_6": {
+          "type": "question",
+          "settings": {
+            "question": "Any question?",
+            "answer": "<p>Reach out to our customer support team and we will get back to you as soon as possible.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4",
+        "question_5",
+        "question_6"
+      ]
+    },
+    "editorial": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "Designed to endure",
+        "display_size": true,
+        "text": "<p>We believe in objects that earn their place — pieces shaped by material honesty, refined proportion, and the quiet confidence of lasting craft.</p>",
+        "text_alignment": "center",
+        "color_scheme": "steel",
+        "use_gradient": true
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "bento",
+    "promo",
+    "category_cards",
+    "featured",
+    "split",
+    "columns",
+    "testimonials",
+    "logos",
+    "faq",
+    "editorial"
+  ]
+}

@@ -1,0 +1,310 @@
+{% liquid
+  assign columns = section.settings.columns
+  assign text_align = section.settings.text_alignment
+%}
+{% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
+
+<section
+  id="shopify-section-{{ section.id }}"
+  class="multicolumn full-width py-14 md:py-20 {{ section_bg }}"
+>
+  <div class="section-inner">
+    {% render 'section-heading',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      subheading: section.settings.subheading,
+      alignment: section.settings.heading_alignment
+    %}
+
+    {% if section.blocks.size > 0 %}
+      <ul
+        class="multicolumn__grid list-none p-0 multicolumn__grid--align-{{ text_align }}"
+        style="--columns: {{ columns }}"
+        role="list"
+      >
+        {% for block in section.blocks %}
+          <li {{ block.shopify_attributes }}>
+            <div class="multicolumn__item">
+              {% if block.settings.image != blank %}
+                <div class="multicolumn__media">
+                  {{
+                    block.settings.image
+                    | image_url: width: 400
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '200,300,400',
+                      alt: block.settings.image.alt
+                      | default: block.settings.heading
+                  }}
+                </div>
+              {% endif %}
+
+              {% if block.settings.heading != blank %}
+                <h3 class="multicolumn__title">{{ block.settings.heading | escape }}</h3>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <div class="multicolumn__text">{{ block.settings.text }}</div>
+              {% endif %}
+
+              {% if block.settings.link_label != blank and block.settings.link_url != blank %}
+                <a class="multicolumn__link" href="{{ block.settings.link_url }}">
+                  {{ block.settings.link_label | escape }}
+                </a>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .multicolumn__grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 750px) {
+    .multicolumn__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 990px) {
+    .multicolumn__grid {
+      grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+    }
+  }
+
+  .multicolumn__grid--align-center .multicolumn__item {
+    text-align: center;
+  }
+
+  .multicolumn__grid--align-center .multicolumn__media {
+    margin-inline: auto;
+  }
+
+  .multicolumn__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .multicolumn__media {
+    width: 4rem;
+    height: 4rem;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .multicolumn__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .multicolumn__title {
+    margin: 0;
+    font-family: var(--font-display--family, var(--font-primary--family));
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  .multicolumn__item:not(:has(.multicolumn__media)) .multicolumn__title::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 3px;
+    margin-bottom: 0.75rem;
+    border-radius: 9999px;
+    background: var(--color-brand-rust, #c57639);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart)
+    .multicolumn__item:not(:has(.multicolumn__media))
+    .multicolumn__title::before {
+    background: var(--color-brand-warmth, #ea7657);
+  }
+
+  .multicolumn__text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .multicolumn__text :where(p) {
+    margin: 0;
+  }
+
+  .multicolumn__link {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-brand-rust, #c57639);
+    text-decoration: underline;
+    text-transform: uppercase;
+    text-underline-offset: 3px;
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .multicolumn__link {
+    color: #fff;
+  }
+
+  .multicolumn__link:hover {
+    color: var(--color-brand-warmth, #ea7657);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .multicolumn__link:hover {
+    color: rgb(255 255 255 / 0.8);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.multicolumn.name",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.shared.content_header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:sections.shared.eyebrow_label"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.shared.heading_label",
+      "default": "Why Momo"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "t:sections.shared.subheading_label"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "t:sections.shared.heading_alignment_label",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "t:sections.shared.columns_desktop_label",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.multicolumn.text_alignment_label",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "t:sections.multicolumn.blocks.column.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.multicolumn.blocks.column.image_label"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.shared.heading_label",
+          "default": "Column"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.shared.text_label",
+          "default": "<p>Share details about your brand, materials, or craftsmanship.</p>"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "t:sections.shared.link_label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "t:sections.shared.link_url_label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.multicolumn.presets.default_name",
+      "settings": {
+        "heading": "Why Momo",
+        "heading_alignment": "center",
+        "columns": 3,
+        "text_alignment": "center",
+        "color_scheme": "white"
+      },
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "heading": "Heritage materials",
+            "text": "<p>Thoughtfully sourced materials chosen for longevity and character.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "heading": "Sculptural form",
+            "text": "<p>Clean lines and balanced proportions that elevate everyday rituals.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "heading": "Made to last",
+            "text": "<p>Built with care so each piece becomes part of your story.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

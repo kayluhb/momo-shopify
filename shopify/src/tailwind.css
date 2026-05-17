@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* Scan theme Liquid (and JSON templates) for class names */
+@source "../blocks/**/*.liquid";
+@source "../layout/**/*.liquid";
+@source "../sections/**/*.liquid";
+@source "../snippets/**/*.liquid";
+@source "../templates/**/*.json";
+
+/* Brand palette — utilities: bg-brand-steel, text-brand-rust, ring-brand-heart, etc. */
+@theme {
+  --color-brand-steel: #00253f;
+  --color-brand-primary: #00253f;
+  --color-brand-rust: #c57639;
+  --color-brand-earth: #987659;
+  --color-brand-warmth: #ea7657;
+  --color-brand-heart: #ff5e6e;
+  --color-brand-canvas: color-mix(in srgb, var(--color-brand-steel) 5%, white);
+  --color-brand-surface: color-mix(in srgb, var(--color-brand-earth) 10%, white);
+  --color-selection-background: var(--color-brand-primary);
+  --color-selection-foreground: #fff;
+}
+
+@layer base {
+  :where(a, button) {
+    transition-property: color, background-color, border-color, text-decoration-color, box-shadow,
+      opacity, transform;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  shopify-account::part(signed-out-avatar) {
+    transition-property: color, background-color, border-color, text-decoration-color, box-shadow,
+      opacity, transform;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

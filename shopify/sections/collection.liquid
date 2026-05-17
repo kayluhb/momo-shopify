@@ -1,0 +1,181 @@
+{% comment %}
+  Collection page with facet filtering via Section Rendering API.
+{% endcomment %}
+
+<h1>{{ collection.title }}</h1>
+
+<div class="collection-layout">
+  {% if collection.filters.size > 0 %}
+    <facets-form-component section-id="{{ section.id }}" class="collection-facets">
+      <form ref="facetsForm" class="collection-facets__form">
+        <h2 class="collection-facets__title">{{ 'collections.filters_title' | t }}</h2>
+
+        {% for filter in collection.filters %}
+          <details class="collection-facets__group" {% if filter.active_values.size > 0 %}open{% endif %}>
+            <summary>{{ filter.label }}</summary>
+
+            <div class="collection-facets__values">
+              {% case filter.type %}
+                {% when 'list' %}
+                  <ul>
+                    {% for value in filter.values %}
+                      <li>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}
+                              checked
+                            {% endif %}
+                            {% if value.count == 0 and value.active == false %}
+                              disabled
+                            {% endif %}
+                          >
+                          {{ value.label }} ({{ value.count }})
+                        </label>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% when 'boolean' %}
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="{{ filter.param_name }}"
+                      value="1"
+                      {% if filter.true_value.active %}
+                        checked
+                      {% endif %}
+                    >
+                    {{ filter.label }}
+                  </label>
+                {% when 'price_range' %}
+                  <div class="collection-facets__price">
+                    <label>
+                      {{ 'collections.price_min' | t }}
+                      <input
+                        type="number"
+                        name="{{ filter.min_value.param_name }}"
+                        {% if filter.min_value.value %}
+                          value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                        {% endif %}
+                        placeholder="0"
+                        min="0"
+                      >
+                    </label>
+                    <label>
+                      {{ 'collections.price_max' | t }}
+                      <input
+                        type="number"
+                        name="{{ filter.max_value.param_name }}"
+                        {% if filter.max_value.value %}
+                          value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                        {% endif %}
+                        placeholder="{{ filter.range_max | money_without_currency }}"
+                        min="0"
+                      >
+                    </label>
+                  </div>
+              {% endcase %}
+            </div>
+          </details>
+        {% endfor %}
+
+        {% if collection.filters.active_values.size > 0 %}
+          <a href="{{ collection.url }}" class="collection-facets__clear">
+            {{ 'collections.clear_filters' | t }}
+          </a>
+        {% endif %}
+      </form>
+    </facets-form-component>
+  {% endif %}
+
+  <div class="collection-products" data-collection-products>
+    {% paginate collection.products by 20 %}
+      {% for product in collection.products %}
+        <div class="collection-product">
+          {% if product.featured_image %}
+            {% render 'image',
+              class: 'collection-product__image',
+              image: product.featured_image,
+              url: product.url,
+              width: 400,
+              height: 400,
+              crop: 'center'
+            %}
+          {% endif %}
+          <div class="collection-product__content">
+            <p>{{ product.title | escape | link_to: product.url }}</p>
+            <p>{{ product.price | money }}</p>
+          </div>
+        </div>
+      {% endfor %}
+
+      {{ paginate | default_pagination }}
+    {% endpaginate %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .collection-layout {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 48rem) {
+    .collection-layout {
+      grid-template-columns: minmax(12rem, 16rem) 1fr;
+      align-items: start;
+    }
+  }
+
+  .collection-facets__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .collection-facets__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .collection-facets__group summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .collection-facets__values ul {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .collection-facets__values li + li {
+    margin-top: 0.35rem;
+  }
+
+  .collection-facets__price {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .collection-facets__clear {
+    font-size: 0.875rem;
+  }
+
+  .collection-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    gap: 1.5rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": []
+}
+{% endschema %}

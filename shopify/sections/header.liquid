@@ -1,0 +1,311 @@
+{% liquid
+  assign is_homepage = false
+  if request.page_type == 'index'
+    assign is_homepage = true
+  endif
+
+  assign header_text_color = section.settings.text_color | default: 'steel'
+  assign header_classes = 'site-header full-width z-50 flex w-full min-h-0 justify-center [&_a]:text-inherit [&_svg]:text-inherit'
+
+  unless is_homepage
+    assign header_classes = header_classes | append: ' site-header--scrolled'
+  endunless
+%}
+
+<header
+  class="{{ header_classes }} {% if is_homepage %}{% render 'brand-text-color-class', color: header_text_color %}{% endif %}"
+  data-site-header
+  data-section-id="{{ section.id }}"
+  {% if is_homepage %}
+    data-site-header-scroll
+  {% endif %}
+>
+  <div class="site-header__inner flex min-h-0 w-full items-center gap-4">
+    <nav
+      class="site-header__nav flex min-h-0 min-w-0 flex-1 flex-wrap items-center justify-start gap-4 text-sm [&_a]:relative [&_a]:inline-flex [&_a]:items-center [&_a]:justify-center [&_a]:font-bold [&_a]:no-underline [&_a]:hover:text-brand-rust"
+      aria-label="{{ 'sections.header.main_navigation' | t }}"
+    >
+      {% for link in section.settings.menu.links %}
+        {{ link.title | link_to: link.url }}
+      {% endfor %}
+    </nav>
+
+    <a
+      class="site-header__logo relative inline-flex min-h-0 shrink-0 items-center justify-center no-underline hover:text-brand-rust"
+      href="{{ routes.root_url }}"
+    >
+      {% if settings.logo %}
+        {{
+          settings.logo
+          | image_url: width: 400
+          | image_tag: alt: shop.name, class: 'site-header__logo-mark block h-auto w-auto max-w-[min(12rem,40vw)] object-contain'
+        }}
+      {% else %}
+        <span class="sr-only">{{ shop.name }}</span>
+        <span class="site-header__logo-mark">{{ 'logo.svg' | inline_asset_content }}</span>
+      {% endif %}
+    </a>
+
+    <div class="site-header__utilities flex min-h-0 min-w-0 flex-1 items-center justify-end gap-4 text-sm">
+      {% if shop.customer_accounts_enabled %}
+        <shopify-account menu="{{ section.settings.customer_account_menu }}">
+          <span slot="signed-out-avatar" class="site-header__account-trigger">
+            {{ 'icon-account.svg' | inline_asset_content }}
+          </span>
+        </shopify-account>
+      {% endif %}
+
+      <button
+        type="button"
+        class="site-header__icon-btn"
+        data-cart-drawer-open
+        aria-label="{{ 'cart.drawer_title' | t }}"
+      >
+        <span data-hydration-key="header-cart" class="site-header__cart-badge">
+          {% if cart.item_count > 0 %}
+            <sup class="absolute left-full max-w-[var(--page-margin)] overflow-hidden">{{ cart.item_count }}</sup>
+          {% endif %}
+        </span>
+
+        {{ 'icon-cart.svg' | inline_asset_content }}
+      </button>
+    </div>
+  </div>
+</header>
+
+{% style %}
+  .shopify-section-group-header-group {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .shopify-section-group-header-group .shopify-section {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  /* Homepage hero: fixed overlay so main/hero start at viewport top (no body gap). */
+  body:has(.hero) .shopify-section-group-header-group {
+    position: fixed;
+  }
+
+  body:not(:has(.hero)) .shopify-section-group-header-group {
+    margin-bottom: calc(-1 * var(--header-height-scrolled));
+  }
+
+  body:not(:has(.hero)) main {
+    padding-top: var(--header-height-scrolled);
+  }
+
+  @property --header-icon-scale {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+  }
+
+  .site-header {
+    --header-icon-scale: 1;
+    padding-block: var(--header-padding-y);
+    transition:
+      padding 250ms ease,
+      background-color 200ms ease,
+      color 200ms ease,
+      --header-icon-scale 250ms ease;
+  }
+
+  .site-header__inner {
+    box-sizing: border-box;
+    max-width: min(calc(var(--page-width) - var(--page-margin) * 2), calc(100% - var(--page-margin) * 2));
+    padding-inline: var(--page-margin);
+  }
+
+  .site-header--scrolled {
+    --header-icon-scale: var(--header-icon-scale-scrolled);
+    padding-block: var(--header-padding-y-scrolled);
+    background-color: #fff;
+    color: var(--color-brand-steel);
+  }
+
+  .site-header__logo-mark {
+    display: block;
+    max-height: var(--header-logo-max-height);
+    width: auto;
+    transition: max-height 250ms ease;
+  }
+
+  .site-header--scrolled .site-header__logo-mark {
+    max-height: var(--header-logo-max-height-scrolled);
+  }
+
+  .site-header__logo-mark :where(svg) {
+    display: block;
+    height: auto;
+    max-height: inherit;
+    width: auto;
+    max-width: min(12rem, 40vw);
+  }
+
+  .site-header__icon-btn,
+  .site-header__utilities shopify-account {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: var(--header-icon-size);
+    height: var(--header-icon-size);
+    line-height: 0;
+    color: inherit;
+    transform: scale(var(--header-icon-scale)) translateZ(0);
+    transform-origin: center;
+    backface-visibility: hidden;
+    /* Scale is driven only by --header-icon-scale on .site-header (no transform transition here).
+       transition: none overrides Tailwind base :where(a) transform/color transitions that fought it. */
+    transition: none;
+  }
+
+  .site-header__icon-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: none;
+  }
+
+  .site-header__icon-btn:hover {
+    color: var(--color-brand-rust);
+  }
+
+  .site-header__icon-btn :where(svg),
+  .site-header__account-trigger :where(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .site-header__utilities shopify-account {
+    --shopify-account-avatar-size: var(--header-icon-size);
+    --shopify-account-signed-in-avatar-size: var(--header-icon-size);
+    --shopify-account-color-accent: currentcolor;
+    --shopify-account-color-accent-hover: var(--color-brand-rust);
+    --shopify-account-color-border: transparent;
+  }
+
+  .site-header__utilities shopify-account::part(signed-out-avatar) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: none;
+  }
+
+  .site-header__utilities shopify-account::part(signed-out-avatar):hover {
+    color: var(--color-brand-rust);
+  }
+
+  .site-header__utilities shopify-account::part(signed-out-avatar):focus-visible {
+    outline: 2px solid var(--color-brand-rust);
+    outline-offset: 2px;
+  }
+
+  .site-header__account-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    pointer-events: none;
+  }
+{% endstyle %}
+
+{% unless request.design_mode %}
+  <script type="module">
+    import { hydrate } from '@theme/section-hydration';
+    hydrate('{{ section.id }}');
+  </script>
+{% endunless %}
+
+{% javascript %}
+  (function () {
+    var header = document.querySelector('[data-site-header]');
+    if (!header || !header.hasAttribute('data-site-header-scroll')) return;
+
+    function onScroll() {
+      header.classList.toggle('site-header--scrolled', window.scrollY > 20);
+    }
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "t:labels.customer_account_menu",
+      "default": "customer-account-main-menu"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "t:sections.header.settings.text_color_label",
+      "default": "steel",
+      "options": [
+        {
+          "value": "white",
+          "label": "t:options.brand_color.white"
+        },
+        {
+          "value": "steel",
+          "label": "t:options.brand_color.steel"
+        },
+        {
+          "value": "rust",
+          "label": "t:options.brand_color.rust"
+        },
+        {
+          "value": "earth",
+          "label": "t:options.brand_color.earth"
+        },
+        {
+          "value": "warmth",
+          "label": "t:options.brand_color.warmth"
+        },
+        {
+          "value": "heart",
+          "label": "t:options.brand_color.heart"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

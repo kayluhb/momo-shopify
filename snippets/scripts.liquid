@@ -36,14 +36,6 @@
 <link rel="modulepreload" href="{{ 'cart-items.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'cart-icon.js' | asset_url }}" fetchpriority="low">
 
-{% if settings.page_transition_enabled %}
-  <script
-    src="{{ 'view-transitions.js' | asset_url }}"
-    async
-    blocking="render"
-  ></script>
-{% endif %}
-
 <script src="{{ 'cart-icon.js' | asset_url }}" type="module" fetchpriority="low"></script>
 <script src="{{ 'cart-items.js' | asset_url }}" type="module" fetchpriority="low"></script>
 <script src="{{ 'cart-drawer.js' | asset_url }}" type="module" fetchpriority="low"></script>

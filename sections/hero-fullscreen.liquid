@@ -30,6 +30,7 @@
 
 <div
   class="hero full-width hero--parallax{% if show_slideshow_chrome %} hero--slideshow{% endif %}"
+  data-hero-parallax
   data-hero-fullscreen
   data-enable-carousel="{% if show_slideshow_chrome %}1{% else %}0{% endif %}"
   data-autoplay="{% if section.settings.autoplay %}1{% else %}0{% endif %}"
@@ -338,7 +339,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 100svh;
+    min-height: calc(100svh - var(--announcement-bar-height));
     overflow: hidden;
   }
 
@@ -735,36 +736,6 @@
     if (!roots.length) return;
 
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var parallaxRate = 0.22;
-    var parallaxTicking = false;
-
-    function updateHeroParallax() {
-      roots.forEach(function (root) {
-        if (!root.classList.contains('hero--parallax')) return;
-        var height = root.offsetHeight;
-        if (!height) return;
-
-        var rect = root.getBoundingClientRect();
-        if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
-
-        var scrolled = Math.max(0, Math.min(height, -rect.top));
-        var offset = scrolled * parallaxRate;
-        root.style.setProperty('--hero-parallax-y', offset + 'px');
-      });
-      parallaxTicking = false;
-    }
-
-    function requestParallaxUpdate() {
-      if (reduceMotion || parallaxTicking) return;
-      parallaxTicking = true;
-      requestAnimationFrame(updateHeroParallax);
-    }
-
-    if (!reduceMotion) {
-      window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
-      window.addEventListener('resize', requestParallaxUpdate, { passive: true });
-      requestParallaxUpdate();
-    }
 
     roots.forEach(function (root) {
       if (root.dataset.enableCarousel !== '1') return;
@@ -960,6 +931,8 @@
     });
   })();
 {% endjavascript %}
+
+{% render 'hero-parallax' %}
 
 {% schema %}
 {

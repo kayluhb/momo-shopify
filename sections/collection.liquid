@@ -2,8 +2,6 @@
   Collection page with facet filtering via Section Rendering API.
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
-
 <div class="collection-layout">
   {% if collection.filters.size > 0 %}
     <facets-form-component section-id="{{ section.id }}" class="collection-facets">

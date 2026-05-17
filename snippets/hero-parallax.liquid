@@ -1,0 +1,51 @@
+{% doc %}
+  Initializes scroll parallax for hero sections marked with `data-hero-parallax`.
+
+  @example
+  {% render 'hero-parallax' %}
+{% enddoc %}
+
+{% javascript %}
+  (function () {
+    if (window.__momoHeroParallaxBound) return;
+    window.__momoHeroParallaxBound = true;
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    var parallaxRate = 0.22;
+    var parallaxTicking = false;
+
+    function getParallaxRoots() {
+      return document.querySelectorAll('[data-hero-parallax]');
+    }
+
+    function updateHeroParallax() {
+      getParallaxRoots().forEach(function (root) {
+        if (!root.classList.contains('hero--parallax')) return;
+        var height = root.offsetHeight;
+        if (!height) return;
+
+        var rect = root.getBoundingClientRect();
+        if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+
+        var scrolled = Math.max(0, Math.min(height, -rect.top));
+        var offset = scrolled * parallaxRate;
+        root.style.setProperty('--hero-parallax-y', offset + 'px');
+      });
+      parallaxTicking = false;
+    }
+
+    function requestParallaxUpdate() {
+      if (parallaxTicking) return;
+      parallaxTicking = true;
+      requestAnimationFrame(updateHeroParallax);
+    }
+
+    window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
+    window.addEventListener('resize', requestParallaxUpdate, { passive: true });
+    requestParallaxUpdate();
+
+    document.addEventListener('shopify:section:load', requestParallaxUpdate);
+  })();
+{% endjavascript %}

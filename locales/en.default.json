@@ -45,6 +45,9 @@
       "instagram": "Instagram",
       "tiktok": "TikTok"
     },
+    "collection_hero": {
+      "featured_product": "Featured product"
+    },
     "hero_fullscreen": {
       "default_heading": "Sleek, sculptural, striking",
       "default_subheading": "A modern statement in form and finish, designed to stand apart.",

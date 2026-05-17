@@ -6,16 +6,7 @@
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
-    {% liquid
-      if settings.type_use_adobe_degular == false
-        assign use_adobe_degular = false
-      else
-        assign use_adobe_degular = true
-      endif
-    %}
-    {% if use_adobe_degular %}
-      {% render 'typekit-fonts' %}
-    {% endif %}
+    {% render 'degular-fonts' %}
 
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}

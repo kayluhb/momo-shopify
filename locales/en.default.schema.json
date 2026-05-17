@@ -14,18 +14,15 @@
     "block": "Block",
     "blog": "Blog",
     "branding": "Branding",
-    "animations": "Animations",
     "cart": "Cart",
     "cart_drawer": "Cart drawer",
     "collection": "Collection",
     "collections": "Collections",
     "collection_card": "Collection card",
     "collections_grid": "Collections grid",
-    "colors": "Colors",
     "column": "Column",
     "content": "Content",
     "custom_section": "Custom section",
-    "fonts": "Fonts",
     "footer": "Footer",
     "group": "Group",
     "header": "Header",
@@ -33,43 +30,30 @@
     "main": "Main",
     "page": "Page",
     "password": "Password",
-    "primary": "Primary",
     "product": "Product",
     "row": "Row",
     "search": "Search",
-    "secondary": "Secondary",
     "section": "Section",
     "settings": "Settings",
     "sidebar": "Sidebar",
     "text": "Text",
-    "theme": "Theme",
-    "typography": "Typography"
+    "theme": "Theme"
   },
   "labels": {
     "alignment": "Alignment",
-    "background": "Background",
-    "foreground": "Foreground",
     "grid_gap": "Grid spacing",
     "grid_item_width": "Grid item width",
-    "input_corner_radius": "Input corner radius",
     "layout_direction": "Layout direction",
     "menu": "Menu",
     "logo": "Logo",
     "logo_info": "Shown in the header and on gift cards. If empty, the theme logo.svg asset is used in the header.",
     "cart_drawer_auto_open": "Open cart drawer when a product is added",
     "customer_account_menu": "Customer account menu",
-    "page_transition_enabled": "Enable page transitions",
     "padding": "Padding",
     "page_margin": "Page margin",
     "page_width": "Page width",
-    "primary_font_shopify_only_info": "Used only when Adobe Fonts (Degular) is turned off.",
-    "show_payment_icons": "Show payment icons",
-    "text_selection": "Text selection",
-    "text_selection_info": "Highlight style when customers select text on the storefront.",
     "text_style": "Text style",
-    "text": "Text",
-    "use_adobe_degular": "Use Degular fonts",
-    "use_adobe_degular_info": "Loads self-hosted Degular Display Thin (headings) and Degular Thin (body) from theme assets."
+    "text": "Text"
   },
   "options": {
     "alignment": {
@@ -84,11 +68,6 @@
     "page_width": {
       "narrow": "Narrow",
       "wide": "Wide"
-    },
-    "text_selection": {
-      "brand": "Brand colors",
-      "subtle": "Subtle tint",
-      "browser": "Browser default"
     },
     "size": {
       "large": "Large",
@@ -106,12 +85,6 @@
       "earth": "Earth",
       "warmth": "Warmth",
       "heart": "Heart"
-    },
-    "header_contrast": {
-      "light_scrim": "Light scrim (dark text)",
-      "inverse_scrim": "Dark scrim (light text)",
-      "solid": "Solid bar",
-      "none": "None"
     },
     "color_scheme": {
       "white": "White",
@@ -265,9 +238,7 @@
     },
     "header": {
       "settings": {
-        "text_color_label": "Text and icon color",
-        "contrast_mode_label": "Contrast over imagery",
-        "contrast_mode_info": "Improves readability when the header sits over photos or dark backgrounds, such as the full screen hero."
+        "text_color_label": "Text and icon color"
       }
     },
     "footer": {
@@ -330,6 +301,25 @@
           "eyebrow_info": "Shown centered on the large tile.",
           "overlay_opacity_label": "Image overlay darkness"
         }
+      }
+    },
+    "collection_hero": {
+      "name": "Collection hero",
+      "settings": {
+        "image_label": "Background image",
+        "image_info": "Uses the collection image when empty.",
+        "overlay_opacity_label": "Image overlay darkness",
+        "hero_height_label": "Hero height",
+        "heading_label": "Heading",
+        "heading_info": "Uses the collection title when empty.",
+        "description_label": "Description",
+        "description_info": "Uses the collection description when empty.",
+        "show_featured_product_label": "Show featured product",
+        "featured_product_label": "Featured product",
+        "featured_product_info": "Uses the first product in the collection when empty."
+      },
+      "presets": {
+        "default_name": "Collection hero"
       }
     },
     "hero_fullscreen": {

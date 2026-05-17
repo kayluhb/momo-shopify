@@ -8,29 +8,6 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "t:general.typography",
-    "settings": [
-      {
-        "type": "header",
-        "content": "t:general.fonts"
-      },
-      {
-        "type": "checkbox",
-        "id": "type_use_adobe_degular",
-        "label": "t:labels.use_adobe_degular",
-        "info": "t:labels.use_adobe_degular_info",
-        "default": true
-      },
-      {
-        "type": "font_picker",
-        "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary",
-        "info": "t:labels.primary_font_shopify_only_info"
-      }
-    ]
-  },
-  {
     "name": "t:general.layout",
     "settings": [
       {
@@ -73,54 +50,6 @@
     ]
   },
   {
-    "name": "t:general.colors",
-    "settings": [
-      {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
-      },
-      {
-        "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
-      },
-      {
-        "type": "range",
-        "id": "input_corner_radius",
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "unit": "px",
-        "label": "t:labels.input_corner_radius",
-        "default": 4
-      },
-      {
-        "type": "select",
-        "id": "text_selection",
-        "label": "t:labels.text_selection",
-        "info": "t:labels.text_selection_info",
-        "options": [
-          {
-            "value": "brand",
-            "label": "t:options.text_selection.brand"
-          },
-          {
-            "value": "subtle",
-            "label": "t:options.text_selection.subtle"
-          },
-          {
-            "value": "browser",
-            "label": "t:options.text_selection.browser"
-          }
-        ],
-        "default": "brand"
-      }
-    ]
-  },
-  {
     "name": "t:general.cart",
     "settings": [
       {
@@ -128,17 +57,6 @@
         "id": "cart_drawer_auto_open",
         "label": "t:labels.cart_drawer_auto_open",
         "default": true
-      }
-    ]
-  },
-  {
-    "name": "t:general.animations",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "page_transition_enabled",
-        "label": "t:labels.page_transition_enabled",
-        "default": false
       }
     ]
   }

@@ -9,7 +9,6 @@
  */
 {
   "current": {
-    "page_transition_enabled": true,
     "sections": {
       "cart-drawer": {
         "type": "cart-drawer",

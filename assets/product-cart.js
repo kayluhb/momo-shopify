@@ -1,7 +1,13 @@
 import { sectionRenderer } from '@theme/section-renderer';
-import { fetchConfig, onDocumentReady } from '@theme/utilities';
-import { cartDebug, cartDebugError, cartDebugWarn, getCartDomSnapshot } from '@theme/cart-debug';
 import { CartAddEvent, CartErrorEvent } from '@theme/events';
+import {
+  cartDebug,
+  cartDebugError,
+  cartDebugWarn,
+  fetchConfig,
+  getCartDomSnapshot,
+  onDocumentReady,
+} from '@theme/utilities';
 import {
   getCartDrawerSectionId,
   getCartSectionsParam,

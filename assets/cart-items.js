@@ -1,5 +1,4 @@
-import { fetchConfig, debounce } from '@theme/utilities';
-import { cartDebug, cartDebugError, getCartDomSnapshot } from '@theme/cart-debug';
+import { cartDebug, cartDebugError, debounce, fetchConfig, getCartDomSnapshot } from '@theme/utilities';
 import { ThemeEvents, CartUpdateEvent, CartAddEvent } from '@theme/events';
 import {
   getCartSectionsParam,

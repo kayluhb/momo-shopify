@@ -1,4 +1,4 @@
-import { cartDebug, cartDebugWarn, getCartDomSnapshot } from '@theme/cart-debug';
+import { cartDebug, cartDebugWarn, getCartDomSnapshot } from '@theme/utilities';
 import { morph, MORPH_OPTIONS } from '@theme/morph';
 import { morphSection, normalizeSectionId, sectionRenderer } from '@theme/section-renderer';
 

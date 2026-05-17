@@ -324,8 +324,28 @@
     .product-gallery--split_half .product-gallery__stack-item {
       flex: 0 0 100%;
       width: 100%;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
       scroll-snap-align: start;
       scroll-snap-stop: always;
+    }
+
+    .product-gallery--split_half .product-gallery__stack-item .product-gallery__zoom-link,
+    .product-gallery--split_half .product-gallery__stack-item .product-gallery__media-tag {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto;
+    }
+
+    .product-gallery--split_half .product-gallery__stack-item .product-gallery__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-gallery--split_half .product-gallery__placeholder {
+      min-height: 0;
+      height: 100%;
     }
 
     .product-gallery--split_half .product-gallery__stack:focus-visible {

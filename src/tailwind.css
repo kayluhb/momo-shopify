@@ -17,11 +17,16 @@
   --color-brand-heart: #ff5e6e;
   --color-brand-canvas: color-mix(in srgb, var(--color-brand-steel) 5%, white);
   --color-brand-surface: color-mix(in srgb, var(--color-brand-earth) 10%, white);
-  --color-selection-background: var(--color-brand-primary);
-  --color-selection-foreground: #fff;
 }
 
 @layer base {
+  ::selection {
+    background-color: #00253f;
+    background-color: var(--color-selection-background);
+    color: #ffffff;
+    color: var(--color-selection-foreground);
+  }
+
   :where(a, button) {
     transition-property: color, background-color, border-color, text-decoration-color, box-shadow,
       opacity, transform;

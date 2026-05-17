@@ -13,8 +13,8 @@
   data-product-id="{{ product.id }}"
   data-product-handle="{{ product.handle }}"
   data-limit="{{ products_limit }}"
-  data-show-recently-viewed="{{ show_recently_viewed }}"
-  data-recommendations-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ products_limit }}"
+  data-show-recently-viewed="{% if show_recently_viewed %}true{% else %}false{% endif %}"
+  data-recommendations-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ products_limit }}&intent=related"
   data-recently-viewed-url="{{ routes.search_url }}?view=recently-viewed"
   style="--collection-columns: {{ columns }}; --collection-gap: {{ grid_gap }}px;"
   {{ section.shopify_attributes }}
@@ -33,6 +33,7 @@
         aria-controls="ProductRecommendationsPanel-related-{{ section.id }}"
         aria-selected="true"
         ref="relatedTab"
+        on:click="/activateRelatedTab"
       >
         {{ 'sections.product_recommendations.related' | t }}
       </button>
@@ -44,6 +45,7 @@
         aria-controls="ProductRecommendationsPanel-recent-{{ section.id }}"
         aria-selected="false"
         ref="recentlyViewedTab"
+        on:click="/activateRecentlyViewedTab"
         {% unless show_recently_viewed %}hidden{% endunless %}
       >
         {{ 'sections.product_recommendations.recently_viewed' | t }}
@@ -57,11 +59,11 @@
       aria-labelledby="ProductRecommendationsTab-related-{{ section.id }}"
       data-related-panel
       ref="relatedPanel"
-      {% if recommendations.performed and recommendations.products_count > 0 %}
+      {% if recommendations.performed? and recommendations.products_count > 0 %}
         data-loaded="true"
       {% endif %}
     >
-      {% if recommendations.performed and recommendations.products_count > 0 %}
+      {% if recommendations.performed? and recommendations.products_count > 0 %}
         {% render 'product-recommendations-grid',
           products: recommendations.products,
           show_secondary_image: section.settings.show_secondary_image,

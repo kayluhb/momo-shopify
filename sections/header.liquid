@@ -17,8 +17,17 @@
   {% endif %}
 >
   <div class="site-header__inner flex min-h-0 w-full flex-nowrap items-center gap-4">
+    <button
+      type="button"
+      class="site-header__icon-btn site-header__menu-trigger"
+      data-menu-drawer-open
+      aria-label="{{ 'sections.header.menu_open' | t }}"
+    >
+      <span class="site-header__icon-svg" aria-hidden="true">{{ 'icon-menu.svg' | inline_asset_content }}</span>
+    </button>
+
     <nav
-      class="site-header__nav flex min-h-0 min-w-0 flex-1 flex-nowrap items-center justify-start gap-4 text-sm [&_a]:relative [&_a]:inline-flex [&_a]:items-center [&_a]:justify-center [&_a]:font-bold [&_a]:no-underline [&_a]:hover:text-brand-rust"
+      class="site-header__nav site-header__nav--desktop flex min-h-0 min-w-0 flex-1 flex-nowrap items-center justify-start gap-4 text-sm [&_a]:relative [&_a]:inline-flex [&_a]:items-center [&_a]:justify-center [&_a]:font-bold [&_a]:no-underline [&_a]:hover:text-brand-rust"
       aria-label="{{ 'sections.header.main_navigation' | t }}"
     >
       {% for link in section.settings.menu.links %}
@@ -85,6 +94,49 @@
       </button>
     </div>
   </div>
+
+  <menu-drawer-component class="menu-drawer">
+    <dialog
+      ref="dialog"
+      class="menu-drawer__dialog dialog-drawer"
+      aria-labelledby="menu-drawer-heading"
+    >
+      <div class="menu-drawer__inner">
+        <header class="menu-drawer__header">
+          <h2 id="menu-drawer-heading" class="menu-drawer__heading">
+            {{ 'sections.header.menu_drawer_title' | t }}
+          </h2>
+          <button
+            type="button"
+            class="menu-drawer__close"
+            on:click="menu-drawer-component/close"
+            aria-label="{{ 'sections.header.menu_close' | t }}"
+          >
+            {{ 'sections.header.menu_close' | t }}
+          </button>
+        </header>
+
+        <nav class="menu-drawer__nav" aria-label="{{ 'sections.header.main_navigation' | t }}">
+          <ul class="menu-drawer__list">
+            {% for link in section.settings.menu.links %}
+              <li class="menu-drawer__item">
+                <a
+                  class="menu-drawer__link"
+                  href="{{ link.url }}"
+                  on:click="menu-drawer-component/close"
+                  {% if link.active %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{ link.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      </div>
+    </dialog>
+  </menu-drawer-component>
 </header>
 
 {% style %}
@@ -130,6 +182,14 @@
     box-sizing: border-box;
     max-width: min(calc(var(--page-width) - var(--page-margin) * 2), calc(100% - var(--page-margin) * 2));
     padding-inline: var(--page-margin);
+  }
+
+  @media (max-width: 749px) {
+    .site-header__inner {
+      gap: 0.75rem;
+      max-width: calc(100% - var(--page-margin-mobile) * 2);
+      padding-inline: var(--page-margin-mobile);
+    }
   }
 
   .site-header__logo-mark {
@@ -305,6 +365,176 @@
       var(--header-icon-size) + (var(--header-icon-size-scrolled) - var(--header-icon-size)) *
         var(--header-scroll-progress)
     );
+  }
+
+  .site-header__menu-trigger {
+    display: none;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 749px) {
+    .site-header__menu-trigger {
+      display: inline-flex;
+    }
+
+    .site-header__nav--desktop {
+      display: none;
+    }
+  }
+
+  .menu-drawer__dialog {
+    --animation-speed: 350ms;
+    --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --dialog-drawer-opening-animation: menu-drawer-slide;
+    --dialog-drawer-closing-animation: menu-drawer-slide;
+
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(20rem, 100vw);
+    max-width: 100%;
+    height: 100%;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: #fff;
+    color: var(--color-brand-steel, #00253f);
+    box-shadow: 4px 0 24px rgb(0 0 0 / 12%);
+  }
+
+  .menu-drawer__dialog[open] {
+    --start-x: -100%;
+    --end-x: 0;
+
+    animation: var(--dialog-drawer-opening-animation) var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  .menu-drawer__dialog[open].dialog-closing {
+    --start-x: 0;
+    --end-x: -100%;
+
+    animation: var(--dialog-drawer-closing-animation) var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  .menu-drawer__dialog::backdrop {
+    background: rgb(0 37 63 / 40%);
+  }
+
+  .menu-drawer__dialog[open]::backdrop {
+    animation: menu-drawer-backdrop-in var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  .menu-drawer__dialog[open].dialog-closing::backdrop {
+    animation: menu-drawer-backdrop-out var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  @keyframes menu-drawer-slide {
+    from {
+      transform: translateX(var(--start-x, -100%));
+    }
+
+    to {
+      transform: translateX(var(--end-x, 0));
+    }
+  }
+
+  @keyframes menu-drawer-backdrop-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes menu-drawer-backdrop-out {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-drawer__dialog[open],
+    .menu-drawer__dialog[open].dialog-closing,
+    .menu-drawer__dialog[open]::backdrop,
+    .menu-drawer__dialog[open].dialog-closing::backdrop {
+      animation: none;
+    }
+  }
+
+  .menu-drawer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+    padding: 1.25rem;
+    box-sizing: border-box;
+  }
+
+  .menu-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .menu-drawer__heading {
+    margin: 0;
+    font-family: var(--font-brand--family, var(--font-display--family, sans-serif));
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .menu-drawer__close {
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+  }
+
+  .menu-drawer__close:focus-visible,
+  .menu-drawer__link:focus-visible {
+    outline: 2px solid var(--color-brand-rust);
+    outline-offset: 2px;
+  }
+
+  .menu-drawer__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu-drawer__item + .menu-drawer__item {
+    margin-top: 0.25rem;
+  }
+
+  .menu-drawer__link {
+    display: block;
+    padding: 0.75rem 0;
+    color: inherit;
+    font-family: var(--font-brand--family, var(--font-display--family, sans-serif));
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .menu-drawer__link:hover {
+    color: var(--color-brand-rust);
+  }
+
+  .menu-drawer__link[aria-current='page'] {
+    color: var(--color-brand-rust);
   }
 {% endstyle %}
 

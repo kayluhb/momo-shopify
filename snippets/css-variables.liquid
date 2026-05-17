@@ -21,6 +21,7 @@
     --font-weight-bold: 700;
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
+    --page-margin-mobile: min(var(--page-margin), 0.75rem);
     --header-padding-y: 2rem;
     --header-padding-y-scrolled: 0.75rem;
     --header-logo-max-height: 2.5rem;
@@ -40,12 +41,8 @@
     --header-offset-scrolled: calc(var(--header-height-scrolled) + var(--announcement-bar-height));
     --color-background: #ffffff;
     --color-foreground: #333333;
+    --color-selection-background: #00253f;
+    --color-selection-foreground: #ffffff;
     --style-border-radius-inputs: 4px;
-  }
-
-  ::selection,
-  ::-moz-selection {
-    background-color: var(--color-selection-background);
-    color: var(--color-selection-foreground);
   }
 {% endstyle %}

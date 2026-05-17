@@ -64,7 +64,10 @@
   },
   "sections": {
     "header": {
-      "main_navigation": "Main navigation"
+      "main_navigation": "Main navigation",
+      "menu_open": "Open menu",
+      "menu_close": "Close menu",
+      "menu_drawer_title": "Menu"
     },
     "announcement_bar": {
       "region_label": "Store announcements",

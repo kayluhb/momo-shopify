@@ -56,8 +56,20 @@ class ProductRecommendationsComponent extends Component {
     }
 
     this.#syncRecentlyViewedTab();
-    this.#setupTabs();
+    this.#updateTabsVisibility();
     this.#observeRelated();
+  }
+
+  activateRelatedTab() {
+    if (!(this.refs.relatedTab instanceof HTMLButtonElement) || this.refs.relatedTab.hidden) return;
+    this.#activateTab(this.refs.relatedTab);
+  }
+
+  activateRecentlyViewedTab() {
+    if (!(this.refs.recentlyViewedTab instanceof HTMLButtonElement) || this.refs.recentlyViewedTab.hidden) {
+      return;
+    }
+    this.#activateTab(this.refs.recentlyViewedTab);
   }
 
   disconnectedCallback() {
@@ -75,27 +87,25 @@ class ProductRecommendationsComponent extends Component {
       this.refs.recentlyViewedTab.hidden = true;
       this.refs.recentlyViewedTab.setAttribute('aria-hidden', 'true');
       this.refs.recentlyViewedTab.disabled = true;
+      this.#updateTabsVisibility();
       return;
     }
 
     this.refs.recentlyViewedTab.hidden = false;
     this.refs.recentlyViewedTab.removeAttribute('aria-hidden');
     this.refs.recentlyViewedTab.disabled = false;
+    this.#updateTabsVisibility();
   }
 
-  #setupTabs() {
+  #updateTabsVisibility() {
     const tabs = [this.refs.relatedTab, this.refs.recentlyViewedTab].filter(
       (tab) => tab instanceof HTMLButtonElement && !tab.hidden
     );
+    const tablist = this.querySelector('.product-recommendations__tabs');
 
-    if (tabs.length < 2) {
-      this.querySelector('.product-recommendations__tabs')?.classList.add('product-recommendations__tabs--single');
-      return;
-    }
+    if (!tablist) return;
 
-    for (const tab of tabs) {
-      tab.addEventListener('click', () => this.#activateTab(tab));
-    }
+    tablist.classList.toggle('product-recommendations__tabs--single', tabs.length < 2);
   }
 
   /** @param {HTMLButtonElement} tab */
@@ -220,6 +230,7 @@ class ProductRecommendationsComponent extends Component {
     } else if (relatedEmpty && !recentHidden) {
       this.refs.relatedTab.hidden = true;
       this.refs.relatedPanel.hidden = true;
+      this.#updateTabsVisibility();
       this.#activateTab(this.refs.recentlyViewedTab);
     }
   }

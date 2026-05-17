@@ -12,8 +12,11 @@
     "hero": {
       "type": "collection-hero",
       "settings": {
-        "overlay_opacity": 40,
-        "hero_height": 18
+        "image": "shopify://shop_images/coffee-beans-from-above.jpg",
+        "overlay_opacity": 25,
+        "hero_height": 14,
+        "heading": "",
+        "description": ""
       }
     },
     "main": {

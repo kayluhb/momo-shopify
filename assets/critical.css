@@ -157,7 +157,7 @@ b {
   letter-spacing: 0.01em;
 }
 
-:where(.btn, .hero__button) {
+:where(.btn) {
   font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
   font-weight: var(--font-weight-bold, 700);
 }

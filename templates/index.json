@@ -168,7 +168,7 @@
       ],
       "settings": {
         "columns": 3,
-        "gap": 8,
+        "gap": 12,
         "card_aspect_ratio": "4 / 5",
         "overlay_opacity": 55
       }
@@ -183,6 +183,7 @@
         "collection": "ann-demeulemeester",
         "products_to_show": 4,
         "columns": 4,
+        "gap": 12,
         "show_view_all": true,
         "view_all_label": "View all",
         "view_all_link": "",

@@ -143,6 +143,7 @@
       "view_all_label": "View all button label",
       "view_all_link_label": "View all link",
       "view_all_link_info": "Leave empty to use the collection URL.",
+      "gap_label": "Space between cards",
       "presets": {
         "default_name": "Featured collection"
       }

@@ -1,73 +1,94 @@
-# Momo
+# Momo Shopify theme
 
-Monorepo for the Momo Shopify storefront and admin app.
+Custom Online Store 2.0 theme for [Momo](https://shopify.dev/) — Liquid templates, Tailwind CSS v4, and Horizon-style JavaScript (Section Rendering API, morph updates, native ES modules).
 
-| Package | Description |
-| --- | --- |
-| [`shopify/`](./shopify/) | Custom Online Store 2.0 theme (Liquid, Tailwind CSS v4, Horizon-style JS) |
-| [`app/`](./app/) | Shopify app (React Router, embedded admin) |
+The storefront theme and the Shopify admin app are **separate projects**. This repository contains only the theme. Theme source must live at the **repository root** so the Shopify CLI can push and sync the theme correctly.
 
-Each package has its own dependencies and scripts. Work from the directory that matches what you are changing.
+The Momo admin app (React Router, embedded admin) is developed in its own project alongside this repo locally (`../app`).
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) LTS (see `app/package.json` engines for supported versions)
+- [Node.js](https://nodejs.org/) LTS
 - [pnpm](https://pnpm.io/)
 - [Shopify CLI](https://shopify.dev/docs/api/shopify-cli)
 
 Optional:
 
-- [Shopify Liquid VS Code extension](https://shopify.dev/docs/storefronts/themes/tools/shopify-liquid-vscode) for theme work
+- [Shopify Liquid VS Code extension](https://shopify.dev/docs/storefronts/themes/tools/shopify-liquid-vscode)
 
 ## Quick start
 
-### Theme (storefront)
+From the repository root:
 
 ```bash
-cd shopify
 pnpm install
 pnpm dev
 ```
 
-`pnpm dev` runs Tailwind in watch mode and `shopify theme dev` in parallel. See [shopify/README.md](./shopify/README.md) for CSS builds, theme structure, cart/section JS, and CLI commands.
+`pnpm dev` runs Tailwind in watch mode and `shopify theme dev` in parallel. Override the dev store with `shopify theme dev --store <store>` if needed (the default store is set in `package.json` → `dev:theme`).
 
-### App (admin)
+### Production CSS
+
+Before pushing theme changes that add or change Tailwind utilities:
 
 ```bash
-cd app
-pnpm install
-pnpm dev
+pnpm run css:build
 ```
-
-See [app/README.md](./app/README.md) for authentication, GraphQL, webhooks, Prisma, and deployment.
 
 ## Repository layout
 
 ```text
-momo/
-├── app/                 # Shopify app (React Router + Vite)
-├── shopify/             # Theme source (uploaded to the store)
-│   ├── assets/          # CSS, JS modules, images
-│   ├── sections/        # Theme sections
-│   ├── snippets/        # Reusable Liquid
-│   ├── templates/       # JSON / Liquid templates
-│   └── src/             # Tailwind source (build output → assets/)
-├── biome.json           # Biome config (theme CSS / tooling)
-└── README.md
+.
+├── assets/          # CSS, JS modules, images (includes compiled tailwind.css)
+├── blocks/          # Theme blocks
+├── config/          # settings_schema.json, settings_data.json
+├── layout/          # theme.liquid, password.liquid
+├── locales/         # Storefront and editor translations
+├── sections/        # Theme sections
+├── snippets/        # Reusable Liquid (scripts, cart, images, etc.)
+├── src/             # Tailwind source → assets/tailwind.css
+├── templates/       # JSON / Liquid page templates
+├── AGENTS.md        # Liquid, schema, and localization conventions
+├── biome.json       # Biome config (Tailwind-aware CSS)
+└── package.json     # Dev scripts and Tailwind toolchain
 ```
 
 ## Tooling
 
-- **Theme CSS** — Tailwind CLI compiles `shopify/src/tailwind.css` to `shopify/assets/tailwind.css`. Run `pnpm run css:build` in `shopify/` before pushing when utilities change.
-- **Theme JS** — Native ES modules with an import map (no bundler). Entry scripts are loaded per template in `shopify/snippets/scripts.liquid`.
-- **Linting** — Theme conventions and Liquid standards are documented in [shopify/AGENTS.md](./shopify/AGENTS.md). The app uses ESLint via `pnpm run lint` in `app/`.
+### Theme CSS
+
+Tailwind v4 scans Liquid and JSON templates under `blocks/`, `layout/`, `sections/`, `snippets/`, and `templates/`. Source: `src/tailwind.css` → output: `assets/tailwind.css`.
+
+Brand color tokens are defined in `src/tailwind.css` (`brand-steel`, `brand-rust`, `brand-earth`, `brand-warmth`, `brand-heart`, etc.) and exposed as utilities such as `bg-brand-steel` and `text-brand-rust`.
+
+### Theme JavaScript
+
+No bundler — native ES modules with an import map in `snippets/scripts.liquid`. Shared modules live in `assets/` (`component.js`, `morph.js`, `section-renderer.js`, cart helpers, and others). Entry scripts are loaded per template from that snippet.
+
+Cart and section updates use the Section Rendering API with DOM morphing (`@theme/morph`, `@theme/section-renderer`).
+
+### Linting and conventions
+
+Theme conventions for Liquid, schemas, and translations are documented in [AGENTS.md](./AGENTS.md).
 
 ## Shopify CLI
 
-Run theme commands from `shopify/` and app commands from `app/`. The dev store for the theme is configured in `shopify/package.json` (`dev:theme` script); override with `shopify theme dev --store <store>` as needed.
+Run theme commands from the repository root:
+
+```bash
+shopify theme dev
+shopify theme push
+shopify theme pull
+```
+
+## Related project
+
+| Project | Description |
+| --- | --- |
+| Momo admin app | Shopify embedded app (React Router). Separate repo / `../app` locally. Use `pnpm dev` in that project for app development. |
 
 ## Further reading
 
-- [shopify/README.md](./shopify/README.md) — theme development, brand tokens, Section Rendering API
-- [shopify/AGENTS.md](./shopify/AGENTS.md) — Liquid, schema, and localization conventions for contributors and agents
-- [app/README.md](./app/README.md) — app template docs, deployment, troubleshooting
+- [AGENTS.md](./AGENTS.md) — contributor and agent guidelines for this theme
+- [Shopify theme architecture](https://shopify.dev/docs/storefronts/themes/architecture)
+- [Section Rendering API](https://shopify.dev/docs/api/ajax/section-rendering)

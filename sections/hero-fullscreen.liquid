@@ -297,14 +297,19 @@
             {% if show_btn1 or show_btn2 %}
               <div class="hero__actions">
                 {% if show_btn1 %}
-                  <a class="hero__button" href="{{ block.settings.button_link }}">
-                    {{ block.settings.button_label | escape }}
-                  </a>
+                  {% render 'button',
+                    label: block.settings.button_label,
+                    url: block.settings.button_link,
+                    style: 'primary',
+                    class: 'btn--on-dark'
+                  %}
                 {% endif %}
                 {% if show_btn2 %}
-                  <a class="hero__button hero__button--secondary" href="{{ block.settings.button_2_link }}">
-                    {{ block.settings.button_2_label | escape }}
-                  </a>
+                  {% render 'button',
+                    label: block.settings.button_2_label,
+                    url: block.settings.button_2_link,
+                    style: 'secondary'
+                  %}
                 {% endif %}
               </div>
             {% endif %}
@@ -460,7 +465,7 @@
     position: absolute;
     z-index: 4;
     bottom: clamp(1.25rem, 4vw, 2rem);
-    left: var(--page-margin);
+    right: var(--page-margin);
   }
 
   .hero__pause {
@@ -574,10 +579,17 @@
     display: grid;
     flex: 1 1 auto;
     align-self: stretch;
-    max-width: none;
-    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: min(calc(var(--page-width) - var(--page-margin) * 2), calc(100% - var(--page-margin) * 2));
+    margin-inline: auto;
+    padding-inline: var(--page-margin);
     min-height: 0;
     pointer-events: none;
+  }
+
+  .hero__inner--stacked .hero__panel {
+    padding-inline: 0;
   }
 
   .hero__panel {
@@ -633,7 +645,7 @@
     visibility: visible;
   }
 
-  .hero__panel .hero__button {
+  .hero__panel .hero__actions .btn {
     pointer-events: auto;
   }
 
@@ -655,41 +667,6 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem;
-  }
-
-  .hero__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    border: 2px solid transparent;
-    border-radius: 9999px;
-    background: #fff;
-    color: #121212;
-    font-size: 0.875rem;
-    letter-spacing: 0.06em;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
-
-  .hero__button:hover {
-    opacity: 0.9;
-  }
-
-  .hero__button:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 3px;
-  }
-
-  .hero__button--secondary {
-    border-color: rgb(255 255 255 / 85%);
-    background: transparent;
-    color: #fff;
-  }
-
-  .hero__button--secondary:hover {
-    background: rgb(255 255 255 / 10%);
-    opacity: 1;
   }
 
   .hero__panel--place-bl .hero__heading,

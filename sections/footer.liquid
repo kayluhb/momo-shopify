@@ -153,9 +153,14 @@
               >
             </div>
 
-            <button type="submit" class="site-footer__join">
-              {{ 'sections.footer.newsletter_submit' | t }}
-            </button>
+            {% assign newsletter_submit_label = 'sections.footer.newsletter_submit' | t %}
+            {% render 'button',
+              label: newsletter_submit_label,
+              tag: 'button',
+              button_type: 'submit',
+              style: 'secondary',
+              class: 'site-footer__join'
+            %}
           {% endif %}
         {% endform %}
       </div>
@@ -283,7 +288,7 @@
     width: 100%;
     padding: 0.5rem 0;
     border: none;
-    border-bottom: 1px solid currentColor;
+    border-bottom: 2px solid currentColor;
     border-radius: 0;
     background: transparent;
     color: inherit;
@@ -306,24 +311,6 @@
   .site-footer__join {
     align-self: flex-start;
     margin-top: 0.25rem;
-    padding: 0.625rem 1.75rem;
-    border: 1px solid currentColor;
-    border-radius: 0;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    line-height: 1;
-    text-transform: uppercase;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  .site-footer__join:hover {
-    background-color: #fff;
-    color: var(--color-brand-earth);
   }
 
   .site-footer__brand {

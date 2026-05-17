@@ -14,7 +14,7 @@
 
   <dialog
     ref="dialog"
-    class="cart-drawer__dialog"
+    class="cart-drawer__dialog dialog-drawer"
     aria-labelledby="cart-drawer-heading"
   >
     <div class="cart-drawer__inner" data-hydration-key="cart-drawer-inner">
@@ -54,6 +54,11 @@
 
 {% stylesheet %}
   .cart-drawer__dialog {
+    --animation-speed: 350ms;
+    --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --dialog-drawer-opening-animation: cart-drawer-slide;
+    --dialog-drawer-closing-animation: cart-drawer-slide;
+
     position: fixed;
     inset: 0 0 0 auto;
     width: min(28rem, 100vw);
@@ -68,8 +73,69 @@
     box-shadow: -4px 0 24px rgb(0 0 0 / 12%);
   }
 
+  .cart-drawer__dialog[open] {
+    --start-x: 100%;
+    --end-x: 0;
+
+    animation: var(--dialog-drawer-opening-animation) var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  .cart-drawer__dialog[open].dialog-closing {
+    --start-x: 0;
+    --end-x: 100%;
+
+    animation: var(--dialog-drawer-closing-animation) var(--animation-speed) var(--animation-easing) forwards;
+  }
+
   .cart-drawer__dialog::backdrop {
     background: rgb(0 37 63 / 40%);
+  }
+
+  .cart-drawer__dialog[open]::backdrop {
+    animation: cart-drawer-backdrop-in var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  .cart-drawer__dialog[open].dialog-closing::backdrop {
+    animation: cart-drawer-backdrop-out var(--animation-speed) var(--animation-easing) forwards;
+  }
+
+  @keyframes cart-drawer-slide {
+    from {
+      transform: translateX(var(--start-x, 100%));
+    }
+
+    to {
+      transform: translateX(var(--end-x, 0));
+    }
+  }
+
+  @keyframes cart-drawer-backdrop-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes cart-drawer-backdrop-out {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cart-drawer__dialog[open],
+    .cart-drawer__dialog[open].dialog-closing,
+    .cart-drawer__dialog[open]::backdrop,
+    .cart-drawer__dialog[open].dialog-closing::backdrop {
+      animation: none;
+    }
   }
 
   .cart-drawer__inner {

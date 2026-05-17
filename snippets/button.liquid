@@ -1,17 +1,21 @@
 {% doc %}
-  Renders a styled link button.
+  Renders a styled button or link.
 
   @param {string} label - Button label text
-  @param {string} url - Destination URL
+  @param {string} [url] - Destination URL (required for link buttons)
+  @param {string} [tag] - a or button (default: a)
+  @param {string} [button_type] - button type when tag is button (default: button)
   @param {string} [style] - primary or secondary (default: primary)
-  @param {string} [class] - Additional CSS classes
+  @param {string} [class] - Additional CSS classes (e.g. btn--on-dark for light buttons on dark backgrounds)
 
   @example
   {% render 'button', label: 'Shop all', url: routes.all_products_collection_url, style: 'primary' %}
+  {% render 'button', label: 'Join', tag: 'button', button_type: 'submit', style: 'secondary' %}
 {% enddoc %}
 
 {% liquid
   assign button_style = style | default: 'primary'
+  assign button_tag = tag | default: 'a'
   assign button_class = 'btn btn--' | append: button_style
 
   if class != blank
@@ -19,9 +23,18 @@
   endif
 %}
 
-<a class="{{ button_class }}" href="{{ url }}">
-  {{ label | escape }}
-</a>
+{% if button_tag == 'button' %}
+  <button
+    type="{{ button_type | default: 'button' }}"
+    class="{{ button_class }}"
+  >
+    {{ label | escape }}
+  </button>
+{% else %}
+  <a class="{{ button_class }}" href="{{ url }}">
+    {{ label | escape }}
+  </a>
+{% endif %}
 
 {% stylesheet %}
   .btn {
@@ -31,6 +44,9 @@
     padding: 0.75rem 1.5rem;
     border: 2px solid transparent;
     border-radius: 9999px;
+    background: none;
+    color: inherit;
+    cursor: pointer;
     font-size: 0.875rem;
     font-weight: var(--font-weight-bold, var(--font-body--weight-bold, 700));
     font-family: var(--font-display--family, var(--font-primary--family));
@@ -38,6 +54,11 @@
     line-height: 1.2;
     text-decoration: none;
     text-transform: uppercase;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      opacity 0.2s ease;
   }
 
   .btn:focus-visible {
@@ -57,6 +78,18 @@
     color: #fff;
   }
 
+  .btn--primary.btn--on-dark {
+    border-color: #fff;
+    background-color: #fff;
+    color: #121212;
+  }
+
+  .btn--primary.btn--on-dark:hover {
+    border-color: rgb(255 255 255 / 88%);
+    background-color: rgb(255 255 255 / 88%);
+    color: #121212;
+  }
+
   .btn--secondary {
     border-color: currentColor;
     background-color: transparent;
@@ -64,6 +97,11 @@
   }
 
   .btn--secondary:hover {
-    opacity: 0.75;
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+    opacity: 1;
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart, .hero__panel) .btn--secondary:hover {
+    background-color: rgb(255 255 255 / 12%);
   }
 {% endstylesheet %}

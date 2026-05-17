@@ -72,7 +72,7 @@
   endif
 %}
 
-<article class="product-card{% if is_grid_card %} product-card--grid{% endif %}">
+<article class="product-card{% if is_grid_card %} product-card--grid{% endif %}" data-product-card>
   <a class="product-card__media" href="{{ product.url }}">
     {% if product.featured_image %}
       <div class="product-card__image product-card__image--primary">
@@ -140,24 +140,122 @@
     </p>
 
     {% if color_option and color_option.values.size > 0 %}
-      <ul class="product-card__swatches list-none p-0" role="list" aria-label="{{ 'products.color_options' | t: option: color_option.name }}">
+      <ul
+        class="product-card__swatches list-none p-0"
+        role="list"
+        aria-label="{{ 'products.color_options' | t: option: color_option.name }}"
+      >
         {% for value in color_option.values %}
           {% liquid
-            assign swatch_style = ''
+            assign variant_for_value = value.variant
+            assign option_position = color_option.position
+
+            if variant_for_value == blank
+              for variant in product.variants
+                if option_position == 1
+                  if variant.option1 == value.name
+                    assign variant_for_value = variant
+                    break
+                  endif
+                elsif option_position == 2
+                  if variant.option2 == value.name
+                    assign variant_for_value = variant
+                    break
+                  endif
+                elsif option_position == 3
+                  if variant.option3 == value.name
+                    assign variant_for_value = variant
+                    break
+                  endif
+                endif
+              endfor
+            endif
+
+            assign swatch_url = product.url
+            if variant_for_value
+              assign swatch_url = variant_for_value.url
+            endif
+
+            assign is_selected = false
+            if variant_for_value
+              if variant_for_value.id == product.selected_or_first_available_variant.id
+                assign is_selected = true
+              endif
+            endif
+
+            assign swatch_image = nil
+            if value.swatch.image != blank
+              assign swatch_image = value.swatch.image
+            elsif variant_for_value.featured_image
+              assign swatch_image = variant_for_value.featured_image
+            endif
+
+            assign swatch_bg = ''
             if value.swatch.color != blank
-              assign swatch_style = 'background-color: rgb(' | append: value.swatch.color.rgb | append: ');'
-            elsif value.swatch.image != blank
-              assign swatch_style = 'background-image: url(' | append: value.swatch.image | image_url: width: 40 | append: ');'
+              assign swatch_bg = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+            elsif swatch_image == blank
+              assign color_key = value.name | downcase | strip
+              case color_key
+                when 'black'
+                  assign swatch_bg = '#1a1a1a'
+                when 'white'
+                  assign swatch_bg = '#f5f5f5'
+                when 'gray', 'grey'
+                  assign swatch_bg = '#9ca3af'
+                when 'navy', 'blue'
+                  assign swatch_bg = '#1e3a5f'
+                when 'red'
+                  assign swatch_bg = '#c0392b'
+                when 'green'
+                  assign swatch_bg = '#2d6a4f'
+                when 'yellow'
+                  assign swatch_bg = '#f4d03f'
+                when 'pink'
+                  assign swatch_bg = '#f4a6b8'
+                when 'brown'
+                  assign swatch_bg = '#8b5e3c'
+                when 'orange'
+                  assign swatch_bg = '#e67e22'
+                when 'purple'
+                  assign swatch_bg = '#6c4f8a'
+                when 'beige', 'tan'
+                  assign swatch_bg = '#d4b896'
+              endcase
+            endif
+
+            assign preview_image_url = ''
+            if variant_for_value.featured_image
+              assign preview_image_url = variant_for_value.featured_image | image_url: width: 800
             endif
           %}
           <li>
-            <span
-              class="product-card__swatch{% if forloop.first %} is-selected{% endif %}"
-              style="{{ swatch_style }}"
-              title="{{ value.name | escape }}"
+            <a
+              href="{{ swatch_url }}"
+              class="product-card__swatch{% if is_selected %} is-selected{% endif %}"
+              {% if swatch_bg != blank %}
+                style="--swatch-bg: {{ swatch_bg }};"
+              {% endif %}
+              {% if preview_image_url != blank %}
+                data-swatch-image="{{ preview_image_url }}"
+              {% endif %}
+              aria-label="{{ value.name | escape }}"
+              {% if is_selected %}
+                aria-current="true"
+              {% endif %}
             >
-              <span class="sr-only">{{ value.name }}</span>
-            </span>
+              {% if swatch_image %}
+                {{
+                  swatch_image
+                  | image_url: width: 80, height: 80, crop: 'center'
+                  | image_tag:
+                    class: 'product-card__swatch-img',
+                    loading: 'lazy',
+                    widths: '40, 80',
+                    sizes: '16px',
+                    alt: ''
+                }}
+              {% endif %}
+            </a>
           </li>
         {% endfor %}
       </ul>
@@ -355,18 +453,42 @@
   }
 
   .product-card__swatch {
+    position: relative;
     display: block;
+    overflow: hidden;
     width: 1rem;
     height: 1rem;
     border-radius: 9999px;
     border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 18%, transparent);
+    background-color: var(--swatch-bg, color-mix(in srgb, var(--color-brand-steel, #00253f) 8%, white));
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-color: color-mix(in srgb, var(--color-brand-steel, #00253f) 8%, white);
+    cursor: pointer;
+    text-decoration: none;
+    transition: box-shadow 150ms ease, transform 150ms ease;
+  }
+
+  .product-card__swatch:hover {
+    transform: scale(1.08);
+  }
+
+  .product-card__swatch:focus-visible {
+    outline: 2px solid var(--color-brand-rust, #c57639);
+    outline-offset: 2px;
   }
 
   .product-card__swatch.is-selected {
     box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--color-brand-steel, #00253f);
   }
+
+  .product-card__swatch-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
 {% endstylesheet %}
+

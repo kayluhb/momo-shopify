@@ -70,6 +70,60 @@ async function refreshCartDrawerIfNeeded(data) {
 
 /**
  * @param {HTMLFormElement} form
+ * @returns {{ items: Array<{ id: number; quantity: number; properties?: Record<string, string>; selling_plan?: number }>; sections?: string; sections_url?: string } | null}
+ */
+function buildCartAddPayload(form) {
+  const formData = new FormData(form);
+  const variantIdRaw = formData.get('id') || formData.get('items[0][id]');
+
+  if (!variantIdRaw) {
+    return null;
+  }
+
+  const variantId = Number(variantIdRaw);
+  if (!Number.isFinite(variantId)) {
+    return null;
+  }
+
+  const quantity = Math.max(1, Number(formData.get('quantity')) || 1);
+
+  /** @type {{ id: number; quantity: number; properties?: Record<string, string>; selling_plan?: number }} */
+  const item = { id: variantId, quantity };
+
+  const properties = {};
+  for (const [key, value] of formData.entries()) {
+    const propertyMatch = /^properties\[(.+)\]$/.exec(key);
+    if (propertyMatch && typeof value === 'string') {
+      properties[propertyMatch[1]] = value;
+    }
+  }
+
+  if (Object.keys(properties).length > 0) {
+    item.properties = properties;
+  }
+
+  const sellingPlan = formData.get('selling_plan');
+  if (sellingPlan) {
+    const sellingPlanId = Number(sellingPlan);
+    if (Number.isFinite(sellingPlanId)) {
+      item.selling_plan = sellingPlanId;
+    }
+  }
+
+  /** @type {{ items: Array<typeof item>; sections?: string; sections_url?: string }} */
+  const payload = { items: [item] };
+
+  const sections = getCartSectionsParam();
+  if (sections) {
+    payload.sections = sections;
+    payload.sections_url = window.location.pathname;
+  }
+
+  return payload;
+}
+
+/**
+ * @param {HTMLFormElement} form
  */
 async function handleProductFormSubmit(form) {
   const submitControl = form.querySelector('[type="submit"]');
@@ -79,13 +133,8 @@ async function handleProductFormSubmit(form) {
 
   if (!form.checkValidity()) return;
 
-  const formData = new FormData(form);
-  const sections = getCartSectionsParam();
-
-  if (sections) {
-    formData.append('sections', sections);
-    formData.append('sections_url', window.location.pathname);
-  }
+  const payload = buildCartAddPayload(form);
+  const variantId = payload?.items[0]?.id?.toString() ?? '';
 
   const defaultLabel = submitControl.value || submitControl.textContent || '';
   const loadingLabel = Theme.translations.add_to_cart_loading;
@@ -99,8 +148,19 @@ async function handleProductFormSubmit(form) {
     submitControl.textContent = loadingLabel;
   }
 
+  if (!payload) {
+    showFormMessage(form, Theme.translations.add_to_cart_error);
+    setFormLoading(form, submitControl, false);
+    if (submitControl instanceof HTMLInputElement) {
+      submitControl.value = defaultLabel;
+    } else {
+      submitControl.textContent = defaultLabel;
+    }
+    return;
+  }
+
   try {
-    const fetchCfg = fetchConfig('javascript', { body: formData });
+    const fetchCfg = fetchConfig('json', { body: JSON.stringify(payload) });
     const response = await fetch(Theme.routes.cart_add_url, fetchCfg);
     const contentType = response.headers.get('content-type') || '';
 
@@ -112,7 +172,7 @@ async function handleProductFormSubmit(form) {
         new CartAddEvent({}, form.id || '', {
           didError: true,
           source: 'product-cart',
-          variantId: formData.get('id')?.toString(),
+          variantId,
         })
       );
       return;
@@ -130,7 +190,7 @@ async function handleProductFormSubmit(form) {
         new CartAddEvent({}, form.id || '', {
           didError: true,
           source: 'product-cart',
-          variantId: formData.get('id')?.toString(),
+          variantId,
         })
       );
       return;
@@ -142,10 +202,10 @@ async function handleProductFormSubmit(form) {
     showFormMessage(form, Theme.translations.add_to_cart_success);
 
     document.dispatchEvent(
-      new CartAddEvent(data, formData.get('id')?.toString() || '', {
+      new CartAddEvent(data, variantId, {
         source: 'product-cart',
-        itemCount: Number(formData.get('quantity')) || 1,
-        variantId: formData.get('id')?.toString(),
+        itemCount: Number(data.item_count),
+        variantId,
         sections: data.sections,
       })
     );

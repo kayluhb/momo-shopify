@@ -49,8 +49,22 @@
 
 {% if template.name == 'collection' %}
   <link rel="modulepreload" href="{{ 'collection-facets.js' | asset_url }}" fetchpriority="low">
+  <link rel="modulepreload" href="{{ 'product-card-swatches.js' | asset_url }}" fetchpriority="low">
   <script src="{{ 'collection-facets.js' | asset_url }}" type="module" fetchpriority="low"></script>
+  <script src="{{ 'product-card-swatches.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
+
+{% liquid
+  assign cart_add_url = routes.cart_add_url
+  unless cart_add_url contains '.js'
+    assign cart_add_url = cart_add_url | append: '.js'
+  endunless
+
+  assign cart_change_url = routes.cart_change_url
+  unless cart_change_url contains '.js'
+    assign cart_change_url = cart_change_url | append: '.js'
+  endunless
+%}
 
 <script>
   const Theme = {
@@ -60,8 +74,8 @@
       add_to_cart_error: {{ 'products.add_to_cart.error' | t | json }},
     },
     routes: {
-      cart_add_url: '{{ routes.cart_add_url | append: '.js' }}',
-      cart_change_url: '{{ routes.cart_change_url | append: '.js' }}',
+      cart_add_url: {{ cart_add_url | json }},
+      cart_change_url: {{ cart_change_url | json }},
       cart_update_url: '{{ routes.cart_update_url }}',
       cart_url: '{{ routes.cart_url }}',
     },

@@ -29,10 +29,10 @@
 %}
 
 <div
+  id="CollectionHero-{{ section.id }}"
   class="collection-hero hero hero--parallax full-width"
   data-hero-parallax
   data-collection-hero
-  style="--collection-hero-height: {{ section.settings.hero_height }}rem;"
   {{ section.shopify_attributes }}
 >
   <div class="collection-hero__media hero__media">
@@ -72,13 +72,16 @@
   </div>
 </div>
 
+{% style %}
+  #CollectionHero-{{ section.id }} {
+    height: {{ section.settings.hero_height }}rem;
+  }
+{% endstyle %}
+
 {% stylesheet %}
   .collection-hero {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    min-height: var(--collection-hero-height, 18rem);
+    height: 18rem;
     overflow: hidden;
   }
 
@@ -132,13 +135,22 @@
   }
 
   .collection-hero__content {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     width: 100%;
     max-width: min(calc(var(--page-width) - var(--page-margin) * 2), calc(100% - var(--page-margin) * 2));
     margin-inline: auto;
-    padding: calc(var(--header-height) + 1.5rem) var(--page-margin) 2rem;
+    padding: 1.5rem var(--page-margin);
     color: #fff;
+    pointer-events: none;
+  }
+
+  .collection-hero__content .rte a {
+    pointer-events: auto;
   }
 
   .collection-hero__heading {

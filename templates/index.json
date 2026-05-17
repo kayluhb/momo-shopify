@@ -419,10 +419,10 @@
         "text": "<p>We believe in objects that earn their place — pieces shaped by material honesty, refined proportion, and the quiet confidence of lasting craft.</p>",
         "button_label": "Button Label",
         "button_link": "shopify://pages/brands",
-        "button_style": "primary",
+        "button_style": "secondary",
         "text_alignment": "center",
         "color_scheme": "white",
-        "use_gradient": true
+        "use_gradient": false
       }
     }
   },

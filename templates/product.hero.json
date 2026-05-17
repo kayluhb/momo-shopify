@@ -9,6 +9,17 @@
         "color_scheme": "canvas"
       }
     },
+    "about_momo": {
+      "type": "about-momo",
+      "settings": {
+        "image_position": "left",
+        "eyebrow": "About Momo",
+        "heading": "Named for the heart of our home",
+        "text": "<p>Momo is our founder's grandmother — the woman whose table brought everyone together. Her spirit of warmth, fellowship, and legacy is woven into everything we make.</p><p>We bridge the vibrant heritage of modern Mexico with the clean, functional silhouettes of mid-century design — crafting the backdrop for the moments you share around your hearth.</p>",
+        "show_brand_values": true,
+        "color_scheme": "canvas"
+      }
+    },
     "product_recommendations": {
       "type": "product-recommendations",
       "settings": {
@@ -25,6 +36,7 @@
   },
   "order": [
     "main",
+    "about_momo",
     "product_recommendations"
   ]
 }

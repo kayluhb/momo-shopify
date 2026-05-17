@@ -1,0 +1,40 @@
+{% doc %}
+  Renders a parallax hero background image.
+
+  @param {image} image - Hero image
+  @param {string} alt - Alt text for the image
+  @param {string} [loading] - lazy or eager
+  @param {string} [fetchpriority] - high when set for LCP images
+{% enddoc %}
+
+{% liquid
+  assign hero_loading = loading | default: 'eager'
+  assign hero_widths = '550, 720, 990, 1100, 1500, 2200, 3000, 3840'
+%}
+
+<div class="hero__parallax" data-hero-parallax-media>
+  {% if fetchpriority != blank %}
+    {{
+      image
+      | image_url: width: 3840
+      | image_tag:
+        widths: hero_widths,
+        sizes: '100vw',
+        loading: hero_loading,
+        fetchpriority: fetchpriority,
+        class: 'hero__img hero__img--parallax',
+        alt: alt
+    }}
+  {% else %}
+    {{
+      image
+      | image_url: width: 3840
+      | image_tag:
+        widths: hero_widths,
+        sizes: '100vw',
+        loading: hero_loading,
+        class: 'hero__img hero__img--parallax',
+        alt: alt
+    }}
+  {% endif %}
+</div>

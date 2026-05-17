@@ -1,0 +1,37 @@
+{% doc %}
+  Renders stacked product gallery panels (split_half layout).
+
+  @param {product} product - The product being displayed
+  @param {number} max_image_width - Largest stage image width
+  @param {string} image_widths - Comma-separated widths for srcset
+  @param {string} image_sizes - Sizes attribute for stage images
+{% enddoc %}
+
+{% if product.media.size > 0 %}
+  {% for media in product.media %}
+    {% liquid
+      if forloop.first
+        assign stack_loading = 'eager'
+        assign stack_fetchpriority = true
+      else
+        assign stack_loading = 'lazy'
+        assign stack_fetchpriority = false
+      endif
+    %}
+    {% render 'product-gallery-media',
+      product: product,
+      media: media,
+      layout_mode: 'stack',
+      max_image_width: max_image_width,
+      image_widths: image_widths,
+      image_sizes: image_sizes,
+      loading: stack_loading,
+      fetchpriority_high: stack_fetchpriority,
+      video_image_size: '1600x'
+    %}
+  {% endfor %}
+{% else %}
+  <div class="product-gallery__stack-item product-gallery__placeholder" aria-hidden="true">
+    {{ 'product-1' | placeholder_svg_tag: class: 'product-gallery__img product-gallery__img--placeholder' }}
+  </div>
+{% endif %}

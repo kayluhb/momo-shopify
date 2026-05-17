@@ -1,6 +1,6 @@
 import { Component } from '@theme/component';
 import { sectionRenderer } from '@theme/section-renderer';
-import { FilterUpdateEvent } from '@theme/events';
+import { FilterUpdateEvent, ShopifyFilterParam } from '@theme/events';
 import { debounce } from '@theme/utilities';
 
 class FacetsFormComponent extends Component {
@@ -74,8 +74,8 @@ class FacetsFormComponent extends Component {
   };
 
   get sectionId() {
-    const id = this.getAttribute('section-id');
-    if (!id) throw new Error('facets-form-component requires section-id');
+    const id = this.dataset.sectionId;
+    if (!id) throw new Error('facets-form-component requires data-section-id');
     return id;
   }
 
@@ -85,8 +85,8 @@ class FacetsFormComponent extends Component {
 
     params.delete('page');
 
-    if (params.get('filter.v.price.gte') === '') params.delete('filter.v.price.gte');
-    if (params.get('filter.v.price.lte') === '') params.delete('filter.v.price.lte');
+    if (params.get(ShopifyFilterParam.priceGte) === '') params.delete(ShopifyFilterParam.priceGte);
+    if (params.get(ShopifyFilterParam.priceLte) === '') params.delete(ShopifyFilterParam.priceLte);
 
     url.search = params.toString();
     history.pushState({}, '', url.toString());

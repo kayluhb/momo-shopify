@@ -24,8 +24,8 @@
 
     {% if collection != blank and collection.products_count > 0 %}
       <ul
-        class="featured-collection__grid list-none p-0"
-        style="--columns: {{ columns }}; --gap: {{ gap }}px;"
+        class="featured-collection__grid product-grid list-none p-0"
+        style="--product-grid-columns: {{ columns }}; --product-grid-gap: {{ gap }}px;"
         role="list"
       >
         {% for product in collection.products limit: products_limit %}
@@ -53,18 +53,6 @@
 </section>
 
 {% stylesheet %}
-  .featured-collection__grid {
-    display: grid;
-    gap: var(--gap, 12px);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (min-width: 750px) {
-    .featured-collection__grid {
-      grid-template-columns: repeat(var(--columns, 4), minmax(0, 1fr));
-    }
-  }
-
   .featured-collection__footer {
     display: flex;
     justify-content: center;
@@ -190,14 +178,14 @@
     {
       "name": "t:sections.featured_collection.presets.default_name",
       "settings": {
-        "heading": "Curated for you",
-        "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
+        "heading": "t:sections.featured_collection.presets.default_heading",
+        "subheading": "t:sections.featured_collection.presets.default_subheading",
         "heading_alignment": "center",
         "products_to_show": 4,
         "columns": 4,
         "gap": 12,
         "show_view_all": true,
-        "view_all_label": "View all",
+        "view_all_label": "t:sections.featured_collection.presets.default_view_all_label",
         "color_scheme": "white"
       }
     }

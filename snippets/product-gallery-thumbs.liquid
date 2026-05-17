@@ -18,51 +18,27 @@
       >
         {{ 'icon-chevron.svg' | inline_asset_content }}
       </button>
-      <div
-        class="product-gallery__thumbs"
-        role="list"
-        aria-label="{{ 'products.gallery.thumbnails' | t }}"
-        data-gallery-thumbs
-      >
-        {% for media in product.media %}
-          {% liquid
-            assign thumb_active = false
-            if initial_media and media.id == initial_media.id
-              assign thumb_active = true
-            elsif initial_media == blank and forloop.first
-              assign thumb_active = true
-            endif
+  {% endif %}
 
-            if media.alt != blank
-              assign thumb_alt = media.alt
-            else
-              assign thumb_alt = product.title
-            endif
-          %}
-          <button
-            type="button"
-            class="product-gallery__thumb{% if thumb_active %} is-active{% endif %}"
-            role="listitem"
-            data-gallery-thumb
-            data-media-id="{{ media.id }}"
-            aria-label="{{ 'products.gallery.view_media' | t: index: forloop.index }}"
-            {% if thumb_active %}
-              aria-current="true"
-            {% endif %}
-          >
-            {{
-              media.preview_image
-              | image_url: width: 160
-              | image_tag:
-                widths: '80, 160',
-                sizes: '80px',
-                loading: 'lazy',
-                class: 'product-gallery__thumb-img',
-                alt: thumb_alt
-            }}
-          </button>
-        {% endfor %}
-      </div>
+  <div
+    class="product-gallery__thumbs"
+    role="list"
+    aria-label="{{ 'products.gallery.thumbnails' | t }}"
+    {% if show_scroll_arrows %}
+      data-gallery-thumbs
+    {% endif %}
+  >
+    {% for media in product.media %}
+      {% render 'product-gallery-thumb',
+        product: product,
+        media: media,
+        initial_media: initial_media,
+        index: forloop.index
+      %}
+    {% endfor %}
+  </div>
+
+  {% if show_scroll_arrows %}
       <button
         type="button"
         class="product-gallery__thumbs-scroll product-gallery__thumbs-scroll--down"
@@ -72,47 +48,6 @@
       >
         {{ 'icon-chevron.svg' | inline_asset_content }}
       </button>
-    </div>
-  {% else %}
-    <div class="product-gallery__thumbs" role="list" aria-label="{{ 'products.gallery.thumbnails' | t }}">
-      {% for media in product.media %}
-        {% liquid
-          assign thumb_active = false
-          if initial_media and media.id == initial_media.id
-            assign thumb_active = true
-          elsif initial_media == blank and forloop.first
-            assign thumb_active = true
-          endif
-
-          if media.alt != blank
-            assign thumb_alt = media.alt
-          else
-            assign thumb_alt = product.title
-          endif
-        %}
-        <button
-          type="button"
-          class="product-gallery__thumb{% if thumb_active %} is-active{% endif %}"
-          role="listitem"
-          data-gallery-thumb
-          data-media-id="{{ media.id }}"
-          aria-label="{{ 'products.gallery.view_media' | t: index: forloop.index }}"
-          {% if thumb_active %}
-            aria-current="true"
-          {% endif %}
-        >
-          {{
-            media.preview_image
-            | image_url: width: 160
-            | image_tag:
-              widths: '80, 160',
-              sizes: '80px',
-              loading: 'lazy',
-              class: 'product-gallery__thumb-img',
-              alt: thumb_alt
-          }}
-        </button>
-      {% endfor %}
     </div>
   {% endif %}
 {% endif %}

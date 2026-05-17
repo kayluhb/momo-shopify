@@ -1,0 +1,21 @@
+{% layout none %}
+
+{% if search.results_count > 0 %}
+  <ul
+    class="collection-page__grid list-none p-0"
+    data-recently-viewed-grid
+    role="list"
+  >
+    {% for product in search.results %}
+      <li>
+        {% render 'product-card',
+          product: product,
+          card_style: 'grid',
+          show_secondary_image: true,
+          show_color_swatches: true,
+          show_rating: false
+        %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

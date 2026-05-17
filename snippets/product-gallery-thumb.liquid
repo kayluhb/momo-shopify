@@ -1,0 +1,46 @@
+{% doc %}
+  Renders one product gallery thumbnail button.
+
+  @param {product} product - The product being displayed
+  @param {object} media - Product media object
+  @param {object} [initial_media] - Initially selected media
+  @param {number} index - 1-based index for aria-label
+{% enddoc %}
+
+{% liquid
+  assign thumb_active = false
+  if initial_media and media.id == initial_media.id
+    assign thumb_active = true
+  elsif initial_media == blank and index == 1
+    assign thumb_active = true
+  endif
+
+  if media.alt != blank
+    assign thumb_alt = media.alt
+  else
+    assign thumb_alt = product.title
+  endif
+%}
+
+<button
+  type="button"
+  class="product-gallery__thumb{% if thumb_active %} is-active{% endif %}"
+  role="listitem"
+  data-gallery-thumb
+  data-media-id="{{ media.id }}"
+  aria-label="{{ 'products.gallery.view_media' | t: index: index }}"
+  {% if thumb_active %}
+    aria-current="true"
+  {% endif %}
+>
+  {{
+    media.preview_image
+    | image_url: width: 160
+    | image_tag:
+      widths: '80, 160',
+      sizes: '80px',
+      loading: 'lazy',
+      class: 'product-gallery__thumb-img',
+      alt: thumb_alt
+  }}
+</button>

@@ -1,15 +1,16 @@
 import { sectionRenderer } from '@theme/section-renderer';
-import { CartAddEvent, CartErrorEvent } from '@theme/events';
+import { CartAddEvent, CartErrorEvent, CartSource } from '@theme/events';
 import {
   cartDebug,
   cartDebugError,
   cartDebugWarn,
+  fetchCartJson,
   fetchConfig,
   getCartDomSnapshot,
-  isShopifyCartJsonResponse,
   onDocumentReady,
 } from '@theme/utilities';
 import {
+  CART_DRAWER_SELECTOR,
   getCartDrawerSectionId,
   getCartSectionsParam,
   getCartSectionsUrl,
@@ -109,7 +110,7 @@ function getCartItemCount(data) {
  * @param {Record<string, unknown>} data
  */
 async function refreshCartDrawerIfNeeded(data) {
-  const drawer = document.querySelector('cart-drawer-component');
+  const drawer = document.querySelector(CART_DRAWER_SELECTOR);
   const hasEmptyState = Boolean(drawer?.querySelector('.cart-empty'));
 
   cartDebug('add', 'refreshCartDrawerIfNeeded', {
@@ -252,40 +253,28 @@ async function handleProductFormSubmit(form) {
       body: payload,
     });
 
-    const response = await fetch(Theme.routes.cart_add_url, fetchCfg);
-    const contentType = response.headers.get('content-type') || '';
-    const responseText = await response.text();
-
-    cartDebug('add', 'cart add response', {
-      ok: response.ok,
-      status: response.status,
-      contentType,
-      bodyPreview: responseText.slice(0, 500),
+    const result = await fetchCartJson(Theme.routes.cart_add_url, fetchCfg, {
+      scope: 'add',
+      logLabel: 'cart add',
     });
 
-    if (!response.ok || !isShopifyCartJsonResponse(contentType)) {
-      cartDebugError('add', 'cart add failed — unexpected response type', {
-        status: response.status,
-        contentType,
-        body: responseText.slice(0, 500),
-      });
+    if (!result.ok) {
       showFormMessage(form, Theme.translations.add_to_cart_error);
       form.dispatchEvent(
         new CartAddEvent({}, form.id || '', {
           didError: true,
-          source: 'product-cart',
+          source: CartSource.productCart,
           variantId,
         })
       );
       return;
     }
 
-    const data = JSON.parse(responseText);
+    const data = result.data;
 
     cartDebug('add', 'cart add parsed', {
       item_count: data.item_count,
       status: data.status,
-      sectionKeys: data.sections ? Object.keys(data.sections) : [],
       isErrorResponse: isCartAddErrorResponse(data),
     });
 
@@ -308,7 +297,7 @@ async function handleProductFormSubmit(form) {
       form.dispatchEvent(
         new CartAddEvent({}, form.id || '', {
           didError: true,
-          source: 'product-cart',
+          source: CartSource.productCart,
           variantId,
         })
       );
@@ -338,7 +327,7 @@ async function handleProductFormSubmit(form) {
 
     document.dispatchEvent(
       new CartAddEvent(cartResource, variantId, {
-        source: 'product-cart',
+        source: CartSource.productCart,
         itemCount,
         variantId,
         sections:

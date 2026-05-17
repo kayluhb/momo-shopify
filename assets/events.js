@@ -26,7 +26,21 @@ export class ThemeEvents {
   static discountUpdate = 'discount:update';
   /** @static @constant {string} Event triggered when changing collection filters */
   static FilterUpdate = 'filter:update';
+  /** @static @constant {string} @deprecated Use FilterUpdate */
+  static filterUpdate = 'filter:update';
 }
+
+/** @enum {string} */
+export const CartSource = {
+  productCart: 'product-cart',
+  cartItems: 'cart-items',
+};
+
+/** @enum {string} */
+export const ShopifyFilterParam = {
+  priceGte: 'filter.v.price.gte',
+  priceLte: 'filter.v.price.lte',
+};
 
 /**
  * Event fired when a variant is selected

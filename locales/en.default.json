@@ -43,6 +43,23 @@
       "zoom": "Zoom in on image",
       "scroll_up": "Scroll thumbnails up",
       "scroll_down": "Scroll thumbnails down"
+    },
+    "swatch_colors": {
+      "black": "#1a1a1a",
+      "white": "#f5f5f5",
+      "gray": "#9ca3af",
+      "grey": "#9ca3af",
+      "navy": "#1e3a5f",
+      "blue": "#1e3a5f",
+      "red": "#c0392b",
+      "green": "#2d6a4f",
+      "yellow": "#f4d03f",
+      "pink": "#f4a6b8",
+      "brown": "#8b5e3c",
+      "orange": "#e67e22",
+      "purple": "#6c4f8a",
+      "beige": "#d4b896",
+      "tan": "#d4b896"
     }
   },
   "sections": {
@@ -85,6 +102,11 @@
     },
     "featured_collection": {
       "empty": "Choose a collection to show products."
+    },
+    "product_recommendations": {
+      "tabs_label": "Product recommendations",
+      "related": "Related products",
+      "recently_viewed": "Recently viewed"
     },
     "testimonials": {
       "rating_label": "{{ rating }} out of 5 stars"

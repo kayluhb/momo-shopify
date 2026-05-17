@@ -1,0 +1,66 @@
+{% doc %}
+  Renders a single product gallery media panel.
+
+  @param {product} product - The product being displayed
+  @param {object} media - Product media object
+  @param {string} layout_mode - carousel or stack
+  @param {boolean} [is_active] - Active panel for carousel mode
+  @param {number} max_image_width - Largest stage image width
+  @param {string} image_widths - Comma-separated widths for srcset
+  @param {string} image_sizes - Sizes attribute for stage images
+  @param {string} [loading] - lazy or eager
+  @param {boolean} [fetchpriority_high] - High fetch priority for LCP image
+  @param {string} [video_image_size] - image_size for non-image media_tag
+{% enddoc %}
+
+{% liquid
+  if media.alt != blank
+    assign media_alt = media.alt
+  else
+    assign media_alt = product.title
+  endif
+
+  assign gallery_loading = loading | default: 'lazy'
+  assign gallery_video_size = video_image_size | default: '1600x'
+
+  if layout_mode == 'stack'
+    assign panel_class = 'product-gallery__stack-item'
+  else
+    assign panel_class = 'product-gallery__panel'
+    if is_active
+      assign panel_class = panel_class | append: ' is-active'
+    endif
+  endif
+%}
+
+<div
+  class="{{ panel_class }}"
+  data-media-panel
+  data-media-id="{{ media.id }}"
+  {% if layout_mode != 'stack' %}
+    {% unless is_active %}
+      hidden
+    {% endunless %}
+  {% endif %}
+>
+  {% case media.media_type %}
+    {% when 'image' %}
+      {% render 'product-gallery-zoom-link',
+        media: media,
+        media_alt: media_alt,
+        max_image_width: max_image_width,
+        image_widths: image_widths,
+        image_sizes: image_sizes,
+        loading: gallery_loading,
+        fetchpriority_high: fetchpriority_high
+      %}
+    {% else %}
+      {{
+        media
+        | media_tag:
+          image_size: gallery_video_size,
+          class: 'product-gallery__media-tag',
+          toggleable: true
+      }}
+  {% endcase %}
+</div>

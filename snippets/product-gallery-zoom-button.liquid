@@ -1,0 +1,24 @@
+{% doc %}
+  Renders the product gallery zoom control when image media is present.
+
+  @param {object} initial_media - Initially selected media
+{% enddoc %}
+
+{% liquid
+  assign zoom_button_hidden = true
+  if initial_media == blank or initial_media.media_type == 'image'
+    assign zoom_button_hidden = false
+  endif
+%}
+
+<button
+  type="button"
+  class="product-gallery__zoom"
+  data-gallery-zoom-button
+  aria-label="{{ 'products.gallery.zoom' | t }}"
+  {% if zoom_button_hidden %}
+    hidden
+  {% endif %}
+>
+  {{ 'icon-zoom.svg' | inline_asset_content }}
+</button>

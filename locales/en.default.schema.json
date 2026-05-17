@@ -141,7 +141,10 @@
       "view_all_link_info": "Leave empty to use the collection URL.",
       "gap_label": "Space between cards",
       "presets": {
-        "default_name": "Featured collection"
+        "default_name": "Featured collection",
+        "default_heading": "Curated for you",
+        "default_subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
+        "default_view_all_label": "View all"
       }
     },
     "image_with_text": {
@@ -301,6 +304,14 @@
           "eyebrow_info": "Shown centered on the large tile.",
           "overlay_opacity_label": "Image overlay darkness"
         }
+      }
+    },
+    "product_recommendations": {
+      "name": "Product recommendations",
+      "show_recently_viewed_label": "Show recently viewed tab",
+      "products_to_show_label": "Maximum products per tab",
+      "presets": {
+        "default_name": "Product recommendations"
       }
     },
     "collection": {

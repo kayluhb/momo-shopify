@@ -1,0 +1,56 @@
+{% doc %}
+  Renders carousel-style product gallery panels (hero and split layouts).
+
+  @param {product} product - The product being displayed
+  @param {object} [initial_media] - Initially selected media
+  @param {boolean} eager_all - Use eager loading for every image (hero layout)
+  @param {number} max_image_width - Largest stage image width
+  @param {string} image_widths - Comma-separated widths for srcset
+  @param {string} image_sizes - Sizes attribute for stage images
+  @param {string} [video_image_size] - image_size for non-image media_tag
+{% enddoc %}
+
+{% liquid
+  assign carousel_video_size = video_image_size | default: '1600x'
+%}
+
+{% if product.media.size > 0 %}
+  {% for media in product.media %}
+    {% liquid
+      assign is_active = false
+      if initial_media and media.id == initial_media.id
+        assign is_active = true
+      elsif initial_media == blank and forloop.first
+        assign is_active = true
+      endif
+
+      assign panel_loading = 'lazy'
+      assign panel_fetchpriority = false
+      if eager_all
+        assign panel_loading = 'eager'
+        if forloop.first
+          assign panel_fetchpriority = true
+        endif
+      elsif forloop.first and is_active
+        assign panel_loading = 'eager'
+        assign panel_fetchpriority = true
+      endif
+    %}
+    {% render 'product-gallery-media',
+      product: product,
+      media: media,
+      layout_mode: 'carousel',
+      is_active: is_active,
+      max_image_width: max_image_width,
+      image_widths: image_widths,
+      image_sizes: image_sizes,
+      loading: panel_loading,
+      fetchpriority_high: panel_fetchpriority,
+      video_image_size: carousel_video_size
+    %}
+  {% endfor %}
+{% else %}
+  <div class="product-gallery__placeholder" aria-hidden="true">
+    {{ 'product-1' | placeholder_svg_tag: class: 'product-gallery__img product-gallery__img--placeholder' }}
+  </div>
+{% endif %}

@@ -1,5 +1,6 @@
 import { onDocumentReady } from '@theme/utilities';
 import { ThemeEvents } from '@theme/events';
+import { CART_DRAWER_SELECTOR } from '@theme/cart-sections';
 
 /**
  * @param {Event} event
@@ -49,7 +50,7 @@ function openCartDrawer(event) {
 
   event.preventDefault();
 
-  const drawer = document.querySelector('cart-drawer-component');
+  const drawer = document.querySelector(CART_DRAWER_SELECTOR);
   if (drawer && 'open' in drawer && typeof drawer.open === 'function') {
     drawer.open();
   }

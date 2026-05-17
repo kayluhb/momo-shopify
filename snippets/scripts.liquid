@@ -7,39 +7,27 @@
 
 {% render 'storefront-components' %}
 
+{% liquid
+  assign theme_module_files = 'cart-icon.js,cart-items.js,cart-sections.js,collection-facets.js,component.js,dialog.js,events.js,morph.js,product-cart.js,photoswipe.esm.min.js,photoswipe-lightbox.esm.min.js,product-gallery.js,section-hydration.js,section-renderer.js,utilities.js,variant-picker.js' | split: ','
+  assign theme_preload_files = 'utilities.js,component.js,morph.js,section-renderer.js,section-hydration.js,events.js,dialog.js,cart-sections.js,cart-items.js,cart-icon.js'
+  assign collection_module_files = 'collection-facets.js,product-card-swatches.js'
+%}
+
 <script type="importmap">
   {
     "imports": {
-      "@theme/cart-icon": "{{ 'cart-icon.js' | asset_url }}",
-      "@theme/cart-items": "{{ 'cart-items.js' | asset_url }}",
-      "@theme/cart-sections": "{{ 'cart-sections.js' | asset_url }}",
-      "@theme/collection-facets": "{{ 'collection-facets.js' | asset_url }}",
-      "@theme/component": "{{ 'component.js' | asset_url }}",
-      "@theme/dialog": "{{ 'dialog.js' | asset_url }}",
-      "@theme/events": "{{ 'events.js' | asset_url }}",
-      "@theme/morph": "{{ 'morph.js' | asset_url }}",
-      "@theme/product-cart": "{{ 'product-cart.js' | asset_url }}",
-      "@theme/photoswipe": "{{ 'photoswipe.esm.min.js' | asset_url }}",
-      "@theme/photoswipe-lightbox": "{{ 'photoswipe-lightbox.esm.min.js' | asset_url }}",
-      "@theme/product-gallery": "{{ 'product-gallery.js' | asset_url }}",
-      "@theme/section-hydration": "{{ 'section-hydration.js' | asset_url }}",
-      "@theme/section-renderer": "{{ 'section-renderer.js' | asset_url }}",
-      "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
-      "@theme/variant-picker": "{{ 'variant-picker.js' | asset_url }}"
+      {%- for module_file in theme_module_files -%}
+        {%- assign module_key = module_file | replace: '.esm.min.js', '' | replace: '.js', '' -%}
+        "@theme/{{ module_key }}": "{{ module_file | asset_url }}"{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
     }
   }
 </script>
 
-<link rel="modulepreload" href="{{ 'utilities.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'component.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'morph.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'section-renderer.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'section-hydration.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'events.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'dialog.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'cart-sections.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'cart-items.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'cart-icon.js' | asset_url }}" fetchpriority="low">
+{% assign preload_files = theme_preload_files | split: ',' %}
+{% for preload_file in preload_files %}
+  <link rel="modulepreload" href="{{ preload_file | asset_url }}" fetchpriority="low">
+{% endfor %}
 
 <script src="{{ 'cart-icon.js' | asset_url }}" type="module" fetchpriority="low"></script>
 <script src="{{ 'cart-items.js' | asset_url }}" type="module" fetchpriority="low"></script>
@@ -47,19 +35,20 @@
 
 {% if template.name == 'product' %}
   {{ 'photoswipe.css' | asset_url | stylesheet_tag }}
-  <link rel="modulepreload" href="{{ 'photoswipe.esm.min.js' | asset_url }}" fetchpriority="low">
-  <link rel="modulepreload" href="{{ 'photoswipe-lightbox.esm.min.js' | asset_url }}" fetchpriority="low">
-  <link rel="modulepreload" href="{{ 'product-cart.js' | asset_url }}" fetchpriority="low">
-  <link rel="modulepreload" href="{{ 'product-gallery.js' | asset_url }}" fetchpriority="low">
-  <link rel="modulepreload" href="{{ 'variant-picker.js' | asset_url }}" fetchpriority="low">
+  {% assign product_preload_files = 'photoswipe.esm.min.js,photoswipe-lightbox.esm.min.js,product-cart.js,product-gallery.js,variant-picker.js' | split: ',' %}
+  {% for preload_file in product_preload_files %}
+    <link rel="modulepreload" href="{{ preload_file | asset_url }}" fetchpriority="low">
+  {% endfor %}
   <script src="{{ 'product-gallery.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'product-cart.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'variant-picker.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
 
 {% if template.name == 'collection' %}
-  <link rel="modulepreload" href="{{ 'collection-facets.js' | asset_url }}" fetchpriority="low">
-  <link rel="modulepreload" href="{{ 'product-card-swatches.js' | asset_url }}" fetchpriority="low">
+  {% assign collection_preload_files = collection_module_files | split: ',' %}
+  {% for preload_file in collection_preload_files %}
+    <link rel="modulepreload" href="{{ preload_file | asset_url }}" fetchpriority="low">
+  {% endfor %}
   <script src="{{ 'collection-facets.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'product-card-swatches.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}

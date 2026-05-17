@@ -1,0 +1,24 @@
+{% doc %}
+  Renders a collection-style product grid for recommendation panels.
+
+  @param products - Products to display
+  @param {boolean} show_secondary_image - Show hover image on cards
+  @param {boolean} show_color_swatches - Show color swatches on cards
+  @param {boolean} show_rating - Show rating metafield on cards
+{% enddoc %}
+
+{% if products.size > 0 %}
+  <ul class="collection-page__grid list-none p-0" role="list">
+    {% for product in products %}
+      <li>
+        {% render 'product-card',
+          product: product,
+          card_style: 'grid',
+          show_secondary_image: show_secondary_image,
+          show_color_swatches: show_color_swatches,
+          show_rating: show_rating
+        %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

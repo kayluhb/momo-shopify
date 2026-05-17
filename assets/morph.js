@@ -553,25 +553,27 @@ function updateChildren(newNode, oldNode, options) {
  * @param {Options} options - The options object
  * @returns {boolean} True if the nodes are the same, false otherwise
  */
-function same(a, b, options) {
+function same(newNode, oldNode, options) {
   // If node types don't match, they're not the same
-  if (a.nodeType !== b.nodeType) return false;
+  if (newNode.nodeType !== oldNode.nodeType) return false;
 
   // For elements, check tag name first
-  if (a.nodeType === Node.ELEMENT_NODE) {
-    if (a instanceof Element && b instanceof Element && a.tagName !== b.tagName) return false;
+  if (newNode.nodeType === Node.ELEMENT_NODE) {
+    if (newNode instanceof Element && oldNode instanceof Element && newNode.tagName !== oldNode.tagName)
+      return false;
 
     // Only compare keys if both nodes have them
-    const aKey = getNodeKey(a, options);
-    const bKey = getNodeKey(b, options);
-    if (aKey && bKey && aKey !== bKey) return false;
+    const newNodeKey = getNodeKey(newNode, options);
+    const oldNodeKey = getNodeKey(oldNode, options);
+    if (newNodeKey && oldNodeKey && newNodeKey !== oldNodeKey) return false;
   }
 
   // For text/comment nodes, compare content
-  if (a.nodeType === Node.TEXT_NODE && b.nodeType === Node.TEXT_NODE)
+  if (newNode.nodeType === Node.TEXT_NODE && oldNode.nodeType === Node.TEXT_NODE)
     // Trim whitespace to avoid false negatives
-    return a.nodeValue?.trim() === b.nodeValue?.trim();
-  if (a.nodeType === Node.COMMENT_NODE && b.nodeType === Node.COMMENT_NODE) return a.nodeValue === b.nodeValue;
+    return newNode.nodeValue?.trim() === oldNode.nodeValue?.trim();
+  if (newNode.nodeType === Node.COMMENT_NODE && oldNode.nodeType === Node.COMMENT_NODE)
+    return newNode.nodeValue === oldNode.nodeValue;
 
   // If we get here and nodes are elements with same tag (and compatible keys), they're the same
   return true;

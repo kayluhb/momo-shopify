@@ -9,7 +9,7 @@
 {% liquid
   assign buy_layout = layout | default: 'split'
   assign is_sticky = false
-  if buy_layout == 'split' or buy_layout == 'split_tall' or buy_layout == 'split_half'
+  if buy_layout != 'hero'
     assign is_sticky = true
   endif
 
@@ -108,11 +108,6 @@
 
   .product-buy__eyebrow {
     margin: 0 0 0.5rem;
-    color: var(--color-brand-rust, #c57639);
-  }
-
-  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .product-buy__eyebrow {
-    color: var(--color-brand-warmth, #ea7657);
   }
 
   .product-buy__title {
@@ -221,8 +216,4 @@
     background-color: rgb(255 255 255 / 12%) !important;
   }
 
-  .product-buy__form__status {
-    margin: 0;
-    font-size: 0.875rem;
-  }
 {% endstylesheet %}

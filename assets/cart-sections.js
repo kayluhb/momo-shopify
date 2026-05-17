@@ -2,6 +2,8 @@ import { cartDebug, cartDebugWarn, getCartDomSnapshot } from '@theme/utilities';
 import { morph, MORPH_OPTIONS } from '@theme/morph';
 import { morphSection, normalizeSectionId, sectionRenderer } from '@theme/section-renderer';
 
+export const CART_DRAWER_SELECTOR = 'cart-drawer-component';
+
 /**
  * URL used when requesting section HTML alongside cart AJAX operations.
  * @returns {string}
@@ -34,7 +36,7 @@ function morphCartDrawerInner(html) {
   const sectionEl = getSectionElementFromHtml(html);
   const newInner = sectionEl?.querySelector('[data-hydration-key="cart-drawer-inner"]');
   const existingInner = document.querySelector(
-    'cart-drawer-component [data-hydration-key="cart-drawer-inner"]'
+    `${CART_DRAWER_SELECTOR} [data-hydration-key="cart-drawer-inner"]`
   );
 
   if (!(newInner instanceof HTMLElement) || !(existingInner instanceof HTMLElement)) {
@@ -231,13 +233,13 @@ export async function morphCartSectionsFromResponse(sections, prioritySectionId)
  * @returns {string | null}
  */
 export function getCartDrawerSectionId() {
-  const drawerSection = document.querySelector('cart-drawer-component')?.closest('.shopify-section');
+  const drawerSection = document.querySelector(CART_DRAWER_SELECTOR)?.closest('.shopify-section');
   if (drawerSection?.id) {
     return normalizeSectionId(drawerSection.id);
   }
 
   const cartItems = document.querySelector(
-    'cart-drawer-component cart-items-component[data-section-id]'
+    `${CART_DRAWER_SELECTOR} cart-items-component[data-section-id]`
   );
   if (cartItems instanceof HTMLElement && cartItems.dataset.sectionId) {
     return cartItems.dataset.sectionId;

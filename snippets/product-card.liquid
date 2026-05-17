@@ -45,9 +45,15 @@
   endif
 
   assign is_new = false
-  if product.tags contains 'new' or product.tags contains 'New'
-    assign is_new = true
-  endif
+  for tag in product.tags
+    assign tag_downcase = tag | downcase
+    if tag_downcase == 'new'
+      assign is_new = true
+      break
+    endif
+  endfor
+
+  assign card_image_sizes = '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
 
   assign rating_value = nil
   assign rating_count = nil
@@ -81,7 +87,7 @@
           | image_url: width: 800
           | image_tag:
             loading: 'lazy',
-            sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+            sizes: card_image_sizes,
             widths: '400,600,800',
             alt: product.featured_image.alt
             | default: product.title
@@ -94,7 +100,7 @@
             | image_url: width: 800
             | image_tag:
               loading: 'lazy',
-              sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+              sizes: card_image_sizes,
               widths: '400,600,800',
               alt: secondary_image.alt
               | default: product.title
@@ -146,117 +152,11 @@
         aria-label="{{ 'products.color_options' | t: option: color_option.name }}"
       >
         {% for value in color_option.values %}
-          {% liquid
-            assign variant_for_value = value.variant
-            assign option_position = color_option.position
-
-            if variant_for_value == blank
-              for variant in product.variants
-                if option_position == 1
-                  if variant.option1 == value.name
-                    assign variant_for_value = variant
-                    break
-                  endif
-                elsif option_position == 2
-                  if variant.option2 == value.name
-                    assign variant_for_value = variant
-                    break
-                  endif
-                elsif option_position == 3
-                  if variant.option3 == value.name
-                    assign variant_for_value = variant
-                    break
-                  endif
-                endif
-              endfor
-            endif
-
-            assign swatch_url = product.url
-            if variant_for_value
-              assign swatch_url = variant_for_value.url
-            endif
-
-            assign is_selected = false
-            if variant_for_value
-              if variant_for_value.id == product.selected_or_first_available_variant.id
-                assign is_selected = true
-              endif
-            endif
-
-            assign swatch_image = nil
-            if value.swatch.image != blank
-              assign swatch_image = value.swatch.image
-            elsif variant_for_value.featured_image
-              assign swatch_image = variant_for_value.featured_image
-            endif
-
-            assign swatch_bg = ''
-            if value.swatch.color != blank
-              assign swatch_bg = 'rgb(' | append: value.swatch.color.rgb | append: ')'
-            elsif swatch_image == blank
-              assign color_key = value.name | downcase | strip
-              case color_key
-                when 'black'
-                  assign swatch_bg = '#1a1a1a'
-                when 'white'
-                  assign swatch_bg = '#f5f5f5'
-                when 'gray', 'grey'
-                  assign swatch_bg = '#9ca3af'
-                when 'navy', 'blue'
-                  assign swatch_bg = '#1e3a5f'
-                when 'red'
-                  assign swatch_bg = '#c0392b'
-                when 'green'
-                  assign swatch_bg = '#2d6a4f'
-                when 'yellow'
-                  assign swatch_bg = '#f4d03f'
-                when 'pink'
-                  assign swatch_bg = '#f4a6b8'
-                when 'brown'
-                  assign swatch_bg = '#8b5e3c'
-                when 'orange'
-                  assign swatch_bg = '#e67e22'
-                when 'purple'
-                  assign swatch_bg = '#6c4f8a'
-                when 'beige', 'tan'
-                  assign swatch_bg = '#d4b896'
-              endcase
-            endif
-
-            assign preview_image_url = ''
-            if variant_for_value.featured_image
-              assign preview_image_url = variant_for_value.featured_image | image_url: width: 800
-            endif
+          {% render 'product-card-swatch',
+            product: product,
+            value: value,
+            color_option: color_option
           %}
-          <li>
-            <a
-              href="{{ swatch_url }}"
-              class="product-card__swatch{% if is_selected %} is-selected{% endif %}"
-              {% if swatch_bg != blank %}
-                style="--swatch-bg: {{ swatch_bg }};"
-              {% endif %}
-              {% if preview_image_url != blank %}
-                data-swatch-image="{{ preview_image_url }}"
-              {% endif %}
-              aria-label="{{ value.name | escape }}"
-              {% if is_selected %}
-                aria-current="true"
-              {% endif %}
-            >
-              {% if swatch_image %}
-                {{
-                  swatch_image
-                  | image_url: width: 80, height: 80, crop: 'center'
-                  | image_tag:
-                    class: 'product-card__swatch-img',
-                    loading: 'lazy',
-                    widths: '40, 80',
-                    sizes: '16px',
-                    alt: ''
-                }}
-              {% endif %}
-            </a>
-          </li>
         {% endfor %}
       </ul>
     {% endif %}

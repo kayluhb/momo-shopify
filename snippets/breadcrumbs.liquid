@@ -7,10 +7,8 @@
 
 {% liquid
   assign breadcrumb_collection = collection
-  if breadcrumb_collection == blank
-    if product.collections.size > 0
-      assign breadcrumb_collection = product.collections.first
-    endif
+  if breadcrumb_collection == blank and product.collections.size > 0
+    assign breadcrumb_collection = product.collections.first
   endif
 %}
 

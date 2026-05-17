@@ -4,10 +4,11 @@
   assign overlay_opacity = section.settings.overlay_opacity
   assign card_ratio = section.settings.card_aspect_ratio
 %}
+{% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="category-cards full-width bg-brand-canvas py-8 md:py-10 text-brand-steel"
+  class="category-cards full-width py-8 md:py-10 {{ section_bg }}"
 >
   <div class="section-inner">
     {% if section.blocks.size > 0 %}
@@ -193,6 +194,18 @@
     {
       "type": "header",
       "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "canvas",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
     },
     {
       "type": "range",

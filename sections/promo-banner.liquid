@@ -1,20 +1,9 @@
 {% liquid
-  assign scheme = section.settings.color_scheme
   assign use_gradient = section.settings.use_gradient
-
-  case scheme
-    when 'heart'
-      assign section_bg = 'bg-brand-heart text-white'
-    when 'warmth'
-      assign section_bg = 'bg-brand-warmth text-white'
-    when 'steel'
-      assign section_bg = 'bg-brand-steel text-white'
-    when 'earth'
-      assign section_bg = 'bg-brand-earth text-white'
-    else
-      assign section_bg = 'bg-brand-steel text-white'
-  endcase
-
+  assign promo_scheme = section.settings.color_scheme | default: 'steel'
+%}
+{% capture section_bg %}{% render 'section-color-scheme', scheme: promo_scheme %}{% endcapture %}
+{% liquid
   if use_gradient
     assign section_bg = section_bg | append: ' promo-banner--gradient'
   endif

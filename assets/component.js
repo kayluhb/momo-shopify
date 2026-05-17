@@ -151,9 +151,10 @@ export class Component extends DeclarativeShadowElement {
   #mutationObserver = new MutationObserver((mutations) => {
     if (
       mutations.some(
-        (m) =>
-          (m.type === 'attributes' && this.#isDescendant(m.target)) ||
-          (m.type === 'childList' && [...m.addedNodes, ...m.removedNodes].some(this.#isDescendant))
+        (mutation) =>
+          (mutation.type === 'attributes' && this.#isDescendant(mutation.target)) ||
+          (mutation.type === 'childList' &&
+            [...mutation.addedNodes, ...mutation.removedNodes].some(this.#isDescendant))
       )
     ) {
       this.#updateRefs();

@@ -3,11 +3,11 @@ import {
   cartDebugError,
   cartDebugWarn,
   debounce,
+  fetchCartJson,
   fetchConfig,
   getCartDomSnapshot,
-  isShopifyCartJsonResponse,
 } from '@theme/utilities';
-import { ThemeEvents, CartUpdateEvent, CartAddEvent } from '@theme/events';
+import { ThemeEvents, CartUpdateEvent, CartAddEvent, CartSource } from '@theme/events';
 import {
   getCartSectionsParam,
   getCartSectionsUrl,
@@ -136,40 +136,20 @@ class CartItemsComponent extends HTMLElement {
     });
 
     try {
-      const response = await fetch(
+      const result = await fetchCartJson(
         Theme.routes.cart_change_url,
-        fetchConfig('json', { body: JSON.stringify(requestBody) })
+        fetchConfig('json', { body: JSON.stringify(requestBody) }),
+        { scope: 'items', logLabel: 'cart change' }
       );
-      const contentType = response.headers.get('content-type') || '';
-      const responseText = await response.text();
 
-      cartDebug('items', 'cart change response', {
-        ok: response.ok,
-        status: response.status,
-        contentType,
-        bodyPreview: responseText.slice(0, 500),
-      });
+      if (!result.ok) return;
 
-      if (!response.ok || !isShopifyCartJsonResponse(contentType)) {
-        cartDebugError('items', 'cart change failed — unexpected response type', {
-          status: response.status,
-          contentType,
-          body: responseText.slice(0, 500),
-        });
-        return;
-      }
-
-      const data = JSON.parse(responseText);
+      const data = result.data;
 
       if (data.errors) {
         cartDebugError('items', 'cart change returned errors', data.errors);
         return;
       }
-
-      cartDebug('items', 'cart change parsed', {
-        item_count: data.item_count,
-        sectionKeys: data.sections ? Object.keys(data.sections) : [],
-      });
 
       try {
         await morphCartSectionsFromResponse(data.sections, this.sectionId);
@@ -179,7 +159,7 @@ class CartItemsComponent extends HTMLElement {
 
       document.dispatchEvent(
         new CartUpdateEvent(data, this.sectionId, {
-          source: 'cart-items',
+          source: CartSource.cartItems,
           sections: data.sections,
           itemCount: data.item_count,
         })

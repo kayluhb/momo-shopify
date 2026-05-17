@@ -19,12 +19,9 @@
     assign overlay_opacity = 40
   endif
 
-  if hero_image != blank
-    if hero_image.alt != blank
-      assign hero_alt = hero_image.alt
-    else
-      assign hero_alt = hero_heading
-    endif
+  assign hero_alt = hero_heading
+  if hero_image != blank and hero_image.alt != blank
+    assign hero_alt = hero_image.alt
   endif
 %}
 
@@ -38,19 +35,12 @@
 >
   <div class="collection-hero__media hero__media">
     {% if hero_image != blank %}
-      <div class="hero__parallax" data-hero-parallax-media>
-        {{
-          hero_image
-          | image_url: width: 3840
-          | image_tag:
-            widths: '550, 720, 990, 1100, 1500, 2200, 3000, 3840',
-            sizes: '100vw',
-            loading: 'eager',
-            fetchpriority: 'high',
-            class: 'hero__img hero__img--parallax',
-            alt: hero_alt
-        }}
-      </div>
+      {% render 'hero-media-image',
+        image: hero_image,
+        alt: hero_alt,
+        loading: 'eager',
+        fetchpriority: 'high'
+      %}
     {% else %}
       <div class="collection-hero__placeholder" aria-hidden="true">
         {{ 'collection-1' | placeholder_svg_tag: class: 'hero__img hero__img--placeholder' }}

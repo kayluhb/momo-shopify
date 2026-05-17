@@ -7,7 +7,7 @@
 
 <div class="collection-page full-width {{ section_bg }}" {{ section.shopify_attributes }}>
   <div class="section-inner">
-  <facets-form-component section-id="{{ section.id }}" class="collection-page__facets">
+  <facets-form-component data-section-id="{{ section.id }}" class="collection-page__facets">
     <form ref="facetsForm" class="collection-page__form">
       {% if collection.filters.size > 0 or collection.sort_options.size > 0 %}
         {% render 'collection-toolbar',
@@ -28,7 +28,7 @@
         {% paginate collection.products by products_per_page %}
           {% if collection.products.size > 0 %}
             <ul
-              class="collection-page__grid list-none p-0"
+              class="collection-page__grid product-grid list-none p-0"
               style="--collection-columns: {{ columns }}; --collection-gap: {{ grid_gap }}px;"
               role="list"
             >
@@ -86,15 +86,8 @@
   }
 
   .collection-page__grid {
-    display: grid;
-    gap: var(--collection-gap, 12px);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (min-width: 750px) {
-    .collection-page__grid {
-      grid-template-columns: repeat(var(--collection-columns, 4), minmax(0, 1fr));
-    }
+    --product-grid-columns: var(--collection-columns, 4);
+    --product-grid-gap: var(--collection-gap, 12px);
   }
 
   .collection-page__empty {
@@ -106,253 +99,6 @@
 
   .collection-page__pagination {
     margin-top: 2rem;
-  }
-
-  .collection-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1rem;
-    padding: 0.875rem 1rem;
-    border-radius: 0.5rem;
-    background: #fff;
-    box-shadow: 0 1px 0 rgb(0 37 63 / 6%);
-  }
-
-  .collection-toolbar__toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.625rem;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .collection-toolbar__toggle-input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  .collection-toolbar__toggle-track {
-    position: relative;
-    flex-shrink: 0;
-    width: 2.25rem;
-    height: 1.25rem;
-    border-radius: 9999px;
-    background: color-mix(in srgb, var(--color-brand-steel, #00253f) 14%, white);
-    transition: background 200ms ease;
-  }
-
-  .collection-toolbar__toggle-track::after {
-    content: '';
-    position: absolute;
-    top: 0.125rem;
-    left: 0.125rem;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 9999px;
-    background: #fff;
-    box-shadow: 0 1px 2px rgb(0 37 63 / 18%);
-    transition: transform 200ms ease;
-  }
-
-  .collection-toolbar__toggle-input:checked + .collection-toolbar__toggle-track {
-    background: var(--color-brand-steel, #00253f);
-  }
-
-  .collection-toolbar__toggle-input:checked + .collection-toolbar__toggle-track::after {
-    transform: translateX(1rem);
-  }
-
-  .collection-toolbar__toggle-input:focus-visible + .collection-toolbar__toggle-track {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
-  }
-
-  .collection-toolbar__toggle-label {
-    font-size: 0.875rem;
-    line-height: 1.3;
-    white-space: nowrap;
-  }
-
-  .collection-toolbar__filters {
-    display: flex;
-    flex: 1 1 auto;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-    min-width: 0;
-  }
-
-  .collection-filter {
-    position: relative;
-  }
-
-  .collection-filter__trigger {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 12%, transparent);
-    border-radius: 0.375rem;
-    background: #fff;
-    font-size: 0.875rem;
-    line-height: 1.2;
-    list-style: none;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .collection-filter__trigger::-webkit-details-marker {
-    display: none;
-  }
-
-  .collection-filter[open] .collection-filter__trigger {
-    border-color: color-mix(in srgb, var(--color-brand-steel, #00253f) 22%, transparent);
-  }
-
-  .collection-filter__count {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 1.125rem;
-    height: 1.125rem;
-    padding-inline: 0.25rem;
-    border-radius: 9999px;
-    background: var(--color-brand-steel, #00253f);
-    color: #fff;
-    font-size: 0.6875rem;
-    font-weight: 700;
-  }
-
-  .collection-filter__chevron,
-  .collection-toolbar__sort-chevron {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-right: 1.5px solid currentcolor;
-    border-bottom: 1.5px solid currentcolor;
-    transform: rotate(45deg) translateY(-1px);
-    opacity: 0.65;
-  }
-
-  .collection-filter__panel {
-    position: absolute;
-    z-index: 5;
-    top: calc(100% + 0.375rem);
-    left: 0;
-    min-width: 12rem;
-    max-width: min(18rem, 80vw);
-    max-height: 16rem;
-    overflow: auto;
-    padding: 0.5rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 10%, transparent);
-    border-radius: 0.375rem;
-    background: #fff;
-    box-shadow: 0 8px 24px rgb(0 37 63 / 10%);
-  }
-
-  .collection-filter__list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .collection-filter__option {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.35rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-  }
-
-  .collection-filter__option:hover {
-    background: color-mix(in srgb, var(--color-brand-steel, #00253f) 5%, white);
-  }
-
-  .collection-filter__option-label {
-    flex: 1 1 auto;
-  }
-
-  .collection-filter__option-count {
-    color: color-mix(in srgb, var(--color-brand-steel, #00253f) 55%, transparent);
-    font-size: 0.8125rem;
-  }
-
-  .collection-filter__price {
-    display: grid;
-    gap: 0.5rem;
-    padding: 0.25rem;
-  }
-
-  .collection-filter__price-field {
-    display: grid;
-    gap: 0.25rem;
-    font-size: 0.8125rem;
-  }
-
-  .collection-filter__price-field input {
-    width: 100%;
-    padding: 0.4rem 0.5rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 14%, transparent);
-    border-radius: 0.25rem;
-  }
-
-  .collection-toolbar__sort {
-    position: relative;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-
-  .collection-toolbar__sort-select {
-    appearance: none;
-    padding: 0.5rem 2rem 0.5rem 0.75rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 12%, transparent);
-    border-radius: 0.375rem;
-    background: #fff;
-    font-size: 0.875rem;
-    line-height: 1.2;
-    cursor: pointer;
-  }
-
-  .collection-toolbar__sort-select:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
-  }
-
-  .collection-toolbar__sort-chevron {
-    position: absolute;
-    top: 50%;
-    right: 0.75rem;
-    pointer-events: none;
-    transform: rotate(45deg) translateY(-50%);
-  }
-
-  @media (max-width: 749px) {
-    .collection-toolbar {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .collection-toolbar__filters {
-      width: 100%;
-    }
-
-    .collection-toolbar__sort {
-      width: 100%;
-      margin-left: 0;
-    }
-
-    .collection-toolbar__sort-select {
-      width: 100%;
-    }
   }
 {% endstylesheet %}
 

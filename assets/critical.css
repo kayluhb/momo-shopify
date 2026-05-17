@@ -131,6 +131,23 @@ b {
   letter-spacing: 0.1em;
   line-height: 1.3;
   text-transform: uppercase;
+  color: var(--color-brand-rust, #c57639);
+}
+
+:where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) :where(.type-eyebrow) {
+  color: var(--color-brand-warmth, #ea7657);
+}
+
+.product-grid {
+  display: grid;
+  gap: var(--product-grid-gap, 12px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 750px) {
+  .product-grid {
+    grid-template-columns: repeat(var(--product-grid-columns, 4), minmax(0, 1fr));
+  }
 }
 
 :where(

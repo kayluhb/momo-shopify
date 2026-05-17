@@ -804,6 +804,47 @@ export function updateAllHeaderCustomProperties() {
 const CART_DEBUG_STORAGE_KEY = 'theme:cart-debug';
 
 /**
+ * @param {string} url
+ * @param {RequestInit} init
+ * @param {{ scope: string; logLabel: string }} options
+ * @returns {Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; status: number; contentType: string; bodyPreview: string }>}
+ */
+export async function fetchCartJson(url, init, { scope, logLabel }) {
+  const response = await fetch(url, init);
+  const contentType = response.headers.get('content-type') || '';
+  const responseText = await response.text();
+
+  cartDebug(scope, `${logLabel} response`, {
+    ok: response.ok,
+    status: response.status,
+    contentType,
+    bodyPreview: responseText.slice(0, 500),
+  });
+
+  if (!response.ok || !isShopifyCartJsonResponse(contentType)) {
+    cartDebugError(scope, `${logLabel} failed — unexpected response type`, {
+      status: response.status,
+      contentType,
+      body: responseText.slice(0, 500),
+    });
+    return {
+      ok: false,
+      status: response.status,
+      contentType,
+      bodyPreview: responseText.slice(0, 500),
+    };
+  }
+
+  const data = /** @type {Record<string, unknown>} */ (JSON.parse(responseText));
+  cartDebug(scope, `${logLabel} parsed`, {
+    item_count: data.item_count,
+    sectionKeys: data.sections ? Object.keys(/** @type {object} */ (data.sections)) : [],
+  });
+
+  return { ok: true, data };
+}
+
+/**
  * Cart debugging is off by default. Enable with either:
  * - `localStorage.setItem('theme:cart-debug', '1')` then reload
  * - Add `?cart_debug=1` to the URL

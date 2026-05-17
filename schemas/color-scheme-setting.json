@@ -1,0 +1,15 @@
+{
+  "$comment": "Reference fragment for section color_scheme settings. Copy into section schema settings arrays; Shopify does not load this file automatically.",
+  "type": "select",
+  "id": "color_scheme",
+  "label": "t:sections.shared.color_scheme_label",
+  "default": "white",
+  "options": [
+    { "value": "white", "label": "t:options.color_scheme.white" },
+    { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+    { "value": "earth", "label": "t:options.color_scheme.earth" },
+    { "value": "steel", "label": "t:options.color_scheme.steel" },
+    { "value": "warmth", "label": "t:options.color_scheme.warmth" },
+    { "value": "heart", "label": "t:options.color_scheme.heart" }
+  ]
+}

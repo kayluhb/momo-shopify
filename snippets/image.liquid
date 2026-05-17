@@ -7,23 +7,19 @@
   @param {image} image - The image to be rendered
   @param {string} [url] - An optional destination URL for the image
   @param {string} [class] - Optional class to be added to the image wrapper
+  @param {string} [image_class] - Optional class on the img element
   @param {string} [alt] - Alt text; falls back to image.alt when omitted
   @param {number} [width] - The highest resolution width of the image to be rendered
   @param {number} [height] - The highest resolution height of the image to be rendered
   @param {string} [crop] - The crop position of the image
+  @param {string} [widths] - Comma-separated widths for responsive srcset
+  @param {string} [sizes] - Sizes attribute for responsive images
+  @param {string} [loading] - lazy or eager
+  @param {string} [fetchpriority] - high when set for LCP images
 
   @example
   {% render 'image', image: product.featured_image %}
   {% render 'image', image: product.featured_image, url: product.url %}
-  {% render 'image',
-    class: 'product__image',
-    image: product.featured_image,
-    url: product.url,
-    width: 1200,
-    height: 800,
-    crop: 'center',
-    alt: product.title,
-  %}
 {% enddoc %}
 
 {% liquid
@@ -46,7 +42,30 @@
     href="{{ url }}"
   {% endif %}
 >
-  {{ image | image_url: width: width, height: height, crop: crop | image_tag: alt: image_alt }}
+  {% if fetchpriority != blank %}
+    {{
+      image
+      | image_url: width: width, height: height, crop: crop
+      | image_tag:
+        widths: widths,
+        sizes: sizes,
+        loading: loading,
+        fetchpriority: fetchpriority,
+        class: image_class,
+        alt: image_alt
+    }}
+  {% else %}
+    {{
+      image
+      | image_url: width: width, height: height, crop: crop
+      | image_tag:
+        widths: widths,
+        sizes: sizes,
+        loading: loading,
+        class: image_class,
+        alt: image_alt
+    }}
+  {% endif %}
 </{{ wrapper }}>
 
 {% stylesheet %}

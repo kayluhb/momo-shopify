@@ -17,10 +17,14 @@
     assign image_sizes = '100vw'
     assign image_widths = '600, 900, 1200, 1600, 2000, 2400, 3000, 3840'
     assign max_image_width = 3840
+    assign carousel_eager_all = true
+    assign carousel_video_size = '2048x'
   else
     assign image_sizes = '(min-width: 990px) 50vw, 100vw'
     assign image_widths = '600, 900, 1200, 1600, 2000, 2400'
     assign max_image_width = 2400
+    assign carousel_eager_all = false
+    assign carousel_video_size = '1600x'
   endif
 
   if hero_height == blank
@@ -54,75 +58,17 @@
       style="--product-gallery-hero-height: {{ hero_height }}rem;"
     >
       <div class="product-gallery__hero-media" data-gallery-zoom>
-        {% if product.media.size > 0 %}
-          {% for media in product.media %}
-            {% liquid
-              assign is_active = false
-              if initial_media and media.id == initial_media.id
-                assign is_active = true
-              elsif initial_media == blank and forloop.first
-                assign is_active = true
-              endif
-
-              if media.alt != blank
-                assign media_alt = media.alt
-              else
-                assign media_alt = product.title
-              endif
-            %}
-            <div
-              class="product-gallery__panel{% if is_active %} is-active{% endif %}"
-              data-media-panel
-              data-media-id="{{ media.id }}"
-              {% unless is_active %}
-                hidden
-              {% endunless %}
-            >
-              {% case media.media_type %}
-                {% when 'image' %}
-                  {% render 'product-gallery-zoom-link',
-                    media: media,
-                    media_alt: media_alt,
-                    max_image_width: max_image_width,
-                    image_widths: image_widths,
-                    image_sizes: image_sizes,
-                    loading: 'eager',
-                    fetchpriority_high: true
-                  %}
-                {% else %}
-                  {{
-                    media
-                    | media_tag:
-                      image_size: '2048x',
-                      class: 'product-gallery__media-tag',
-                      toggleable: true
-                  }}
-              {% endcase %}
-            </div>
-          {% endfor %}
-        {% else %}
-          <div class="product-gallery__placeholder" aria-hidden="true">
-            {{ 'product-1' | placeholder_svg_tag: class: 'product-gallery__img product-gallery__img--placeholder' }}
-          </div>
-        {% endif %}
+        {% render 'product-gallery-carousel',
+          product: product,
+          initial_media: initial_media,
+          eager_all: carousel_eager_all,
+          max_image_width: max_image_width,
+          image_widths: image_widths,
+          image_sizes: image_sizes,
+          video_image_size: carousel_video_size
+        %}
         {% if has_image_media %}
-          {% liquid
-            assign zoom_button_hidden = true
-            if initial_media == blank or initial_media.media_type == 'image'
-              assign zoom_button_hidden = false
-            endif
-          %}
-          <button
-            type="button"
-            class="product-gallery__zoom"
-            data-gallery-zoom-button
-            aria-label="{{ 'products.gallery.zoom' | t }}"
-            {% if zoom_button_hidden %}
-              hidden
-            {% endif %}
-          >
-            {{ 'icon-zoom.svg' | inline_asset_content }}
-          </button>
+          {% render 'product-gallery-zoom-button', initial_media: initial_media %}
         {% endif %}
         <div
           class="product-gallery__overlay"
@@ -131,154 +77,38 @@
         ></div>
       </div>
     </div>
+    {% render 'product-gallery-thumbs', product: product, initial_media: initial_media %}
   {% elsif gallery_layout == 'split_half' %}
     <div class="product-gallery__stack" data-gallery-zoom>
-      {% if product.media.size > 0 %}
-        {% for media in product.media %}
-          {% liquid
-            if media.alt != blank
-              assign media_alt = media.alt
-            else
-              assign media_alt = product.title
-            endif
-
-            if forloop.first
-              assign stack_loading = 'eager'
-              assign stack_fetchpriority = true
-            else
-              assign stack_loading = 'lazy'
-              assign stack_fetchpriority = false
-            endif
-          %}
-          <div
-            class="product-gallery__stack-item"
-            data-media-panel
-            data-media-id="{{ media.id }}"
-          >
-            {% case media.media_type %}
-              {% when 'image' %}
-                {% render 'product-gallery-zoom-link',
-                  media: media,
-                  media_alt: media_alt,
-                  max_image_width: max_image_width,
-                  image_widths: image_widths,
-                  image_sizes: image_sizes,
-                  loading: stack_loading,
-                  fetchpriority_high: stack_fetchpriority
-                %}
-              {% else %}
-                {{
-                  media
-                  | media_tag:
-                    image_size: '1600x',
-                    class: 'product-gallery__media-tag',
-                    toggleable: true
-                }}
-            {% endcase %}
-          </div>
-        {% endfor %}
-      {% else %}
-        <div class="product-gallery__stack-item product-gallery__placeholder" aria-hidden="true">
-          {{ 'product-1' | placeholder_svg_tag: class: 'product-gallery__img product-gallery__img--placeholder' }}
-        </div>
-      {% endif %}
+      {% render 'product-gallery-stack',
+        product: product,
+        max_image_width: max_image_width,
+        image_widths: image_widths,
+        image_sizes: image_sizes
+      %}
     </div>
   {% else %}
     <div class="product-gallery__layout">
       <div class="product-gallery__stage" data-gallery-zoom>
-      {% if product.media.size > 0 %}
-        {% for media in product.media %}
-          {% liquid
-            assign is_active = false
-            if initial_media and media.id == initial_media.id
-              assign is_active = true
-            elsif initial_media == blank and forloop.first
-              assign is_active = true
-            endif
-
-            if media.alt != blank
-              assign media_alt = media.alt
-            else
-              assign media_alt = product.title
-            endif
-          %}
-          <div
-            class="product-gallery__panel{% if is_active %} is-active{% endif %}"
-            data-media-panel
-            data-media-id="{{ media.id }}"
-            {% unless is_active %}
-              hidden
-            {% endunless %}
-          >
-            {% case media.media_type %}
-              {% when 'image' %}
-                {% if forloop.first and is_active %}
-                  {% render 'product-gallery-zoom-link',
-                    media: media,
-                    media_alt: media_alt,
-                    max_image_width: max_image_width,
-                    image_widths: image_widths,
-                    image_sizes: image_sizes,
-                    loading: 'eager',
-                    fetchpriority_high: true
-                  %}
-                {% else %}
-                  {% render 'product-gallery-zoom-link',
-                    media: media,
-                    media_alt: media_alt,
-                    max_image_width: max_image_width,
-                    image_widths: image_widths,
-                    image_sizes: image_sizes,
-                    loading: 'lazy'
-                  %}
-                {% endif %}
-              {% else %}
-                {{
-                  media
-                  | media_tag:
-                    image_size: '1600x',
-                    class: 'product-gallery__media-tag',
-                    toggleable: true
-                }}
-            {% endcase %}
-          </div>
-        {% endfor %}
-      {% else %}
-        <div class="product-gallery__placeholder" aria-hidden="true">
-          {{ 'product-1' | placeholder_svg_tag: class: 'product-gallery__img product-gallery__img--placeholder' }}
-        </div>
-      {% endif %}
-      {% if has_image_media %}
-        {% liquid
-          assign zoom_button_hidden = true
-          if initial_media == blank or initial_media.media_type == 'image'
-            assign zoom_button_hidden = false
-          endif
+        {% render 'product-gallery-carousel',
+          product: product,
+          initial_media: initial_media,
+          eager_all: carousel_eager_all,
+          max_image_width: max_image_width,
+          image_widths: image_widths,
+          image_sizes: image_sizes,
+          video_image_size: carousel_video_size
         %}
-        <button
-          type="button"
-          class="product-gallery__zoom"
-          data-gallery-zoom-button
-          aria-label="{{ 'products.gallery.zoom' | t }}"
-          {% if zoom_button_hidden %}
-            hidden
-          {% endif %}
-        >
-          {{ 'icon-zoom.svg' | inline_asset_content }}
-        </button>
-      {% endif %}
+        {% if has_image_media %}
+          {% render 'product-gallery-zoom-button', initial_media: initial_media %}
+        {% endif %}
       </div>
-
       {% render 'product-gallery-thumbs',
         product: product,
         initial_media: initial_media,
         show_scroll_arrows: true
       %}
     </div>
-  {% endif %}
-
-  {% if gallery_layout == 'hero' %}
-    {% render 'product-gallery-thumbs', product: product, initial_media: initial_media %}
   {% endif %}
 </product-gallery>
 

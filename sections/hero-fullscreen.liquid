@@ -91,19 +91,12 @@
               aria-hidden="{% if slide_render_index == 0 %}false{% else %}true{% endif %}"
               {{ block.shopify_attributes }}
             >
-              <div class="hero__parallax" data-hero-parallax-media>
-                {{
-                  block.settings.image
-                  | image_url: width: 3840
-                  | image_tag:
-                    widths: '550, 720, 990, 1100, 1500, 2200, 3000, 3840',
-                    sizes: '100vw',
-                    loading: slide_loading,
-                    fetchpriority: slide_fetchpriority,
-                    class: 'hero__img hero__img--parallax',
-                    alt: slide_alt
-                }}
-              </div>
+              {% render 'hero-media-image',
+                image: block.settings.image,
+                alt: slide_alt,
+                loading: slide_loading,
+                fetchpriority: slide_fetchpriority
+              %}
               <div
                 class="hero__overlay"
                 style="background: rgb(0 0 0 / {{ slide_overlay_opacity }}%);"
@@ -233,20 +226,9 @@
               assign slide_text_placement = 'center'
             endif
             assign slide_text_color = block.settings.text_color | default: 'white'
-            case slide_text_color
-              when 'steel'
-                assign slide_text_color_class = 'text-brand-steel'
-              when 'rust'
-                assign slide_text_color_class = 'text-brand-rust'
-              when 'earth'
-                assign slide_text_color_class = 'text-brand-earth'
-              when 'warmth'
-                assign slide_text_color_class = 'text-brand-warmth'
-              when 'heart'
-                assign slide_text_color_class = 'text-brand-heart'
-              else
-                assign slide_text_color_class = 'text-white'
-            endcase
+            capture slide_text_color_class
+              render 'brand-text-color-class', color: slide_text_color
+            endcapture
           %}
           <div
             id="{{ panel_id }}"
@@ -730,207 +712,9 @@
   }
 {% endstylesheet %}
 
-{% javascript %}
-  (function () {
-    var roots = document.querySelectorAll('[data-hero-fullscreen]');
-    if (!roots.length) return;
-
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    roots.forEach(function (root) {
-      if (root.dataset.enableCarousel !== '1') return;
-
-      var slides = root.querySelectorAll('[data-hero-slide]');
-      var panels = root.querySelectorAll('[data-hero-slide-inner]');
-      var dots = root.querySelectorAll('[data-hero-dot]');
-      var prevBtn = root.querySelector('[data-hero-dir="prev"]');
-      var nextBtn = root.querySelector('[data-hero-dir="next"]');
-      var pauseBtn = root.querySelector('[data-hero-pause]');
-      var liveRegion = root.querySelector('[id^="hero-live-"]');
-      var total = slides.length;
-      if (total < 2) return;
-
-      var index = 0;
-      var timer = null;
-      var userPaused = false;
-      var autoplayEnabled = root.dataset.autoplay === '1' && !reduceMotion;
-      var interval = parseInt(root.dataset.interval, 10) || 5000;
-      var i18nSlide = root.dataset.i18nSlide || '';
-      var i18nSlideNamed = root.dataset.i18nSlideNamed || '';
-      var i18nPause = root.dataset.i18nPause || 'Pause slideshow';
-      var i18nPlay = root.dataset.i18nPlay || 'Play slideshow';
-
-      function formatMessage(template, current, title) {
-        var msg = template.replace(/__CURRENT__/g, String(current)).replace(/__TOTAL__/g, String(total));
-        if (title) {
-          msg = msg.replace(/__TITLE__/g, title);
-        }
-        return msg;
-      }
-
-      function announce() {
-        if (!liveRegion) return;
-        var panel = panels[index];
-        var title = panel ? panel.getAttribute('data-slide-title') : '';
-        var current = index + 1;
-        if (title && i18nSlideNamed) {
-          liveRegion.textContent = formatMessage(i18nSlideNamed, current, title);
-        } else if (i18nSlide) {
-          liveRegion.textContent = formatMessage(i18nSlide, current);
-        }
-      }
-
-      function updatePauseUi() {
-        if (!pauseBtn) return;
-        var paused = userPaused || !autoplayEnabled;
-        pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
-        pauseBtn.setAttribute('aria-label', paused ? i18nPlay : i18nPause);
-        pauseBtn.classList.toggle('is-paused', paused);
-      }
-
-      function goTo(i, options) {
-        options = options || {};
-        index = (i + total) % total;
-        slides.forEach(function (s, j) {
-          var active = j === index;
-          s.classList.toggle('is-active', active);
-          s.setAttribute('aria-hidden', active ? 'false' : 'true');
-        });
-        panels.forEach(function (p, j) {
-          var active = j === index;
-          p.classList.toggle('is-active', active);
-          p.setAttribute('aria-hidden', active ? 'false' : 'true');
-          if (active) {
-            p.removeAttribute('tabindex');
-          } else {
-            p.setAttribute('tabindex', '-1');
-          }
-        });
-        dots.forEach(function (d, j) {
-          var active = j === index;
-          d.classList.toggle('is-active', active);
-          d.setAttribute('aria-selected', active ? 'true' : 'false');
-          d.setAttribute('tabindex', active ? '0' : '-1');
-        });
-        if (options.announce !== false) {
-          announce();
-        }
-      }
-
-      function stopTimer() {
-        if (timer) {
-          clearInterval(timer);
-          timer = null;
-        }
-      }
-
-      function startTimer() {
-        stopTimer();
-        if (!autoplayEnabled || userPaused) return;
-        timer = setInterval(function () {
-          goTo(index + 1);
-        }, interval);
-      }
-
-      function togglePause() {
-        userPaused = !userPaused;
-        updatePauseUi();
-        if (userPaused) {
-          stopTimer();
-        } else {
-          startTimer();
-        }
-      }
-
-      if (prevBtn) {
-        prevBtn.addEventListener('click', function () {
-          goTo(index - 1);
-          startTimer();
-        });
-      }
-      if (nextBtn) {
-        nextBtn.addEventListener('click', function () {
-          goTo(index + 1);
-          startTimer();
-        });
-      }
-
-      if (pauseBtn) {
-        if (!autoplayEnabled) {
-          pauseBtn.setAttribute('aria-disabled', 'true');
-          pauseBtn.disabled = true;
-        }
-        pauseBtn.addEventListener('click', togglePause);
-        updatePauseUi();
-      }
-
-      dots.forEach(function (dot) {
-        dot.addEventListener('click', function () {
-          var i = parseInt(dot.getAttribute('data-hero-dot'), 10);
-          if (!isNaN(i)) {
-            goTo(i);
-            startTimer();
-          }
-        });
-
-        dot.addEventListener('keydown', function (e) {
-          var i = parseInt(dot.getAttribute('data-hero-dot'), 10);
-          if (isNaN(i)) return;
-          var target = i;
-          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-            e.preventDefault();
-            target = (i + 1) % total;
-          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-            e.preventDefault();
-            target = (i - 1 + total) % total;
-          } else if (e.key === 'Home') {
-            e.preventDefault();
-            target = 0;
-          } else if (e.key === 'End') {
-            e.preventDefault();
-            target = total - 1;
-          } else {
-            return;
-          }
-          goTo(target);
-          dots[target].focus();
-          startTimer();
-        });
-      });
-
-      root.addEventListener('keydown', function (e) {
-        if (!root.contains(document.activeElement)) return;
-        if (e.key === 'ArrowLeft') {
-          e.preventDefault();
-          goTo(index - 1);
-          startTimer();
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          goTo(index + 1);
-          startTimer();
-        } else if (e.key === 'Home') {
-          e.preventDefault();
-          goTo(0);
-          startTimer();
-        } else if (e.key === 'End') {
-          e.preventDefault();
-          goTo(total - 1);
-          startTimer();
-        }
-      });
-
-      root.addEventListener('mouseenter', stopTimer);
-      root.addEventListener('mouseleave', startTimer);
-      root.addEventListener('focusin', stopTimer);
-      root.addEventListener('focusout', function (e) {
-        if (!root.contains(e.relatedTarget)) startTimer();
-      });
-
-      goTo(0, { announce: false });
-      startTimer();
-    });
-  })();
-{% endjavascript %}
+{% if show_slideshow_chrome %}
+  <script src="{{ 'hero-carousel.js' | asset_url }}" defer></script>
+{% endif %}
 
 {% render 'hero-parallax' %}
 

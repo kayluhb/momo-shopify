@@ -39,7 +39,8 @@
     },
     "gallery": {
       "thumbnails": "Product images",
-      "view_media": "View image {{ index }}"
+      "view_media": "View image {{ index }}",
+      "zoom": "Zoom in on image"
     }
   },
   "sections": {

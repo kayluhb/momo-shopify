@@ -1,27 +1,83 @@
+import PhotoSwipeLightbox from '@theme/photoswipe-lightbox';
+
 class ProductGallery extends HTMLElement {
+  /** @type {PhotoSwipeLightbox | null} */
+  #lightbox = null;
+
   connectedCallback() {
     this.addEventListener('click', this.#onClick);
+    this.#initLightbox();
 
     const initialMediaId = this.dataset.initialMediaId;
     if (initialMediaId) {
       this.#showMedia(initialMediaId);
+      return;
+    }
+
+    const activePanel = this.querySelector('[data-media-panel].is-active');
+    if (activePanel instanceof HTMLElement && activePanel.dataset.mediaId) {
+      this.#updateZoomButton(activePanel.dataset.mediaId);
     }
   }
 
   disconnectedCallback() {
     this.removeEventListener('click', this.#onClick);
+    this.#destroyLightbox();
   }
 
   /** @param {MouseEvent} event */
   #onClick = (event) => {
-    const thumb = event.target instanceof Element ? event.target.closest('[data-gallery-thumb]') : null;
-    if (!(thumb instanceof HTMLButtonElement) || !this.contains(thumb)) return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target || !this.contains(target)) return;
+
+    if (target.closest('[data-gallery-zoom-button]')) {
+      event.preventDefault();
+      this.#openZoom();
+      return;
+    }
+
+    const thumb = target.closest('[data-gallery-thumb]');
+    if (!(thumb instanceof HTMLButtonElement)) return;
 
     const mediaId = thumb.dataset.mediaId;
     if (!mediaId) return;
 
     this.#showMedia(mediaId);
   };
+
+  #initLightbox() {
+    if (this.#lightbox || !this.querySelector('[data-gallery-zoom]')) return;
+
+    this.#lightbox = new PhotoSwipeLightbox({
+      gallery: '[data-gallery-zoom]',
+      children: 'a.product-gallery__zoom-link',
+      pswpModule: () => import('@theme/photoswipe'),
+      bgOpacity: 0.75,
+      initialZoomLevel: (zoomLevel) => zoomLevel.fill,
+      secondaryZoomLevel: (zoomLevel) => zoomLevel.fill,
+      maxZoomLevel: 5,
+      doubleTapAction: false,
+      tapAction: 'close',
+    });
+
+    this.#lightbox.init();
+  }
+
+  #destroyLightbox() {
+    this.#lightbox?.destroy();
+    this.#lightbox = null;
+  }
+
+  #openZoom() {
+    const links = this.querySelectorAll('a.product-gallery__zoom-link');
+    if (!links.length || !this.#lightbox) return;
+
+    const activePanel = this.querySelector('[data-media-panel].is-active');
+    const activeLink = activePanel?.querySelector('a.product-gallery__zoom-link');
+    const index = activeLink ? Array.from(links).indexOf(activeLink) : 0;
+
+    this.#lightbox.loadAndOpen(Math.max(0, index));
+  }
 
   /** @param {string} mediaId */
   #showMedia(mediaId) {
@@ -50,6 +106,20 @@ class ProductGallery extends HTMLElement {
         thumb.removeAttribute('aria-current');
       }
     });
+
+    this.#updateZoomButton(mediaId);
+  }
+
+  /** @param {string} mediaId */
+  #updateZoomButton(mediaId) {
+    const zoomButton = this.querySelector('[data-gallery-zoom-button]');
+    if (!(zoomButton instanceof HTMLButtonElement)) return;
+
+    const activePanel = this.querySelector(`[data-media-panel][data-media-id="${mediaId}"]`);
+    const hasZoomableImage = Boolean(activePanel?.querySelector('a.product-gallery__zoom-link'));
+
+    zoomButton.hidden = !hasZoomableImage;
+    zoomButton.disabled = !hasZoomableImage;
   }
 }
 

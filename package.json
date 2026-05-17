@@ -10,5 +10,8 @@
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.0",
     "tailwindcss": "^4.3.0"
+  },
+  "dependencies": {
+    "photoswipe": "5.4.4"
   }
 }

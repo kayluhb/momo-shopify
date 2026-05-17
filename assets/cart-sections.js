@@ -1,12 +1,13 @@
+import { cartDebug, cartDebugWarn, getCartDomSnapshot } from '@theme/cart-debug';
 import { morph, MORPH_OPTIONS } from '@theme/morph';
-import { morphSection, normalizeSectionId } from '@theme/section-renderer';
+import { morphSection, normalizeSectionId, sectionRenderer } from '@theme/section-renderer';
 
 /**
  * URL used when requesting section HTML alongside cart AJAX operations.
  * @returns {string}
  */
 export function getCartSectionsUrl() {
-  return Theme.routes?.cart_url || window.location.pathname;
+  return window.location.pathname || Theme.routes?.cart_url || '/';
 }
 
 /**
@@ -77,6 +78,22 @@ function morphCartItemsForSection(sectionId, html) {
 
 /**
  * @param {string} sectionId
+ * @returns {Promise<void>}
+ */
+async function fetchAndRenderSection(sectionId) {
+  const normalizedId = normalizeSectionId(sectionId);
+  const url = new URL(getCartSectionsUrl(), window.location.origin);
+
+  cartDebug('sections', `fetching section via Section Rendering API`, {
+    sectionId: normalizedId,
+    url: url.toString(),
+  });
+
+  await sectionRenderer.renderSection(normalizedId, { cache: false, url });
+}
+
+/**
+ * @param {string} sectionId
  * @param {string} html
  * @returns {Promise<boolean>}
  */
@@ -85,16 +102,41 @@ async function morphCartSection(sectionId, html) {
 
   try {
     await morphSection(normalizedId, html);
+    cartDebug('sections', `morphed section ${normalizedId}`);
     return true;
   } catch (error) {
-    console.warn(`Could not morph section ${normalizedId} after cart update`, error);
+    cartDebugWarn('sections', `full section morph failed for ${normalizedId}`, error);
   }
 
   if (morphCartDrawerInner(html)) {
+    cartDebug('sections', `morphed cart drawer inner for ${normalizedId}`);
     return true;
   }
 
-  return morphCartItemsForSection(normalizedId, html);
+  if (morphCartItemsForSection(normalizedId, html)) {
+    cartDebug('sections', `morphed cart-items-component for ${normalizedId}`);
+    return true;
+  }
+
+  cartDebugWarn('sections', `all morph strategies failed for ${normalizedId}`);
+  return false;
+}
+
+/**
+ * @param {Record<string, string> | undefined} sections
+ * @returns {Array<[string, string]>}
+ */
+function getRenderableSectionEntries(sections) {
+  if (!sections) return [];
+
+  return Object.entries(sections).filter((entry) => {
+    const html = entry[1];
+    if (!html || typeof html !== 'string') {
+      cartDebugWarn('sections', `section "${entry[0]}" has no HTML in cart response`);
+      return false;
+    }
+    return true;
+  });
 }
 
 /**
@@ -103,9 +145,32 @@ async function morphCartSection(sectionId, html) {
  * @param {string} [prioritySectionId] - Section to morph first (e.g. the cart items source)
  */
 export async function morphCartSectionsFromResponse(sections, prioritySectionId) {
-  if (!sections) return;
+  const before = getCartDomSnapshot();
+  const requestedIds = getCartSectionIds();
+  const entries = getRenderableSectionEntries(sections);
 
-  const entries = Object.entries(sections).filter((entry) => entry[1]);
+  cartDebug('sections', 'morphCartSectionsFromResponse', {
+    prioritySectionId,
+    sectionsUrl: getCartSectionsUrl(),
+    requestedSectionIds: requestedIds,
+    responseSectionKeys: sections ? Object.keys(sections) : [],
+    renderableSectionCount: entries.length,
+    domBefore: before,
+  });
+
+  if (entries.length === 0) {
+    cartDebugWarn('sections', 'no renderable section HTML — falling back to Section Rendering API');
+
+    const fallbackId = prioritySectionId ?? getCartDrawerSectionId();
+    if (fallbackId) {
+      await fetchAndRenderSection(fallbackId);
+    }
+
+    cartDebug('sections', 'dom after fetch fallback', getCartDomSnapshot());
+    return;
+  }
+
+  let priorityUpdated = false;
 
   if (prioritySectionId) {
     const normalizedPriority = normalizeSectionId(prioritySectionId);
@@ -113,22 +178,29 @@ export async function morphCartSectionsFromResponse(sections, prioritySectionId)
     const otherEntries = entries.filter(([id]) => normalizeSectionId(id) !== normalizedPriority);
 
     if (priorityEntry) {
-      await morphCartSection(priorityEntry[0], /** @type {string} */ (priorityEntry[1]));
+      priorityUpdated = await morphCartSection(priorityEntry[0], priorityEntry[1]);
+    } else {
+      cartDebugWarn('sections', `priority section "${normalizedPriority}" missing from response`, {
+        responseKeys: entries.map(([id]) => id),
+      });
     }
 
     await Promise.all(
-      otherEntries.map(([sectionId, sectionHtml]) =>
-        morphCartSection(sectionId, /** @type {string} */ (sectionHtml))
-      )
+      otherEntries.map(([sectionId, sectionHtml]) => morphCartSection(sectionId, sectionHtml))
     );
-    return;
+
+    if (!priorityUpdated && prioritySectionId) {
+      cartDebugWarn('sections', `priority morph failed — fetching "${normalizedPriority}"`);
+      await fetchAndRenderSection(prioritySectionId);
+    }
+  } else {
+    await Promise.all(
+      entries.map(([sectionId, sectionHtml]) => morphCartSection(sectionId, sectionHtml))
+    );
   }
 
-  await Promise.all(
-    entries.map(([sectionId, sectionHtml]) =>
-      morphCartSection(sectionId, /** @type {string} */ (sectionHtml))
-    )
-  );
+  const after = getCartDomSnapshot();
+  cartDebug('sections', 'dom after morph', { before, after });
 }
 
 /**

@@ -1,4 +1,5 @@
 import { fetchConfig, debounce } from '@theme/utilities';
+import { cartDebug, cartDebugError, getCartDomSnapshot } from '@theme/cart-debug';
 import { ThemeEvents, CartUpdateEvent, CartAddEvent } from '@theme/events';
 import {
   getCartSectionsParam,
@@ -14,6 +15,11 @@ class CartItemsComponent extends HTMLElement {
 
   connectedCallback() {
     this.#sectionId = this.dataset.sectionId;
+
+    cartDebug('items', 'cart-items-component connected', {
+      sectionId: this.#sectionId,
+      dom: getCartDomSnapshot(),
+    });
 
     document.addEventListener(ThemeEvents.cartUpdate, this.#handleCartUpdate);
     this.addEventListener('change', this.#debouncedChange);
@@ -42,6 +48,13 @@ class CartItemsComponent extends HTMLElement {
     if (!line) return;
 
     event.preventDefault();
+
+    cartDebug('items', 'remove clicked', {
+      line,
+      sectionId: this.sectionId,
+      domBefore: getCartDomSnapshot(),
+    });
+
     this.#updateLine(line, 0);
   }
 
@@ -58,6 +71,8 @@ class CartItemsComponent extends HTMLElement {
 
     if (!line || Number.isNaN(quantity)) return;
 
+    cartDebug('items', 'quantity change', { line, quantity, sectionId: this.sectionId });
+
     this.#updateLine(line, quantity);
   }
 
@@ -69,29 +84,53 @@ class CartItemsComponent extends HTMLElement {
     this.setAttribute('aria-busy', 'true');
 
     const sections = getCartSectionsParam();
-    const body = JSON.stringify({
+    const requestBody = {
       line,
       quantity,
       sections,
       sections_url: getCartSectionsUrl(),
+    };
+
+    cartDebug('items', 'cart change request', {
+      url: Theme.routes.cart_change_url,
+      body: requestBody,
     });
 
     try {
-      const response = await fetch(Theme.routes.cart_change_url, fetchConfig('json', { body }));
+      const response = await fetch(
+        Theme.routes.cart_change_url,
+        fetchConfig('json', { body: JSON.stringify(requestBody) })
+      );
       const contentType = response.headers.get('content-type') || '';
       const responseText = await response.text();
 
+      cartDebug('items', 'cart change response', {
+        ok: response.ok,
+        status: response.status,
+        contentType,
+        bodyPreview: responseText.slice(0, 500),
+      });
+
       if (!response.ok || !contentType.includes('json')) {
-        console.error('Cart update failed', response.status, responseText.slice(0, 300));
+        cartDebugError('items', 'cart change failed — non-JSON or error status', {
+          status: response.status,
+          contentType,
+          body: responseText.slice(0, 500),
+        });
         return;
       }
 
       const data = JSON.parse(responseText);
 
       if (data.errors) {
-        console.error(data.errors);
+        cartDebugError('items', 'cart change returned errors', data.errors);
         return;
       }
+
+      cartDebug('items', 'cart change parsed', {
+        item_count: data.item_count,
+        sectionKeys: data.sections ? Object.keys(data.sections) : [],
+      });
 
       await morphCartSectionsFromResponse(data.sections, this.sectionId);
 
@@ -102,8 +141,10 @@ class CartItemsComponent extends HTMLElement {
           itemCount: data.item_count,
         })
       );
+
+      cartDebug('items', 'cart change complete', getCartDomSnapshot());
     } catch (error) {
-      console.error(error);
+      cartDebugError('items', 'cart change threw', error);
     } finally {
       this.removeAttribute('aria-busy');
     }
@@ -115,6 +156,12 @@ class CartItemsComponent extends HTMLElement {
   #handleCartUpdate = async (event) => {
     if (event.target === this) return;
 
+    cartDebug('items', 'cart:update event received', {
+      source: event.detail?.data?.source,
+      sectionId: this.sectionId,
+      sectionKeys: event.detail?.data?.sections ? Object.keys(event.detail.data.sections) : [],
+    });
+
     if (event.detail?.data?.sections) {
       await morphCartSectionsFromResponse(event.detail.data.sections, this.sectionId);
     }
@@ -124,3 +171,9 @@ class CartItemsComponent extends HTMLElement {
 if (!customElements.get('cart-items-component')) {
   customElements.define('cart-items-component', CartItemsComponent);
 }
+
+cartDebug('items', 'cart-items module loaded', {
+  cartChangeUrl: Theme.routes.cart_change_url,
+  sectionIds: getCartSectionsParam(),
+  debugHint: 'Enable with localStorage.setItem("theme:cart-debug", "1") or ?cart_debug=1',
+});

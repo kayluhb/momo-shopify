@@ -8,6 +8,7 @@
 <script type="importmap">
   {
     "imports": {
+      "@theme/cart-debug": "{{ 'cart-debug.js' | asset_url }}",
       "@theme/cart-icon": "{{ 'cart-icon.js' | asset_url }}",
       "@theme/cart-items": "{{ 'cart-items.js' | asset_url }}",
       "@theme/cart-sections": "{{ 'cart-sections.js' | asset_url }}",
@@ -32,6 +33,7 @@
 <link rel="modulepreload" href="{{ 'section-hydration.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'events.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'dialog.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'cart-debug.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'cart-sections.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'cart-items.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'cart-icon.js' | asset_url }}" fetchpriority="low">

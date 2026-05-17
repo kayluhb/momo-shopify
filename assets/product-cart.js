@@ -1,5 +1,6 @@
 import { sectionRenderer } from '@theme/section-renderer';
 import { fetchConfig, onDocumentReady } from '@theme/utilities';
+import { cartDebug, cartDebugError, cartDebugWarn, getCartDomSnapshot } from '@theme/cart-debug';
 import { CartAddEvent, CartErrorEvent } from '@theme/events';
 import {
   getCartDrawerSectionId,
@@ -88,18 +89,30 @@ function getCartItemCount(data) {
  */
 async function refreshCartDrawerIfNeeded(data) {
   const drawer = document.querySelector('cart-drawer-component');
-  if (!drawer?.querySelector('.cart-empty')) return;
+  const hasEmptyState = Boolean(drawer?.querySelector('.cart-empty'));
+
+  cartDebug('add', 'refreshCartDrawerIfNeeded', {
+    hasDrawer: Boolean(drawer),
+    hasEmptyState,
+    itemCount: getCartItemCount(data),
+  });
+
+  if (!hasEmptyState) return;
 
   const itemCount = getCartItemCount(data);
   if (itemCount <= 0) return;
 
   const sectionId = getCartDrawerSectionId();
-  if (!sectionId) return;
+  if (!sectionId) {
+    cartDebugWarn('add', 'no cart drawer section id found for refresh');
+    return;
+  }
 
   try {
     await sectionRenderer.renderSection(sectionId, { cache: false });
+    cartDebug('add', 'cart drawer refreshed via Section Rendering API', getCartDomSnapshot());
   } catch (error) {
-    console.warn('Could not refresh cart drawer after cart add', error);
+    cartDebugWarn('add', 'could not refresh cart drawer after cart add', error);
   }
 }
 
@@ -111,12 +124,16 @@ function buildCartAddPayload(form) {
   const formData = new FormData(form);
   const variantIdRaw = formData.get('id') || formData.get('items[0][id]');
 
+  cartDebug('add', 'buildCartAddPayload form fields', Object.fromEntries(formData.entries()));
+
   if (!variantIdRaw) {
+    cartDebugWarn('add', 'no variant id in form');
     return null;
   }
 
   const variantId = Number(variantIdRaw);
   if (!Number.isFinite(variantId)) {
+    cartDebugWarn('add', 'invalid variant id', { variantIdRaw });
     return null;
   }
 
@@ -152,6 +169,8 @@ function buildCartAddPayload(form) {
   if (sections) {
     payload.sections = sections;
     payload.sections_url = getCartSectionsUrl();
+  } else {
+    cartDebugWarn('add', 'no section ids collected for cart add');
   }
 
   return payload;
@@ -163,16 +182,26 @@ function buildCartAddPayload(form) {
 async function handleProductFormSubmit(form) {
   const submitControl = form.querySelector('[type="submit"]');
   if (!(submitControl instanceof HTMLInputElement || submitControl instanceof HTMLButtonElement)) {
+    cartDebugWarn('add', 'submit control not found');
     return;
   }
 
-  if (!form.checkValidity()) return;
+  if (!form.checkValidity()) {
+    cartDebugWarn('add', 'form validation failed');
+    return;
+  }
 
   const payload = buildCartAddPayload(form);
   const variantId = payload?.items[0]?.id?.toString() ?? '';
 
   const defaultLabel = submitControl.value || submitControl.textContent || '';
   const loadingLabel = Theme.translations.add_to_cart_loading;
+
+  cartDebug('add', 'submit started', {
+    variantId,
+    payload,
+    domBefore: getCartDomSnapshot(),
+  });
 
   setFormLoading(form, submitControl, true);
   clearFormMessage(form);
@@ -196,12 +225,29 @@ async function handleProductFormSubmit(form) {
 
   try {
     const fetchCfg = fetchConfig('json', { body: JSON.stringify(payload) });
+
+    cartDebug('add', 'cart add request', {
+      url: Theme.routes.cart_add_url,
+      body: payload,
+    });
+
     const response = await fetch(Theme.routes.cart_add_url, fetchCfg);
     const contentType = response.headers.get('content-type') || '';
+    const responseText = await response.text();
+
+    cartDebug('add', 'cart add response', {
+      ok: response.ok,
+      status: response.status,
+      contentType,
+      bodyPreview: responseText.slice(0, 500),
+    });
 
     if (!response.ok || !contentType.includes('json')) {
-      const body = await response.text();
-      console.error('Cart add failed', response.status, body.slice(0, 300));
+      cartDebugError('add', 'cart add failed — non-JSON or error status', {
+        status: response.status,
+        contentType,
+        body: responseText.slice(0, 500),
+      });
       showFormMessage(form, Theme.translations.add_to_cart_error);
       form.dispatchEvent(
         new CartAddEvent({}, form.id || '', {
@@ -213,7 +259,14 @@ async function handleProductFormSubmit(form) {
       return;
     }
 
-    const data = await response.json();
+    const data = JSON.parse(responseText);
+
+    cartDebug('add', 'cart add parsed', {
+      item_count: data.item_count,
+      status: data.status,
+      sectionKeys: data.sections ? Object.keys(data.sections) : [],
+      isErrorResponse: isCartAddErrorResponse(data),
+    });
 
     if (isCartAddErrorResponse(data)) {
       const record = /** @type {Record<string, unknown>} */ (data);
@@ -221,6 +274,7 @@ async function handleProductFormSubmit(form) {
         (typeof record.description === 'string' && record.description) ||
         (typeof record.message === 'string' && record.message) ||
         Theme.translations.add_to_cart_error;
+      cartDebugError('add', 'cart add treated as error response', { message, record });
       showFormMessage(form, message);
       form.dispatchEvent(
         new CartErrorEvent(
@@ -268,8 +322,10 @@ async function handleProductFormSubmit(form) {
             : undefined,
       })
     );
+
+    cartDebug('add', 'cart add complete', getCartDomSnapshot());
   } catch (error) {
-    console.error(error);
+    cartDebugError('add', 'cart add threw', error);
     showFormMessage(form, Theme.translations.add_to_cart_error);
   } finally {
     setFormLoading(form, submitControl, false);
@@ -290,10 +346,18 @@ function onDocumentSubmit(event) {
   if (!(form instanceof HTMLFormElement)) return;
   if (!form.closest('[data-product-form]')) return;
 
+  cartDebug('add', 'product form submit intercepted');
+
   event.preventDefault();
   handleProductFormSubmit(form);
 }
 
 onDocumentReady(() => {
+  cartDebug('add', 'product-cart listener registered', {
+    cartAddUrl: Theme.routes.cart_add_url,
+    sectionIds: getCartSectionsParam(),
+    debugHint: 'Enable with localStorage.setItem("theme:cart-debug", "1") or ?cart_debug=1',
+  });
+
   document.addEventListener('submit', onDocumentSubmit);
 });

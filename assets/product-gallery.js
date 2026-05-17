@@ -53,11 +53,18 @@ class ProductGallery extends HTMLElement {
       children: 'a.product-gallery__zoom-link',
       pswpModule: () => import('@theme/photoswipe'),
       bgOpacity: 0.75,
-      initialZoomLevel: (zoomLevel) => zoomLevel.fill,
+      initialZoomLevel: (zoomLevel) => zoomLevel.fit,
       secondaryZoomLevel: (zoomLevel) => zoomLevel.fill,
       maxZoomLevel: 5,
-      doubleTapAction: false,
+      wheelToZoom: true,
+      imageClickAction: 'zoom',
+      bgClickAction: 'close',
       tapAction: 'close',
+      doubleTapAction: false,
+      zoomAnimationDuration: 333,
+      showAnimationDuration: 333,
+      hideAnimationDuration: 333,
+      padding: { top: 24, bottom: 24, left: 16, right: 16 },
     });
 
     this.#lightbox.init();
@@ -69,14 +76,18 @@ class ProductGallery extends HTMLElement {
   }
 
   #openZoom() {
+    const activePanel = this.querySelector('[data-media-panel].is-active');
+    const activeLink = activePanel?.querySelector('a.product-gallery__zoom-link');
+
+    if (activeLink instanceof HTMLAnchorElement) {
+      activeLink.click();
+      return;
+    }
+
     const links = this.querySelectorAll('a.product-gallery__zoom-link');
     if (!links.length || !this.#lightbox) return;
 
-    const activePanel = this.querySelector('[data-media-panel].is-active');
-    const activeLink = activePanel?.querySelector('a.product-gallery__zoom-link');
-    const index = activeLink ? Array.from(links).indexOf(activeLink) : 0;
-
-    this.#lightbox.loadAndOpen(Math.max(0, index));
+    this.#lightbox.loadAndOpen(0);
   }
 
   /** @param {string} mediaId */

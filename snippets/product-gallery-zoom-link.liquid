@@ -1,0 +1,60 @@
+{% doc %}
+  Renders a PhotoSwipe-enabled image link for the product gallery.
+
+  @param {image} media - Product media image
+  @param {string} media_alt - Alt text for the image
+  @param {number} max_image_width - Largest width for the stage image
+  @param {string} image_widths - Comma-separated widths for srcset
+  @param {string} image_sizes - Sizes attribute for the stage image
+  @param {string} loading - lazy or eager
+  @param {boolean} [fetchpriority_high] - Set fetchpriority="high" on the stage image
+{% enddoc %}
+
+{% liquid
+  assign zoom_max_width = 3000
+  assign pswp_width = media.width | default: media.preview_image.width
+  assign pswp_height = media.height | default: media.preview_image.height
+  assign zoom_width = pswp_width | at_most: zoom_max_width
+  assign zoom_src = media | image_url: width: zoom_width
+%}
+
+{% capture zoom_srcset -%}
+  {{- media | image_url: width: 1200 }} 1200w,
+  {{- media | image_url: width: 1800 }} 1800w,
+  {{- media | image_url: width: 2400 }} 2400w,
+  {{- media | image_url: width: zoom_width }} {{ zoom_width }}w
+{%- endcapture %}
+
+<a
+  href="{{ zoom_src }}"
+  class="product-gallery__zoom-link"
+  data-pswp-width="{{ pswp_width }}"
+  data-pswp-height="{{ pswp_height }}"
+  data-pswp-srcset="{{ zoom_srcset | strip }}"
+  data-cropped="true"
+>
+  {% if fetchpriority_high %}
+    {{
+      media
+      | image_url: width: max_image_width
+      | image_tag:
+        widths: image_widths,
+        sizes: image_sizes,
+        loading: loading,
+        fetchpriority: 'high',
+        class: 'product-gallery__img',
+        alt: media_alt
+    }}
+  {% else %}
+    {{
+      media
+      | image_url: width: max_image_width
+      | image_tag:
+        widths: image_widths,
+        sizes: image_sizes,
+        loading: loading,
+        class: 'product-gallery__img',
+        alt: media_alt
+    }}
+  {% endif %}
+</a>

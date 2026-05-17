@@ -3,7 +3,7 @@
     "main": {
       "type": "product",
       "settings": {
-        "layout": "split",
+        "layout": "split_tall",
         "image_position": "left",
         "color_scheme": "canvas"
       }

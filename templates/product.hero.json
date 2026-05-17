@@ -3,8 +3,9 @@
     "main": {
       "type": "product",
       "settings": {
-        "layout": "split",
-        "image_position": "left",
+        "layout": "hero",
+        "hero_height": 42,
+        "overlay_opacity": 35,
         "color_scheme": "canvas"
       }
     }

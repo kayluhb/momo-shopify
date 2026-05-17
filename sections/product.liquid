@@ -1,76 +1,103 @@
-{% comment %}
-  Product page with variant picker and AJAX add to cart.
-{% endcomment %}
+{% liquid
+  assign product_layout = section.settings.layout | default: 'split'
+  assign image_position = section.settings.image_position | default: 'left'
+  capture section_bg
+    render 'section-color-scheme', scheme: section.settings.color_scheme
+  endcapture
+%}
 
-<variant-picker
-  data-section-id="{{ section.id }}"
-  data-product-url="{{ product.url }}"
-  data-product-id="{{ product.id }}"
-  class="product"
+<section
+  id="shopify-section-{{ section.id }}"
+  class="product-section full-width product-section--{{ product_layout }} {{ section_bg }}"
+  {{ section.shopify_attributes }}
 >
-  <div class="product-images">
-    {% for image in product.images %}
-      {% assign image_alt = image.alt | default: product.title %}
-      {% render 'image', class: 'product-image', image: image, alt: image_alt %}
-    {% endfor %}
-  </div>
+  <variant-picker
+    class="product-section__picker"
+    data-section-id="{{ section.id }}"
+    data-product-url="{{ product.url }}"
+    data-product-id="{{ product.id }}"
+  >
+    {% if product_layout == 'hero' %}
+      {% render 'product-gallery',
+        product: product,
+        layout: 'hero',
+        section_id: section.id,
+        hero_height: section.settings.hero_height,
+        overlay_opacity: section.settings.overlay_opacity
+      %}
 
-  <div class="product-info">
-    <h1>{{ product.title }}</h1>
-    <p data-variant-price>{{ product.selected_or_first_available_variant.price | money }}</p>
-    <p>{{ product.description }}</p>
-  </div>
+      <div class="section-inner product-section__buy product-section__buy--hero">
+        {% render 'product-buy-box',
+          product: product,
+          section_id: section.id,
+          layout: 'hero'
+        %}
+      </div>
+    {% else %}
+      <div class="section-inner product-section__inner product-section__inner--image-{{ image_position }}">
+        {% render 'product-gallery',
+          product: product,
+          layout: product_layout,
+          section_id: section.id
+        %}
 
-  <div class="product-form" data-product-form>
-    {% form 'product', product %}
-      {% assign current_variant = product.selected_or_first_available_variant %}
-
-      <label for="product-variant-{{ section.id }}">{{ 'products.variant_label' | t }}</label>
-      <select id="product-variant-{{ section.id }}" name="id">
-        {% for variant in product.variants %}
-          <option
-            value="{{ variant.id }}"
-            {% if variant == current_variant %}
-              selected="selected"
-            {% endif %}
-            {% unless variant.available %}
-              disabled
-            {% endunless %}
-          >
-            {{ variant.title }} - {{ variant.price | money }}
-          </option>
-        {% endfor %}
-      </select>
-
-      <label for="product-quantity-{{ section.id }}">{{ 'products.quantity_label' | t }}</label>
-      <input id="product-quantity-{{ section.id }}" type="number" name="quantity" min="1" value="1">
-
-      <input type="submit" value="{{ 'products.add_to_cart.label' | t }}">
-      {{ form | payment_button }}
-    {% endform %}
-  </div>
-</variant-picker>
+        {% render 'product-buy-box',
+          product: product,
+          section_id: section.id,
+          layout: product_layout
+        %}
+      </div>
+    {% endif %}
+  </variant-picker>
+</section>
 
 {% stylesheet %}
-  .product {
-    display: grid;
-    gap: 2rem;
+  .product-section {
+    padding-block: 3.5rem;
   }
 
-  @media (min-width: 48rem) {
-    .product {
-      grid-template-columns: 1fr 1fr;
+  @media (min-width: 750px) {
+    .product-section {
+      padding-block: 5rem;
     }
   }
 
-  .product-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: flex-start;
+  .product-section--hero {
+    padding-block: 0;
   }
 
-  .product-form__status {
+  .product-section__picker {
+    display: block;
+  }
+
+  .product-section__inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 990px) {
+    .product-section__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .product-section__inner--image-right .product-gallery {
+      order: 2;
+    }
+  }
+
+  .product-section__buy--hero {
+    padding-block: 2.5rem 3.5rem;
+  }
+
+  @media (min-width: 750px) {
+    .product-section__buy--hero {
+      padding-block: 3rem 5rem;
+    }
+  }
+
+  .product-section .product-form__status {
     margin: 0;
     font-size: 0.875rem;
   }
@@ -78,8 +105,70 @@
 
 {% schema %}
 {
-  "name": "t:general.product",
-  "settings": [],
+  "name": "t:sections.product.name",
+  "tag": "section",
+  "class": "section-product",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.product.layout_label",
+      "default": "split",
+      "options": [
+        { "value": "split", "label": "t:sections.product.layout_options.split" },
+        { "value": "split_tall", "label": "t:sections.product.layout_options.split_tall" },
+        { "value": "hero", "label": "t:sections.product.layout_options.hero" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.product.image_position_label",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "t:options.alignment.left" },
+        { "value": "right", "label": "t:options.alignment.right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "hero_height",
+      "min": 24,
+      "max": 56,
+      "step": 2,
+      "unit": "rem",
+      "label": "t:sections.product.hero_height_label",
+      "default": 42,
+      "visible_if": "{{ section.settings.layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "t:sections.product.overlay_opacity_label",
+      "default": 35,
+      "visible_if": "{{ section.settings.layout == 'hero' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "canvas",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

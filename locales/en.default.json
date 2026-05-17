@@ -12,6 +12,10 @@
     "accessibility": {
       "skip_to_main": "Skip to main content"
     },
+    "breadcrumbs": {
+      "label": "Breadcrumbs",
+      "home": "Home"
+    },
     "view_all": "View all"
   },
   "products": {
@@ -32,6 +36,10 @@
     "color_options": "{{ option }} options",
     "price": {
       "sale": "Sale price"
+    },
+    "gallery": {
+      "thumbnails": "Product images",
+      "view_media": "View image {{ index }}"
     }
   },
   "sections": {

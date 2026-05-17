@@ -314,6 +314,18 @@
         "show_rating_info": "Displays when a reviews.rating or custom.rating metafield is set."
       }
     },
+    "product": {
+      "name": "Product",
+      "layout_label": "Layout",
+      "layout_options": {
+        "split": "Split — image and details",
+        "split_tall": "Split tall — full-height image",
+        "hero": "Hero — full-width image band"
+      },
+      "image_position_label": "Image position",
+      "hero_height_label": "Hero image height",
+      "overlay_opacity_label": "Image overlay darkness"
+    },
     "collection_hero": {
       "name": "Collection hero",
       "settings": {

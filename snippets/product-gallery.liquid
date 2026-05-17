@@ -1,0 +1,371 @@
+{% doc %}
+  Renders a product media gallery with a large main stage and optional thumbnails.
+
+  @param {product} product - The product to display
+  @param {string} layout - split, split_tall, or hero
+  @param {string} section_id - Section ID for unique element IDs
+  @param {number} [hero_height] - Hero band height in rem when layout is hero
+  @param {number} [overlay_opacity] - Hero overlay opacity percentage
+{% enddoc %}
+
+{% liquid
+  assign gallery_layout = layout | default: 'split'
+  assign current_variant = product.selected_or_first_available_variant
+  assign initial_media = current_variant.featured_media | default: product.featured_media
+
+  if gallery_layout == 'hero'
+    assign image_sizes = '100vw'
+    assign image_widths = '600, 900, 1200, 1600, 2000, 2400, 3000, 3840'
+    assign max_image_width = 3840
+  else
+    assign image_sizes = '(min-width: 990px) 50vw, 100vw'
+    assign image_widths = '600, 900, 1200, 1600, 2000, 2400'
+    assign max_image_width = 2400
+  endif
+
+  if hero_height == blank
+    assign hero_height = 42
+  endif
+
+  if overlay_opacity == blank
+    assign overlay_opacity = 35
+  endif
+%}
+
+<product-gallery
+  class="product-gallery product-gallery--{{ gallery_layout }}"
+  data-layout="{{ gallery_layout }}"
+  data-section-id="{{ section_id }}"
+  {% if initial_media %}
+    data-initial-media-id="{{ initial_media.id }}"
+  {% endif %}
+>
+  {% if gallery_layout == 'hero' %}
+    <div
+      class="product-gallery__hero"
+      style="--product-gallery-hero-height: {{ hero_height }}rem;"
+    >
+      <div class="product-gallery__hero-media">
+        {% if product.media.size > 0 %}
+          {% for media in product.media %}
+            {% liquid
+              assign is_active = false
+              if initial_media and media.id == initial_media.id
+                assign is_active = true
+              elsif initial_media == blank and forloop.first
+                assign is_active = true
+              endif
+
+              if media.alt != blank
+                assign media_alt = media.alt
+              else
+                assign media_alt = product.title
+              endif
+            %}
+            <div
+              class="product-gallery__panel{% if is_active %} is-active{% endif %}"
+              data-media-panel
+              data-media-id="{{ media.id }}"
+              {% unless is_active %}
+                hidden
+              {% endunless %}
+            >
+              {% case media.media_type %}
+                {% when 'image' %}
+                  {{
+                    media
+                    | image_url: width: max_image_width
+                    | image_tag:
+                      widths: image_widths,
+                      sizes: image_sizes,
+                      loading: 'eager',
+                      fetchpriority: 'high',
+                      class: 'product-gallery__img',
+                      alt: media_alt
+                  }}
+                {% else %}
+                  {{
+                    media
+                    | media_tag:
+                      image_size: '2048x',
+                      class: 'product-gallery__media-tag',
+                      toggleable: true
+                  }}
+              {% endcase %}
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="product-gallery__placeholder" aria-hidden="true">
+            {{ 'product-1' | placeholder_svg_tag: class: 'product-gallery__img product-gallery__img--placeholder' }}
+          </div>
+        {% endif %}
+        <div
+          class="product-gallery__overlay"
+          style="background: rgb(0 0 0 / {{ overlay_opacity }}%);"
+          aria-hidden="true"
+        ></div>
+      </div>
+    </div>
+  {% else %}
+    <div class="product-gallery__layout">
+    <div class="product-gallery__stage">
+      {% if product.media.size > 0 %}
+        {% for media in product.media %}
+          {% liquid
+            assign is_active = false
+            if initial_media and media.id == initial_media.id
+              assign is_active = true
+            elsif initial_media == blank and forloop.first
+              assign is_active = true
+            endif
+
+            if media.alt != blank
+              assign media_alt = media.alt
+            else
+              assign media_alt = product.title
+            endif
+          %}
+          <div
+            class="product-gallery__panel{% if is_active %} is-active{% endif %}"
+            data-media-panel
+            data-media-id="{{ media.id }}"
+            {% unless is_active %}
+              hidden
+            {% endunless %}
+          >
+            {% case media.media_type %}
+              {% when 'image' %}
+                {% if forloop.first and is_active %}
+                  {{
+                    media
+                    | image_url: width: max_image_width
+                    | image_tag:
+                      widths: image_widths,
+                      sizes: image_sizes,
+                      loading: 'eager',
+                      fetchpriority: 'high',
+                      class: 'product-gallery__img',
+                      alt: media_alt
+                  }}
+                {% else %}
+                  {{
+                    media
+                    | image_url: width: max_image_width
+                    | image_tag:
+                      widths: image_widths,
+                      sizes: image_sizes,
+                      loading: 'lazy',
+                      class: 'product-gallery__img',
+                      alt: media_alt
+                  }}
+                {% endif %}
+              {% else %}
+                {{
+                  media
+                  | media_tag:
+                    image_size: '1600x',
+                    class: 'product-gallery__media-tag',
+                    toggleable: true
+                }}
+            {% endcase %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="product-gallery__placeholder" aria-hidden="true">
+          {{ 'product-1' | placeholder_svg_tag: class: 'product-gallery__img product-gallery__img--placeholder' }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if product.media.size > 1 %}
+    <div class="product-gallery__thumbs" role="list" aria-label="{{ 'products.gallery.thumbnails' | t }}">
+      {% for media in product.media %}
+        {% liquid
+          assign thumb_active = false
+          if initial_media and media.id == initial_media.id
+            assign thumb_active = true
+          elsif initial_media == blank and forloop.first
+            assign thumb_active = true
+          endif
+
+          if media.alt != blank
+            assign thumb_alt = media.alt
+          else
+            assign thumb_alt = product.title
+          endif
+        %}
+        <button
+          type="button"
+          class="product-gallery__thumb{% if thumb_active %} is-active{% endif %}"
+          role="listitem"
+          data-gallery-thumb
+          data-media-id="{{ media.id }}"
+          aria-label="{{ 'products.gallery.view_media' | t: index: forloop.index }}"
+          {% if thumb_active %}
+            aria-current="true"
+          {% endif %}
+        >
+          {{
+            media.preview_image
+            | image_url: width: 160
+            | image_tag:
+              widths: '80, 160',
+              sizes: '80px',
+              loading: 'lazy',
+              class: 'product-gallery__thumb-img',
+              alt: thumb_alt
+          }}
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</product-gallery>
+
+{% stylesheet %}
+  .product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .product-gallery__stage {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    aspect-ratio: 4 / 5;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  .product-gallery--split_tall .product-gallery__stage {
+    aspect-ratio: auto;
+    min-height: calc(100svh - var(--header-height, 0px) - var(--announcement-bar-height, 0px) - 8rem);
+  }
+
+  .product-gallery__panel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-gallery__panel.is-active {
+    z-index: 1;
+  }
+
+  .product-gallery__panel[hidden] {
+    display: none !important;
+  }
+
+  .product-gallery__img,
+  .product-gallery__media-tag {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-gallery__media-tag {
+    display: block;
+  }
+
+  .product-gallery__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 16rem;
+  }
+
+  .product-gallery__img--placeholder {
+    width: 60%;
+    height: auto;
+    opacity: 0.35;
+    object-fit: contain;
+  }
+
+  .product-gallery__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .product-gallery__thumb {
+    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 0.25rem;
+    background: color-mix(in srgb, currentColor 6%, transparent);
+    cursor: pointer;
+  }
+
+  .product-gallery__thumb.is-active {
+    border-color: var(--color-brand-rust, #c57639);
+  }
+
+  .product-gallery__thumb:focus-visible {
+    outline: 2px solid var(--color-brand-rust, #c57639);
+    outline-offset: 2px;
+  }
+
+  .product-gallery__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .product-gallery__thumb:hover .product-gallery__thumb-img {
+    transform: scale(1.03);
+  }
+
+  .product-gallery--hero {
+    gap: 0;
+    width: 100%;
+  }
+
+  .product-gallery__hero {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: var(--product-gallery-hero-height, 42rem);
+    min-height: 0;
+  }
+
+  .product-gallery__hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .product-gallery--hero .product-gallery__panel {
+    position: absolute;
+    inset: 0;
+  }
+
+  .product-gallery--hero .product-gallery__panel.is-active {
+    position: absolute;
+    inset: 0;
+  }
+
+  .product-gallery__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .product-gallery--hero .product-gallery__thumbs {
+    position: relative;
+    z-index: 2;
+    margin-top: -3.5rem;
+    padding-inline: var(--page-margin);
+    padding-bottom: 0.75rem;
+  }
+{% endstylesheet %}

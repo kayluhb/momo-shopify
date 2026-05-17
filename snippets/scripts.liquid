@@ -19,6 +19,7 @@
       "@theme/events": "{{ 'events.js' | asset_url }}",
       "@theme/morph": "{{ 'morph.js' | asset_url }}",
       "@theme/product-cart": "{{ 'product-cart.js' | asset_url }}",
+      "@theme/product-gallery": "{{ 'product-gallery.js' | asset_url }}",
       "@theme/section-hydration": "{{ 'section-hydration.js' | asset_url }}",
       "@theme/section-renderer": "{{ 'section-renderer.js' | asset_url }}",
       "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
@@ -44,7 +45,9 @@
 
 {% if template.name == 'product' %}
   <link rel="modulepreload" href="{{ 'product-cart.js' | asset_url }}" fetchpriority="low">
+  <link rel="modulepreload" href="{{ 'product-gallery.js' | asset_url }}" fetchpriority="low">
   <link rel="modulepreload" href="{{ 'variant-picker.js' | asset_url }}" fetchpriority="low">
+  <script src="{{ 'product-gallery.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'product-cart.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'variant-picker.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}

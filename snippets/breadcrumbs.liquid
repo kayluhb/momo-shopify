@@ -1,0 +1,97 @@
+{% doc %}
+  Renders breadcrumb navigation for a product page.
+
+  @param {product} product - The product for the current page
+  @param {collection} [collection] - Collection context when available
+{% enddoc %}
+
+{% liquid
+  assign breadcrumb_collection = collection
+  if breadcrumb_collection == blank
+    if product.collections.size > 0
+      assign breadcrumb_collection = product.collections.first
+    endif
+  endif
+%}
+
+<nav class="breadcrumbs" aria-label="{{ 'general.breadcrumbs.label' | t }}">
+  <ol class="breadcrumbs__list">
+    <li class="breadcrumbs__item">
+      <a class="breadcrumbs__link" href="{{ routes.root_url }}">
+        {{ 'general.breadcrumbs.home' | t }}
+      </a>
+    </li>
+
+    {% if breadcrumb_collection != blank %}
+      <li class="breadcrumbs__item">
+        <a class="breadcrumbs__link" href="{{ breadcrumb_collection.url }}">
+          {{ breadcrumb_collection.title | escape }}
+        </a>
+      </li>
+    {% endif %}
+
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__current" aria-current="page">
+        {{ product.title | escape }}
+      </span>
+    </li>
+  </ol>
+</nav>
+
+{% stylesheet %}
+  .breadcrumbs {
+    margin-bottom: 0.75rem;
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .breadcrumbs__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .breadcrumbs__item:not(:last-child)::after {
+    content: '/';
+    margin-inline: 0.35rem;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .breadcrumbs__link {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.75;
+  }
+
+  .breadcrumbs__link:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .breadcrumbs__link:focus-visible {
+    outline: 2px solid var(--color-brand-rust, #c57639);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .breadcrumbs__current {
+    opacity: 0.9;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+{% endstylesheet %}

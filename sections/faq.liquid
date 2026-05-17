@@ -102,6 +102,40 @@
   </div>
 </section>
 
+{%- if section.blocks.size > 0 -%}
+  {%- assign faq_schema_first = true -%}
+  {%- capture faq_schema_entities -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'question' -%}
+        {%- if block.settings.question != blank -%}
+          {%- if block.settings.answer != blank -%}
+            {%- unless faq_schema_first -%},{%- endunless -%}
+            {
+              "@type": "Question",
+              "name": {{ block.settings.question | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ block.settings.answer | strip_html | strip | json }}
+              }
+            }
+            {%- assign faq_schema_first = false -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if faq_schema_entities != blank -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{{ faq_schema_entities }}]
+      }
+    </script>
+  {%- endif -%}
+{%- endif -%}
+
 {% stylesheet %}
 
   .faq__inner {

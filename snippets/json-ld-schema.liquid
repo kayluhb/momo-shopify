@@ -1,0 +1,352 @@
+{% doc %}
+  Renders JSON-LD structured data for the current page and site-wide schemas.
+
+  Uses Shopify's structured_data filter for product and article objects.
+  Outputs Organization and WebSite on all public pages.
+
+  @example
+  {% render 'json-ld-schema' %}
+{% enddoc %}
+
+{%- unless request.page_type == 'password' -%}
+  {%- liquid
+    assign schema_base_url = shop.url
+    assign schema_home_url = schema_base_url | append: routes.root_url
+    assign schema_search_url = schema_base_url | append: routes.search_url | append: '?q={search_term_string}'
+    assign schema_logo_url = blank
+
+    if settings.logo != blank
+      assign schema_logo_url = settings.logo | image_url: width: 600
+    endif
+  -%}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": {{ schema_base_url | append: '#organization' | json }},
+      "name": {{ shop.name | json }},
+      "url": {{ schema_base_url | json }}
+      {%- if schema_logo_url != blank -%}
+        ,
+        "logo": {
+          "@type": "ImageObject",
+          "url": {{ schema_logo_url | json }}
+        }
+      {%- endif -%}
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": {{ schema_base_url | append: '#website' | json }},
+      "name": {{ shop.name | json }},
+      "url": {{ schema_base_url | json }},
+      "publisher": {
+        "@id": {{ schema_base_url | append: '#organization' | json }}
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": {{ schema_search_url | json }}
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+
+  {%- case request.page_type -%}
+    {%- when 'product' -%}
+      <script type="application/ld+json">
+        {{ product | structured_data }}
+      </script>
+
+      {%- liquid
+        assign schema_breadcrumb_collection = collection
+        if schema_breadcrumb_collection == blank
+          if product.collections.size > 0
+            assign schema_breadcrumb_collection = product.collections.first
+          endif
+        endif
+      -%}
+
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": {{ 'general.breadcrumbs.home' | t | json }},
+              "item": {{ schema_home_url | json }}
+            }
+            {%- if schema_breadcrumb_collection != blank -%}
+              ,{
+                "@type": "ListItem",
+                "position": 2,
+                "name": {{ schema_breadcrumb_collection.title | json }},
+                "item": {{ schema_base_url | append: schema_breadcrumb_collection.url | json }}
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": {{ product.title | json }},
+                "item": {{ canonical_url | json }}
+              }
+            {%- else -%}
+              ,{
+                "@type": "ListItem",
+                "position": 2,
+                "name": {{ product.title | json }},
+                "item": {{ canonical_url | json }}
+              }
+            {%- endif -%}
+          ]
+        }
+      </script>
+
+    {%- when 'article' -%}
+      <script type="application/ld+json">
+        {{ article | structured_data }}
+      </script>
+
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": {{ 'general.breadcrumbs.home' | t | json }},
+              "item": {{ schema_home_url | json }}
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": {{ blog.title | json }},
+              "item": {{ schema_base_url | append: blog.url | json }}
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": {{ article.title | json }},
+              "item": {{ canonical_url | json }}
+            }
+          ]
+        }
+      </script>
+
+    {%- when 'collection' -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": {{ collection.title | json }},
+          "url": {{ canonical_url | json }}
+          {%- if collection.description != blank -%}
+            ,
+            "description": {{ collection.description | strip_html | strip | json }}
+          {%- endif -%}
+          {%- if collection.image -%}
+            ,
+            "image": {{ collection.image | image_url: width: 1200 | json }}
+          {%- endif -%}
+          {%- if collection.products_count > 0 -%}
+            ,
+            "mainEntity": {
+              "@type": "ItemList",
+              "numberOfItems": {{ collection.products_count }},
+              "itemListElement": [
+                {%- for product in collection.products limit: 50 -%}
+                  {%- unless forloop.first -%},{%- endunless -%}
+                  {
+                    "@type": "ListItem",
+                    "position": {{ forloop.index }},
+                    "url": {{ schema_base_url | append: product.url | json }},
+                    "name": {{ product.title | json }}
+                  }
+                {%- endfor -%}
+              ]
+            }
+          {%- endif -%}
+        }
+      </script>
+
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": {{ 'general.breadcrumbs.home' | t | json }},
+              "item": {{ schema_home_url | json }}
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": {{ collection.title | json }},
+              "item": {{ canonical_url | json }}
+            }
+          ]
+        }
+      </script>
+
+    {%- when 'blog' -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "name": {{ blog.title | json }},
+          "url": {{ canonical_url | json }}
+          {%- if blog.articles_count > 0 -%}
+            ,
+            "blogPost": [
+              {%- for article in blog.articles limit: 10 -%}
+                {%- unless forloop.first -%},{%- endunless -%}
+                {
+                  "@type": "BlogPosting",
+                  "headline": {{ article.title | json }},
+                  "url": {{ schema_base_url | append: article.url | json }},
+                  "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }}
+                  {%- if article.image -%}
+                    ,
+                    "image": {{ article.image | image_url: width: 1200 | json }}
+                  {%- endif -%}
+                }
+              {%- endfor -%}
+            ]
+          {%- endif -%}
+        }
+      </script>
+
+    {%- when 'page' -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": {{ page.title | json }},
+          "url": {{ canonical_url | json }}
+          {%- if page.content != blank -%}
+            ,
+            "description": {{ page.content | strip_html | truncate: 320 | strip | json }}
+          {%- endif -%}
+        }
+      </script>
+
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": {{ 'general.breadcrumbs.home' | t | json }},
+              "item": {{ schema_home_url | json }}
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": {{ page.title | json }},
+              "item": {{ canonical_url | json }}
+            }
+          ]
+        }
+      </script>
+
+    {%- when 'list-collections' -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": {{ page_title | json }},
+          "url": {{ canonical_url | json }},
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {%- for collection in collections -%}
+                {%- unless forloop.first -%},{%- endunless -%}
+                {
+                  "@type": "ListItem",
+                  "position": {{ forloop.index }},
+                  "url": {{ schema_base_url | append: collection.url | json }},
+                  "name": {{ collection.title | json }}
+                }
+              {%- endfor -%}
+            ]
+          }
+        }
+      </script>
+
+    {%- when 'search' -%}
+      {%- if search.performed -%}
+        <script type="application/ld+json">
+          {
+            "@context": "https://schema.org",
+            "@type": "SearchResultsPage",
+            "name": {{ page_title | json }},
+            "url": {{ canonical_url | json }}
+          }
+        </script>
+      {%- else -%}
+        <script type="application/ld+json">
+          {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": {{ page_title | json }},
+            "url": {{ canonical_url | json }}
+          }
+        </script>
+      {%- endif -%}
+
+    {%- when 'cart' -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": {{ page_title | json }},
+          "url": {{ canonical_url | json }}
+        }
+      </script>
+
+    {%- when 'index' -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": {{ canonical_url | append: '#webpage' | json }},
+          "name": {{ page_title | json }},
+          "url": {{ canonical_url | json }}
+          {%- if page_description != blank -%}
+            ,
+            "description": {{ page_description | json }}
+          {%- endif -%}
+          ,
+          "isPartOf": {
+            "@id": {{ schema_base_url | append: '#website' | json }}
+          }
+        }
+      </script>
+
+    {%- else -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": {{ page_title | json }},
+          "url": {{ canonical_url | json }}
+          {%- if page_description != blank -%}
+            ,
+            "description": {{ page_description | json }}
+          {%- endif -%}
+        }
+      </script>
+  {%- endcase -%}
+{%- endunless -%}

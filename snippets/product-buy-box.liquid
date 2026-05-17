@@ -1,0 +1,179 @@
+{% doc %}
+  Renders product title, price, description, and add-to-cart form.
+
+  @param {product} product - The product to display
+  @param {string} section_id - Section ID for form field IDs
+  @param {string} [layout] - split, split_tall, or hero (controls sticky buy column)
+{% enddoc %}
+
+{% liquid
+  assign buy_layout = layout | default: 'split'
+  assign is_sticky = false
+  if buy_layout == 'split' or buy_layout == 'split_tall'
+    assign is_sticky = true
+  endif
+
+  assign current_variant = product.selected_or_first_available_variant
+  assign eyebrow_text = product.vendor
+  if eyebrow_text == blank and product.type != blank
+    assign eyebrow_text = product.type
+  endif
+%}
+
+<div class="product-buy{% if is_sticky %} product-buy--sticky{% endif %}">
+  {% render 'breadcrumbs', product: product %}
+
+  {% if eyebrow_text != blank %}
+    <p class="product-buy__eyebrow type-eyebrow">{{ eyebrow_text | escape }}</p>
+  {% endif %}
+
+  <h1 class="product-buy__title">{{ product.title | escape }}</h1>
+
+  <p class="product-buy__price" data-variant-price>
+    {{ current_variant.price | money }}
+  </p>
+
+  {% if product.description != blank %}
+    <div class="product-buy__description rte">
+      {{ product.description }}
+    </div>
+  {% endif %}
+
+  <div class="product-buy__form" data-product-form>
+    {% form 'product', product %}
+      <label class="product-buy__label" for="product-variant-{{ section_id }}">
+        {{ 'products.variant_label' | t }}
+      </label>
+      <select
+        id="product-variant-{{ section_id }}"
+        class="product-buy__select"
+        name="id"
+      >
+        {% for variant in product.variants %}
+          <option
+            value="{{ variant.id }}"
+            {% if variant == current_variant %}
+              selected="selected"
+            {% endif %}
+            {% unless variant.available %}
+              disabled
+            {% endunless %}
+          >
+            {{ variant.title }} - {{ variant.price | money }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <label class="product-buy__label" for="product-quantity-{{ section_id }}">
+        {{ 'products.quantity_label' | t }}
+      </label>
+      <input
+        id="product-quantity-{{ section_id }}"
+        class="product-buy__quantity"
+        type="number"
+        name="quantity"
+        min="1"
+        value="1"
+      >
+
+      <div class="product-buy__submit">
+        {% assign add_to_cart_label = 'products.add_to_cart.label' | t %}
+        {% render 'button',
+          label: add_to_cart_label,
+          tag: 'button',
+          button_type: 'submit',
+          style: 'primary'
+        %}
+      </div>
+
+      {{ form | payment_button }}
+    {% endform %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-buy--sticky {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 1rem);
+    align-self: start;
+  }
+
+  .product-buy .breadcrumbs {
+    margin-bottom: 1rem;
+  }
+
+  .product-buy__eyebrow {
+    margin: 0 0 0.5rem;
+    color: var(--color-brand-rust, #c57639);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .product-buy__eyebrow {
+    color: var(--color-brand-warmth, #ea7657);
+  }
+
+  .product-buy__title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.875rem, 3.5vw, 2.375rem);
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  .product-buy__price {
+    margin: 0 0 1.25rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .product-buy__description {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .product-buy__description :where(p) {
+    margin: 0 0 1rem;
+  }
+
+  .product-buy__description :where(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .product-buy__form .shopify-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .product-buy__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .product-buy__select,
+  .product-buy__quantity {
+    width: 100%;
+    max-width: 16rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+  }
+
+  .product-buy__submit {
+    margin-top: 0.5rem;
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .product-buy__submit .btn {
+    width: 100%;
+  }
+
+  .product-buy__form__status {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+{% endstylesheet %}

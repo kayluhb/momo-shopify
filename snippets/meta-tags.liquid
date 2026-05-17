@@ -1,5 +1,5 @@
 {% doc %}
-  Renders document metadata: charset, viewport, favicons, Open Graph, Twitter, title, and canonical URL.
+  Renders document metadata: charset, viewport, favicons, Open Graph, Twitter, title, canonical URL, and JSON-LD.
 
   @example
   {% render 'meta-tags' %}
@@ -119,10 +119,6 @@
 {%- endif -%}
 
 {%- if request.page_type == 'product' -%}
-  <script type="application/ld+json">
-    {{ product | structured_data }}
-  </script>
-
   <meta
     property="og:price:amount"
     content="{{ product.price | money_without_currency | strip_html }}"
@@ -164,3 +160,5 @@
     content="{{ page_description | escape }}"
   >
 {% endif %}
+
+{% render 'json-ld-schema' %}

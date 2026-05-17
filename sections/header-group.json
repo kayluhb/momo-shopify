@@ -14,11 +14,13 @@
     "header": {
       "type": "header",
       "settings": {
+        "menu": "main-menu",
+        "customer_account_menu": "customer-account-main-menu",
         "text_color": "white"
       }
     }
   },
   "order": [
     "header"
-  ],
+  ]
 }

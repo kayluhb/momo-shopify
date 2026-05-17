@@ -11,68 +11,93 @@
   "sections": {
     "hero": {
       "type": "hero-fullscreen",
-      "settings": {},
       "blocks": {
+        "slide_JmewBq": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/bare-stony-room-with-two-wooden-benches-and-coffee-tables.jpg",
+            "overlay_opacity": 40,
+            "heading": "Heading",
+            "subheading": "Subheading",
+            "button_label": "Shop Now",
+            "button_link": "shopify://collections/frontpage",
+            "button_2_label": "Secondary",
+            "button_2_link": "shopify://metaobjects/content/style-studio",
+            "text_color": "white",
+            "text_placement": "bl"
+          }
+        },
         "slide_1": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/long-espresso-sits-on-a-wooden-stool.jpg",
             "overlay_opacity": 40,
             "heading": "Sleek, sculptural, striking",
             "subheading": "A modern statement in form and finish, designed to stand apart.",
             "button_label": "Shop all",
             "button_link": "/collections/all",
-            "text_placement": "center"
+            "button_2_label": "",
+            "button_2_link": "",
+            "text_color": "white",
+            "text_placement": "bl"
           }
         }
       },
       "block_order": [
+        "slide_JmewBq",
         "slide_1"
-      ]
+      ],
+      "settings": {
+        "autoplay": true,
+        "autoplay_interval": 5,
+        "show_dots": true
+      }
     },
     "bento": {
       "type": "bento-grid",
-      "settings": {
-        "gap": 12,
-        "corner_radius": 14,
-        "min_height": 520,
-        "color_scheme": "earth"
-      },
       "blocks": {
         "tile_featured": {
           "type": "tile",
           "settings": {
             "layout": "featured",
-            "eyebrow": "Leather ear pads",
-            "title": "MG20 gaming headphones",
+            "image": "shopify://shop_images/iced-latte-at-coffee-shop-window.jpg",
+            "eyebrow": "",
+            "title": "Blankets",
             "link": "shopify://collections/all",
-            "overlay_opacity": 25
+            "overlay_opacity": 0
           }
         },
         "tile_small_left": {
           "type": "tile",
           "settings": {
             "layout": "small_left",
-            "title": "MW08 sport",
+            "image": "shopify://shop_images/long-espresso-sits-on-a-wooden-stool.jpg",
+            "eyebrow": "",
+            "title": "Coffee",
             "link": "shopify://collections/all",
-            "overlay_opacity": 25
+            "overlay_opacity": 0
           }
         },
         "tile_small_right": {
           "type": "tile",
           "settings": {
             "layout": "small_right",
-            "title": "Accessories",
+            "image": "shopify://shop_images/coffee-and-cake.jpg",
+            "eyebrow": "",
+            "title": "Fragrance",
             "link": "shopify://collections/all",
-            "overlay_opacity": 25
+            "overlay_opacity": 0
           }
         },
         "tile_wide": {
           "type": "tile",
           "settings": {
             "layout": "wide",
-            "title": "MH40 wireless",
+            "image": "shopify://shop_images/lenses-lattes.jpg",
+            "eyebrow": "",
+            "title": "Fire Pits",
             "link": "shopify://collections/all",
-            "overlay_opacity": 25
+            "overlay_opacity": 0
           }
         }
       },
@@ -81,30 +106,37 @@
         "tile_small_left",
         "tile_small_right",
         "tile_wide"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "subheading": "",
+        "heading_alignment": "center",
+        "gap": 12,
+        "corner_radius": 14,
+        "min_height": 520,
+        "color_scheme": "earth"
+      }
     },
     "promo": {
       "type": "promo-banner",
       "settings": {
         "heading": "Free shipping on orders over $100",
+        "text": "",
         "button_label": "Shop now",
         "button_link": "shopify://collections/all",
         "color_scheme": "warmth",
-        "use_gradient": true
+        "use_gradient": false,
+        "overlay_opacity": 0
       }
     },
     "category_cards": {
       "type": "category-cards",
-      "settings": {
-        "columns": 3,
-        "gap": 8,
-        "card_aspect_ratio": "4 / 5",
-        "overlay_opacity": 55
-      },
       "blocks": {
         "card_1": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/holding-coffee-in-bed.jpg",
             "heading_line_1": "Heritage materials",
             "heading_line_2": "Explore the collection",
             "link": "shopify://collections/all"
@@ -113,6 +145,7 @@
         "card_2": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/black-kettle-and-pour-over-coffee.jpg",
             "heading_line_1": "Sculptural form",
             "heading_line_2": "Objects for everyday ritual",
             "link": "shopify://collections/all"
@@ -121,9 +154,10 @@
         "card_3": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/espresso-machine-with-dark-wood-handles.jpg",
             "heading_line_1": "Made to last",
             "heading_line_2": "Discover our story",
-            "link": "shopify://pages/about"
+            "link": "shopify://products/the-collection-snowboard-liquid"
           }
         }
       },
@@ -131,60 +165,71 @@
         "card_1",
         "card_2",
         "card_3"
-      ]
+      ],
+      "settings": {
+        "columns": 3,
+        "gap": 8,
+        "card_aspect_ratio": "4 / 5",
+        "overlay_opacity": 55
+      }
     },
     "featured": {
       "type": "featured-collection",
       "settings": {
+        "eyebrow": "",
         "heading": "Curated for you",
         "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
         "heading_alignment": "center",
+        "collection": "",
         "products_to_show": 4,
         "columns": 4,
         "show_view_all": true,
         "view_all_label": "View all",
+        "view_all_link": "",
         "color_scheme": "canvas"
       }
     },
     "split": {
       "type": "image-with-text",
       "settings": {
+        "image_position": "left",
+        "eyebrow": "",
         "heading": "Crafted with care",
         "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
         "button_label": "Our story",
-        "image_position": "left",
+        "button_link": "",
+        "button_style": "primary",
         "color_scheme": "earth"
       }
     },
     "columns": {
       "type": "multicolumn",
-      "settings": {
-        "heading": "Why Momo",
-        "heading_alignment": "center",
-        "columns": 3,
-        "text_alignment": "center",
-        "color_scheme": "canvas"
-      },
       "blocks": {
         "column_1": {
           "type": "column",
           "settings": {
             "heading": "Heritage materials",
-            "text": "<p>Thoughtfully sourced materials chosen for longevity and character.</p>"
+            "text": "<p>Thoughtfully sourced materials chosen for longevity and character.</p>",
+            "link_label": "",
+            "link_url": ""
           }
         },
         "column_2": {
           "type": "column",
           "settings": {
             "heading": "Sculptural form",
-            "text": "<p>Clean lines and balanced proportions that elevate everyday rituals.</p>"
+            "text": "<p>Clean lines and balanced proportions that elevate everyday rituals.</p>",
+            "link_label": "",
+            "link_url": ""
           }
         },
         "column_3": {
           "type": "column",
           "settings": {
             "heading": "Made to last",
-            "text": "<p>Built with care so each piece becomes part of your story.</p>"
+            "text": "<p>Built with care so each piece becomes part of your story.</p>",
+            "link_label": "",
+            "link_url": ""
           }
         }
       },
@@ -192,15 +237,19 @@
         "column_1",
         "column_2",
         "column_3"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Why Momo",
+        "subheading": "",
+        "heading_alignment": "center",
+        "columns": 3,
+        "text_alignment": "center",
+        "color_scheme": "canvas"
+      }
     },
     "testimonials": {
       "type": "testimonials",
-      "settings": {
-        "heading": "What customers say",
-        "heading_alignment": "center",
-        "color_scheme": "earth"
-      },
       "blocks": {
         "testimonial_1": {
           "type": "testimonial",
@@ -234,22 +283,48 @@
         "testimonial_1",
         "testimonial_2",
         "testimonial_3"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "What customers say",
+        "subheading": "",
+        "heading_alignment": "center",
+        "color_scheme": "earth"
+      }
     },
     "logos": {
       "type": "logo-list",
-      "settings": {
-        "heading": "As seen in",
-        "columns": 5,
-        "grayscale": true,
-        "color_scheme": "canvas"
-      },
       "blocks": {
-        "logo_1": { "type": "logo", "settings": {} },
-        "logo_2": { "type": "logo", "settings": {} },
-        "logo_3": { "type": "logo", "settings": {} },
-        "logo_4": { "type": "logo", "settings": {} },
-        "logo_5": { "type": "logo", "settings": {} }
+        "logo_1": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
+        },
+        "logo_2": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
+        },
+        "logo_3": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
+        },
+        "logo_4": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
+        },
+        "logo_5": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
+        }
       },
       "block_order": [
         "logo_1",
@@ -257,18 +332,19 @@
         "logo_3",
         "logo_4",
         "logo_5"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "As seen in",
+        "subheading": "",
+        "columns": 5,
+        "logo_height": 40,
+        "grayscale": true,
+        "color_scheme": "canvas"
+      }
     },
     "faq": {
       "type": "faq",
-      "settings": {
-        "heading": "Have a question ? We are here to help.",
-        "subheading": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>",
-        "support_hours": "Our customer support is available monday to friday: 8am-8:30pm.",
-        "support_response_time": "Average answer time: 24h",
-        "show_online_status": true,
-        "color_scheme": "canvas"
-      },
       "blocks": {
         "question_1": {
           "type": "question",
@@ -320,14 +396,28 @@
         "question_4",
         "question_5",
         "question_6"
-      ]
+      ],
+      "settings": {
+        "heading": "Have a question ? We are here to help.",
+        "subheading": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>",
+        "show_online_status": true,
+        "support_hours": "Our customer support is available monday to friday: 8am-8:30pm.",
+        "support_response_time": "Average answer time: 24h",
+        "contact_label": "",
+        "contact_link": "",
+        "color_scheme": "canvas"
+      }
     },
     "editorial": {
       "type": "rich-text",
       "settings": {
+        "eyebrow": "",
         "heading": "Designed to endure",
         "display_size": true,
         "text": "<p>We believe in objects that earn their place — pieces shaped by material honesty, refined proportion, and the quiet confidence of lasting craft.</p>",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "primary",
         "text_alignment": "center",
         "color_scheme": "steel",
         "use_gradient": true

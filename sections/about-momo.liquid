@@ -1,167 +1,214 @@
 {% liquid
   assign image_position = section.settings.image_position
-  assign show_values = section.settings.show_brand_values
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
   assign image_alt = section.settings.image.alt | default: section.settings.heading
+  assign is_dark_scheme = false
+  if section.settings.color_scheme == 'earth'
+    assign is_dark_scheme = true
+  endif
+  if section.settings.color_scheme == 'steel'
+    assign is_dark_scheme = true
+  endif
+  if section.settings.color_scheme == 'rust'
+    assign is_dark_scheme = true
+  endif
+  if section.settings.color_scheme == 'warmth'
+    assign is_dark_scheme = true
+  endif
+  if section.settings.color_scheme == 'heart'
+    assign is_dark_scheme = true
+  endif
+
+  assign button_class = ''
+  if is_dark_scheme and section.settings.button_style == 'primary'
+    assign button_class = 'btn--on-dark'
+  endif
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="about-momo full-width py-14 md:py-20 {{ section_bg }}"
+  class="about-momo full-width {{ section_bg }}{% if has_image %} about-momo--has-image{% endif %} about-momo--image-{{ image_position }}"
   {{ section.shopify_attributes }}
 >
-  <div class="section-inner about-momo__inner about-momo__inner--image-{{ image_position }}">
-    <div class="about-momo__media">
-      {% if section.settings.image != blank %}
-        {{
-          section.settings.image
-          | image_url: width: 1400
-          | image_tag:
-            loading: 'lazy',
-            sizes: '(min-width: 990px) 42vw, 100vw',
-            widths: '600,900,1200,1400',
-            class: 'about-momo__img',
-            alt: image_alt
-        }}
-      {% else %}
-        <div class="about-momo__mark" aria-hidden="true">
-          <span class="about-momo__mark-svg">{{ 'logo.svg' | inline_asset_content }}</span>
-        </div>
-      {% endif %}
+  <div class="about-momo__frame">
+    <div class="about-momo__rule" aria-hidden="true"></div>
+
+    <div class="about-momo__masthead">
+      <p class="about-momo__eyebrow">
+        {% if section.settings.eyebrow != blank %}
+          {{ section.settings.eyebrow | escape }}
+        {% endif %}
+      </p>
+      <span class="about-momo__mark" aria-hidden="true">{{ 'momo.svg' | inline_asset_content }}</span>
     </div>
 
-    <div class="about-momo__content">
-      {% if section.settings.eyebrow != blank %}
-        <p class="about-momo__eyebrow type-eyebrow">{{ section.settings.eyebrow | escape }}</p>
-      {% endif %}
-
+    <div class="about-momo__layout">
       {% if section.settings.heading != blank %}
-        <h2 class="about-momo__heading font-display">{{ section.settings.heading | escape }}</h2>
+        <h2 class="about-momo__headline">{{ section.settings.heading | escape }}</h2>
       {% endif %}
 
-      {% if section.settings.text != blank %}
-        <div class="about-momo__text rte">{{ section.settings.text }}</div>
-      {% endif %}
+      <div class="about-momo__body">
+        {% if has_image %}
+          <figure class="about-momo__figure">
+            {{
+              section.settings.image
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'lazy',
+                sizes: '(min-width: 990px) 28vw, 88vw',
+                widths: '500,800,1200,1600',
+                class: 'about-momo__img',
+                alt: image_alt
+            }}
+          </figure>
+        {% endif %}
 
-      {% if show_values %}
-        <ul class="about-momo__values" aria-label="{{ 'sections.about_momo.values_label' | t }}">
-          <li>{{ 'sections.about_momo.values.family' | t }}</li>
-          <li>{{ 'sections.about_momo.values.heritage' | t }}</li>
-          <li>{{ 'sections.about_momo.values.legacy' | t }}</li>
-          <li>{{ 'sections.about_momo.values.fellowship' | t }}</li>
-          <li>{{ 'sections.about_momo.values.warmth' | t }}</li>
-          <li>{{ 'sections.about_momo.values.integrity' | t }}</li>
-        </ul>
-      {% endif %}
+        <div class="about-momo__copy">
+          {% if section.settings.text != blank %}
+            <div class="about-momo__text rte">{{ section.settings.text }}</div>
+          {% endif %}
 
-      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-        <div class="about-momo__cta">
-          {% render 'button',
-            label: section.settings.button_label,
-            url: section.settings.button_link,
-            style: section.settings.button_style
-          %}
+          {% if section.settings.pull_quote != blank %}
+            <blockquote class="about-momo__quote">
+              <p>{{ section.settings.pull_quote | escape }}</p>
+            </blockquote>
+          {% endif %}
+
+          {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+            <div class="about-momo__cta">
+              {% render 'button',
+                label: section.settings.button_label,
+                url: section.settings.button_link,
+                style: section.settings.button_style,
+                class: button_class
+              %}
+            </div>
+          {% endif %}
         </div>
-      {% endif %}
+      </div>
     </div>
+
+    <div class="about-momo__rule" aria-hidden="true"></div>
   </div>
 </section>
 
 {% stylesheet %}
-  .about-momo__inner {
+  .about-momo {
+    --about-momo-accent: var(--color-brand-rust, #c57639);
+    --about-momo-rule: color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  .bg-brand-earth,
+  .bg-brand-steel,
+  .bg-brand-rust,
+  .bg-brand-warmth,
+  .bg-brand-heart {
+    --about-momo-accent: var(--color-brand-warmth, #ea7657);
+  }
+
+  .bg-brand-warmth,
+  .bg-brand-heart {
+    --about-momo-accent: var(--color-brand-steel, #00253f);
+  }
+
+  .about-momo__frame {
+    box-sizing: border-box;
+    width: 100%;
+    padding: clamp(2.75rem, 7vw, 5rem) var(--page-margin);
+  }
+
+  @media (max-width: 749px) {
+    .about-momo__frame {
+      padding-inline: var(--page-margin-mobile);
+    }
+  }
+
+  .about-momo__rule {
+    height: 1px;
+    background: var(--about-momo-rule);
+  }
+
+  .about-momo__masthead {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-block: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .about-momo__eyebrow {
+    margin: 0;
+    font-family: var(--font-brand--family, var(--font-display--family));
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold, 700);
+    letter-spacing: 0.14em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--about-momo-accent);
+  }
+
+  .about-momo__mark {
+    display: block;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    color: color-mix(in srgb, currentColor 70%, transparent);
+  }
+
+  .about-momo__mark :where(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .about-momo__layout {
     display: grid;
-    gap: 2.5rem;
-    align-items: center;
+    gap: clamp(1.75rem, 4vw, 3rem);
   }
 
-  @media (min-width: 990px) {
-    .about-momo__inner {
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-      gap: clamp(2.5rem, 5vw, 5rem);
-    }
-
-    .about-momo__inner--image-right .about-momo__media {
-      order: 2;
-    }
+  .about-momo__headline {
+    margin: 0;
+    max-width: 11ch;
+    font-size: clamp(2.5rem, 7.5vw, 4.25rem);
+    font-weight: var(--font-weight-bold, 700);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 
-  .about-momo__media {
-    position: relative;
+  .about-momo__body {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .about-momo__figure {
+    margin: 0;
     overflow: hidden;
-    border-radius: 0.25rem;
-    aspect-ratio: 4 / 5;
-    background-color: color-mix(in srgb, currentColor 6%, transparent);
-  }
-
-  .about-momo__media::before {
-    content: '';
-    position: absolute;
-    inset: 0 auto 0 0;
-    z-index: 1;
-    width: 0.25rem;
-    background-color: var(--color-brand-rust, #c57639);
+    aspect-ratio: 1;
+    max-width: 22rem;
   }
 
   .about-momo__img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .about-momo__mark {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 2.5rem;
-    background-color: color-mix(in srgb, var(--color-brand-steel, #00253f) 4%, transparent);
-  }
-
-  .about-momo__mark-svg {
-    display: block;
-    width: min(12rem, 55%);
-    margin-inline: auto;
-    color: var(--color-brand-steel, #00253f);
-  }
-
-  .about-momo__mark-svg :where(svg) {
-    width: 100%;
-    height: auto;
-  }
-
-  .bg-brand-steel .about-momo__mark-svg,
-  .bg-brand-earth .about-momo__mark-svg {
-    color: currentColor;
-    opacity: 0.35;
-  }
-
-  .about-momo__content {
-    position: relative;
-    padding-inline-start: 1rem;
-    border-inline-start: 1px solid color-mix(in srgb, currentColor 12%, transparent);
-  }
-
-  @media (min-width: 990px) {
-    .about-momo__content {
-      padding-inline-start: 1.5rem;
-    }
-  }
-
-  .about-momo__eyebrow {
-    margin: 0 0 0.75rem;
-  }
-
-  .about-momo__heading {
-    margin: 0 0 1.25rem;
-    font-size: clamp(2rem, 4.5vw, 2.75rem);
-    line-height: 1.05;
+  .about-momo__copy {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 32rem;
   }
 
   .about-momo__text {
-    font-size: 1.0625rem;
+    font-size: 1rem;
     line-height: 1.7;
-    max-width: 36rem;
+    letter-spacing: 0.01em;
   }
 
   .about-momo__text :where(p) {
@@ -172,32 +219,78 @@
     margin-bottom: 0;
   }
 
-  .about-momo__values {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 0.75rem;
-    margin: 1.75rem 0 0;
-    padding: 0;
-    list-style: none;
+  .about-momo__quote {
+    margin: 0;
+    padding: 0 0 0 1rem;
+    border: none;
+    border-inline-start: 2px solid var(--about-momo-accent);
   }
 
-  .about-momo__values li {
+  .about-momo__quote p {
+    margin: 0;
     font-family: var(--font-brand--family, var(--font-display--family));
-    font-size: 0.6875rem;
+    font-size: 1.0625rem;
     font-weight: var(--font-weight-bold, 700);
-    letter-spacing: 0.12em;
-    line-height: 1.2;
-    text-transform: uppercase;
-    color: var(--color-brand-rust, #c57639);
-  }
-
-  .bg-brand-earth .about-momo__values li,
-  .bg-brand-steel .about-momo__values li {
-    color: var(--color-brand-warmth, #ea7657);
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: inherit;
   }
 
   .about-momo__cta {
-    margin-top: 1.75rem;
+    padding-top: 0.25rem;
+  }
+
+  @media (min-width: 750px) {
+    .about-momo--has-image .about-momo__body {
+      grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+      align-items: start;
+      column-gap: clamp(1.5rem, 4vw, 3rem);
+    }
+
+    .about-momo--has-image.about-momo--image-right .about-momo__body {
+      direction: rtl;
+    }
+
+    .about-momo--has-image.about-momo--image-right .about-momo__body > * {
+      direction: ltr;
+    }
+
+    .about-momo__figure {
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 990px) {
+    .about-momo__layout {
+      grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+      column-gap: clamp(2rem, 5vw, 4.5rem);
+      align-items: end;
+    }
+
+    .about-momo__headline {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: end;
+      max-width: none;
+      font-size: clamp(3rem, 5.5vw, 4.75rem);
+    }
+
+    .about-momo__body {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .about-momo--has-image .about-momo__body {
+      grid-template-columns: minmax(0, 0.46fr) minmax(0, 1fr);
+    }
+
+    .about-momo:not(.about-momo--has-image) .about-momo__layout {
+      grid-template-columns: minmax(0, 0.48fr) minmax(0, 0.52fr);
+    }
+
+    .about-momo:not(.about-momo--has-image) .about-momo__copy {
+      max-width: 36rem;
+    }
   }
 {% endstylesheet %}
 
@@ -249,10 +342,10 @@
       "default": "t:sections.about_momo.presets.text"
     },
     {
-      "type": "checkbox",
-      "id": "show_brand_values",
-      "label": "t:sections.about_momo.show_values_label",
-      "default": true
+      "type": "text",
+      "id": "pull_quote",
+      "label": "t:sections.about_momo.pull_quote_label",
+      "info": "t:sections.about_momo.pull_quote_info"
     },
     {
       "type": "text",
@@ -268,7 +361,7 @@
       "type": "select",
       "id": "button_style",
       "label": "t:sections.shared.button_style_label",
-      "default": "secondary",
+      "default": "primary",
       "options": [
         { "value": "primary", "label": "t:options.button_style.primary" },
         { "value": "secondary", "label": "t:options.button_style.secondary" }
@@ -282,12 +375,14 @@
       "type": "select",
       "id": "color_scheme",
       "label": "t:sections.shared.color_scheme_label",
-      "default": "canvas",
+      "default": "steel",
       "options": [
-        { "value": "white", "label": "t:options.color_scheme.white" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" },
         { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "steel", "label": "t:options.color_scheme.steel" }
+        { "value": "rust", "label": "t:sections.about_momo.color_rust" },
+        { "value": "warmth", "label": "t:sections.about_momo.color_warmth" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "white", "label": "t:options.color_scheme.white" }
       ]
     }
   ],
@@ -298,9 +393,8 @@
         "eyebrow": "About Momo",
         "heading": "Named for the heart of our home",
         "text": "<p>Momo is our founder's grandmother — the woman whose table brought everyone together. Her spirit of warmth, fellowship, and legacy is woven into everything we make.</p><p>We bridge the vibrant heritage of modern Mexico with the clean, functional silhouettes of mid-century design — crafting the backdrop for the moments you share around your hearth.</p>",
-        "show_brand_values": true,
         "image_position": "left",
-        "color_scheme": "canvas"
+        "color_scheme": "steel"
       }
     }
   ]

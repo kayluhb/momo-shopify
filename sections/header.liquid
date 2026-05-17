@@ -170,6 +170,16 @@
     );
     background-color: color-mix(in srgb, transparent, #fff calc(var(--header-scroll-progress) * 100%));
     color: color-mix(in srgb, #fff, var(--color-brand-steel) calc(var(--header-scroll-progress) * 100%));
+    transition: none;
+  }
+
+  .template-index [data-site-header-scroll] :where(a, button),
+  .template-index [data-site-header-scroll] shopify-account::part(signed-out-avatar) {
+    transition: none;
+  }
+
+  .template-index [data-site-header-scroll] .site-header__logo-mark {
+    transition: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -186,9 +196,13 @@
 
   @media (max-width: 749px) {
     .site-header__inner {
-      gap: 0.75rem;
-      max-width: calc(100% - var(--page-margin-mobile) * 2);
-      padding-inline: var(--page-margin-mobile);
+      gap: 0.5rem;
+      max-width: 100%;
+      padding-inline: 0.75rem;
+    }
+
+    .site-header__menu-trigger {
+      margin-inline-end: 1rem;
     }
   }
 
@@ -533,6 +547,8 @@
     var header = document.querySelector('[data-site-header]');
     if (!header) return;
 
+    var usesScrollShrink = header.hasAttribute('data-site-header-scroll');
+
     function syncHeaderHeight() {
       var height = header.offsetHeight + 'px';
       document.documentElement.style.setProperty('--header-height', height);
@@ -542,7 +558,7 @@
     syncHeaderHeight();
     window.addEventListener('resize', syncHeaderHeight, { passive: true });
 
-    if (typeof ResizeObserver !== 'undefined') {
+    if (typeof ResizeObserver !== 'undefined' && !usesScrollShrink) {
       new ResizeObserver(syncHeaderHeight).observe(header);
     }
   })();
@@ -576,6 +592,10 @@
       }
 
       root.style.setProperty('--header-scroll-progress', String(progress));
+
+      var height = header.offsetHeight + 'px';
+      root.style.setProperty('--header-height', height);
+      root.style.setProperty('--header-height-scrolled', height);
     }
 
     function onScroll() {

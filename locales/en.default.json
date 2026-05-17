@@ -113,17 +113,6 @@
       "related": "Related products",
       "recently_viewed": "Recently viewed"
     },
-    "about_momo": {
-      "values_label": "Momo brand values",
-      "values": {
-        "family": "Family",
-        "heritage": "Heritage",
-        "legacy": "Legacy",
-        "fellowship": "Fellowship",
-        "warmth": "Warmth",
-        "integrity": "Integrity"
-      }
-    },
     "testimonials": {
       "rating_label": "{{ rating }} out of 5 stars"
     },

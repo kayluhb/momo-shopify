@@ -317,9 +317,12 @@
     "about_momo": {
       "name": "About Momo",
       "image_label": "Image",
-      "image_info": "Optional. Shows the Momo logo mark when empty.",
+      "image_info": "Square crop, editorial layout. Without an image, headline and copy use a two-column grid.",
       "image_position_label": "Image position",
-      "show_values_label": "Show brand values",
+      "pull_quote_label": "Pull quote",
+      "pull_quote_info": "Optional accent line with a vertical rule.",
+      "color_rust": "Rust",
+      "color_warmth": "Warmth",
       "presets": {
         "default_name": "About Momo",
         "eyebrow": "About Momo",

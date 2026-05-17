@@ -63,11 +63,12 @@
         {% endif %}
       </div>
 
-      <div class="site-footer__column">
-        <h2 class="site-footer__heading">
-          {{ 'sections.footer.customer_care_heading' | t }}
-        </h2>
-        {% if section.settings.customer_care_menu.links.size > 0 %}
+      <div class="site-footer__menu-pair col-span-1 grid grid-cols-2 gap-x-8 sm:contents">
+        <div class="site-footer__column">
+          <h2 class="site-footer__heading">
+            {{ 'sections.footer.customer_care_heading' | t }}
+          </h2>
+          {% if section.settings.customer_care_menu.links.size > 0 %}
           <ul class="site-footer__links list-none p-0" role="list">
             {% for link in section.settings.customer_care_menu.links %}
               <li>
@@ -75,13 +76,13 @@
               </li>
             {% endfor %}
           </ul>
-        {% endif %}
-      </div>
+          {% endif %}
+        </div>
 
-      <div class="site-footer__column">
-        <h2 class="site-footer__heading">
-          {{ 'sections.footer.resources_heading' | t }}
-        </h2>
+        <div class="site-footer__column">
+          <h2 class="site-footer__heading">
+            {{ 'sections.footer.resources_heading' | t }}
+          </h2>
         {% if section.settings.resources_menu.links.size > 0 %}
           <ul class="site-footer__links list-none p-0" role="list">
             {% for link in section.settings.resources_menu.links %}
@@ -90,7 +91,8 @@
               </li>
             {% endfor %}
           </ul>
-        {% endif %}
+          {% endif %}
+        </div>
       </div>
 
       <div class="site-footer__column site-footer__column--newsletter">
@@ -228,6 +230,13 @@
     padding-inline: var(--page-margin);
   }
 
+  @media (max-width: 749px) {
+    .site-footer__inner {
+      max-width: calc(100% - var(--page-margin-mobile) * 2);
+      padding-inline: var(--page-margin-mobile);
+    }
+  }
+
   .site-footer__heading {
     margin: 0 0 1rem;
     font-family: var(--font-display--family, var(--font-primary--family));
@@ -240,6 +249,10 @@
 
   .site-footer__text :where(p) {
     margin: 0;
+  }
+
+  .site-footer__menu-pair > .site-footer__column {
+    min-width: 0;
   }
 
   .site-footer__links {

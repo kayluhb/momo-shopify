@@ -623,6 +623,26 @@
     padding-bottom: clamp(3.5rem, 6vw, 4.5rem);
   }
 
+  @media (max-width: 749px) {
+    .hero__inner,
+    .hero__inner--stacked {
+      max-width: calc(100% - var(--page-margin-mobile) * 2);
+      padding-inline: var(--page-margin-mobile);
+    }
+
+    .hero__panel {
+      padding-inline: var(--page-margin-mobile);
+    }
+
+    .hero__inner--stacked .hero__panel {
+      padding-inline: 0;
+    }
+
+    .hero__pause-wrap {
+      right: var(--page-margin-mobile);
+    }
+  }
+
   .hero__panel.is-active {
     opacity: 1;
     visibility: visible;

@@ -1,0 +1,23 @@
+# macOS / Windows
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Secrets (keep examples if you add them)
+.env
+.env.*
+!.env.example
+
+# Shopify CLI (when run from the repository root)
+.shopify/
+.shopify.lock
+
+# Desktop font files (Typekit — do not commit; purchase a desktop license for production use)
+fonts/degular-opentype/

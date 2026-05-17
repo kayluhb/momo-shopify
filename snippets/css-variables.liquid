@@ -1,0 +1,79 @@
+{% doc %}
+  Global CSS custom properties, including typography. Degular loads from self-hosted woff2 when enabled.
+
+  @example
+  {% render 'css-variables' %}
+{% enddoc %}
+{% liquid
+  if settings.type_use_adobe_degular == false
+    assign use_adobe_degular = false
+  else
+    assign use_adobe_degular = true
+  endif
+%}
+{% style %}
+  {% unless use_adobe_degular %}
+    {{ settings.type_primary_font | font_face: font_display: 'swap' }}
+    {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+    {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+    {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {% endunless %}
+
+  :root {
+    {% if use_adobe_degular %}
+      --font-display--family: "degular-display-thin", "degular-display", sans-serif;
+      --font-body--family: var(--font-display--family);
+      --font-primary--family: var(--font-display--family);
+      --font-primary--style: normal;
+      --font-primary--weight: 400;
+      --font-display--weight: 400;
+      --font-display--weight-bold: 700;
+      --font-body--weight: 400;
+      --font-body--weight-bold: 700;
+      --font-brand--family: var(--font-display--family);
+      --font-weight-thin: 400;
+      --font-weight-medium: 400;
+      --font-weight-bold: 700;
+    {% else %}
+      --font-display--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
+      --font-body--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
+      --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
+      --font-primary--style: {{ settings.type_primary_font.style }};
+      --font-primary--weight: {{ settings.type_primary_font.weight }};
+      --font-brand--family: var(--font-display--family);
+      --font-weight-thin: 400;
+      --font-weight-medium: 400;
+      --font-weight-bold: 700;
+    {% endif %}
+    --page-width: {{ settings.max_page_width }};
+    --page-margin: {{ settings.min_page_margin }}px;
+    --header-padding-y: 2rem;
+    --header-padding-y-scrolled: 0.75rem;
+    --header-logo-max-height: 2.5rem;
+    --header-logo-max-height-scrolled: 1.375rem;
+    --header-icon-size: 1.625rem;
+    --header-icon-size-scrolled: 1.375rem;
+    --header-icon-scale-scrolled: calc(var(--header-icon-size-scrolled) / var(--header-icon-size));
+    --header-height: calc(var(--header-padding-y) * 2 + var(--header-logo-max-height));
+    --header-height-scrolled: calc(
+      var(--header-padding-y-scrolled) * 2 + var(--header-logo-max-height-scrolled)
+    );
+    --color-background: {{ settings.background_color }};
+    --color-foreground: {{ settings.foreground_color }};
+    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+  }
+
+  {% if settings.text_selection == 'brand' %}
+    ::selection,
+    ::-moz-selection {
+      background-color: var(--color-selection-background);
+      color: var(--color-selection-foreground);
+    }
+  {% elsif settings.text_selection == 'subtle' %}
+    ::selection,
+    ::-moz-selection {
+      background-color: color-mix(in srgb, var(--color-foreground) 22%, transparent);
+      color: var(--color-foreground);
+    }
+  {% endif %}
+{% endstyle %}

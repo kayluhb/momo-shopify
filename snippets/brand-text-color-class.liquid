@@ -1,0 +1,24 @@
+{% doc %}
+  Returns the Tailwind text color class for a brand palette key.
+
+  @param {string} color - white, steel, rust, earth, warmth, or heart
+
+  @example
+  {% render 'brand-text-color-class', color: 'steel' %}
+{% enddoc %}
+{% liquid
+  case color
+    when 'steel'
+      echo 'text-brand-steel'
+    when 'rust'
+      echo 'text-brand-rust'
+    when 'earth'
+      echo 'text-brand-earth'
+    when 'warmth'
+      echo 'text-brand-warmth'
+    when 'heart'
+      echo 'text-brand-heart'
+    else
+      echo 'text-white'
+  endcase
+%}

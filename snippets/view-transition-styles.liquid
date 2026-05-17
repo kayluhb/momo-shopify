@@ -1,0 +1,27 @@
+{% doc %}
+  CSS for same-document and cross-document view transitions.
+
+  @example
+  {% render 'view-transition-styles' %}
+{% enddoc %}
+
+{% if settings.page_transition_enabled %}
+  {% style %}
+    @view-transition {
+      navigation: auto;
+    }
+
+    ::view-transition-old(main-content),
+    ::view-transition-new(main-content) {
+      animation-duration: 250ms;
+      animation-timing-function: ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-old(main-content),
+      ::view-transition-new(main-content) {
+        animation: none;
+      }
+    }
+  {% endstyle %}
+{% endif %}

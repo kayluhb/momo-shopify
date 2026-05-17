@@ -1,0 +1,10 @@
+{% # theme-check-disable RemoteAsset %}
+{% doc %}
+  Self-hosted Degular woff2 files and preloads for display + body regular weights.
+
+  @example
+  {% render 'degular-fonts' %}
+{% enddoc %}
+{{ 'fonts/degular-display-thin-400-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{{ 'fonts/degular-display-thin-700-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{{ 'degular-fonts.css' | asset_url | stylesheet_tag }}

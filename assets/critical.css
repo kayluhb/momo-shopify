@@ -1,0 +1,236 @@
+/** Critical CSS for the theme. This file is included on every page. */
+
+/* Reset styles inspired by https://www.joshwcomeau.com/css/custom-css-reset/ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  min-height: 100svh;
+}
+
+body:has(.hero) {
+  display: block;
+}
+
+html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+  overflow: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  border-radius: var(--style-border-radius-inputs);
+}
+
+select {
+  background-color: var(--color-background);
+  color: currentcolor;
+}
+
+dialog {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+p {
+  text-wrap: pretty;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p:empty {
+  display: none;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):first-child,
+:empty:first-child + :where(p, h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 0;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):last-child,
+:where(p, h1, h2, h3, h4, h5, h6) + :has(+ :empty:last-child) {
+  margin-block-end: 0;
+}
+
+/** Theme styles below */
+body {
+  font-family: var(--font-brand--family, var(--font-body--family, var(--font-primary--family)));
+  font-size: 1rem;
+  font-weight: var(--font-weight-thin, var(--font-body--weight, 400));
+  line-height: 1.6;
+  letter-spacing: 0.015em;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+strong,
+b {
+  font-weight: var(--font-weight-bold, var(--font-body--weight-bold, 700));
+}
+
+:where(.font-display) {
+  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
+  letter-spacing: -0.03em;
+}
+
+:where(.type-eyebrow) {
+  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+:where(
+    .section-heading__subheading,
+    .hero__subheading,
+    .faq__subheading,
+    .faq__answer,
+    .faq__support-hours,
+    .rich-text__body,
+    .image-with-text__text,
+    .multicolumn__text,
+    .testimonials__quote p,
+    .promo-banner__text,
+    .site-footer__text,
+    .rte
+  ) {
+  font-family: var(--font-brand--family, var(--font-body--family, var(--font-primary--family)));
+  font-weight: var(--font-weight-medium, 400);
+  letter-spacing: 0.015em;
+}
+
+:where(.faq__support-response, .testimonials__role) {
+  font-weight: var(--font-weight-thin, 400);
+  letter-spacing: 0.02em;
+}
+
+:where(.faq__question, .faq__question-text) {
+  font-weight: var(--font-weight-medium, 400);
+  letter-spacing: 0.01em;
+}
+
+:where(.btn, .hero__button) {
+  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-weight: var(--font-weight-bold, 700);
+}
+
+:where(.product-card__title, .product-card__badge) {
+  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-weight: var(--font-weight-bold, 700);
+}
+
+:where(.product-card__price, .product-card__price-compare) {
+  font-family: var(--font-brand--family, var(--font-body--family, var(--font-primary--family)));
+  font-weight: var(--font-weight-medium, 400);
+  letter-spacing: 0.01em;
+}
+
+:where(.product-card__price-sale) {
+  font-weight: var(--font-weight-bold, 700);
+}
+
+:where(.bento-grid__eyebrow) {
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: 0.14em;
+}
+
+.site-header__nav {
+  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/** Section layout utilities */
+
+/**
+ * Setup a grid that enables both full-width and constrained layouts
+ * depending on the class of the child elements.
+ *
+ * By default, a minimum content margin is set on the left and right
+ * sides of the section and the content is centered in the viewport to
+ * not exceed the maximum page width.
+ *
+ * When a child element is given the `full-width` class, it will span
+ * the entire viewport.
+ */
+.shopify-section {
+  --content-width: min(
+    calc(var(--page-width) - var(--page-margin) * 2),
+    calc(100% - var(--page-margin) * 2)
+  );
+  --content-margin: minmax(var(--page-margin), 1fr);
+  --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
+
+  /* This is required to make <img> elements work as background images */
+  position: relative;
+  grid-template-columns: var(--content-grid);
+  display: grid;
+  width: 100%;
+}
+
+/* Child elements, by default, are constrained to the central column of the grid. */
+.shopify-section > * {
+  grid-column: 2;
+}
+
+/* Child elements that use the full-width utility class span the entire viewport. */
+.shopify-section > .full-width {
+  grid-column: 1 / -1;
+}
+
+/** Constrained content wrapper for sections that span full width. */
+.section-inner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: min(calc(var(--page-width) - var(--page-margin) * 2), calc(100% - var(--page-margin) * 2));
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}

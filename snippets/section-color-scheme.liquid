@@ -1,0 +1,24 @@
+{% doc %}
+  Returns Tailwind classes for a section color scheme.
+
+  @param {string} scheme - white, canvas, earth, steel, warmth, or heart
+
+  @example
+  {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
+{% enddoc %}
+{% liquid
+  case scheme
+    when 'earth'
+      echo 'bg-brand-earth text-white'
+    when 'steel'
+      echo 'bg-brand-steel text-white'
+    when 'warmth'
+      echo 'bg-brand-warmth text-white'
+    when 'heart'
+      echo 'bg-brand-heart text-white'
+    when 'canvas'
+      echo 'bg-brand-canvas text-brand-steel'
+    else
+      echo 'bg-white text-brand-steel'
+  endcase
+%}

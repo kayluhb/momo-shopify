@@ -1,0 +1,80 @@
+{% doc %}
+  Loads theme JavaScript modules (Section Rendering API + morph stack) and the Theme global.
+
+  @example
+  {% render 'scripts' %}
+{% enddoc %}
+
+<script type="importmap">
+  {
+    "imports": {
+      "@theme/cart-icon": "{{ 'cart-icon.js' | asset_url }}",
+      "@theme/cart-items": "{{ 'cart-items.js' | asset_url }}",
+      "@theme/cart-sections": "{{ 'cart-sections.js' | asset_url }}",
+      "@theme/collection-facets": "{{ 'collection-facets.js' | asset_url }}",
+      "@theme/component": "{{ 'component.js' | asset_url }}",
+      "@theme/dialog": "{{ 'dialog.js' | asset_url }}",
+      "@theme/events": "{{ 'events.js' | asset_url }}",
+      "@theme/morph": "{{ 'morph.js' | asset_url }}",
+      "@theme/product-cart": "{{ 'product-cart.js' | asset_url }}",
+      "@theme/section-hydration": "{{ 'section-hydration.js' | asset_url }}",
+      "@theme/section-renderer": "{{ 'section-renderer.js' | asset_url }}",
+      "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
+      "@theme/variant-picker": "{{ 'variant-picker.js' | asset_url }}"
+    }
+  }
+</script>
+
+<link rel="modulepreload" href="{{ 'utilities.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'component.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'morph.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'section-renderer.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'section-hydration.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'events.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'dialog.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'cart-sections.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'cart-items.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'cart-icon.js' | asset_url }}" fetchpriority="low">
+
+{% if settings.page_transition_enabled %}
+  <script
+    src="{{ 'view-transitions.js' | asset_url }}"
+    async
+    blocking="render"
+  ></script>
+{% endif %}
+
+<script src="{{ 'cart-icon.js' | asset_url }}" type="module" fetchpriority="low"></script>
+<script src="{{ 'cart-items.js' | asset_url }}" type="module" fetchpriority="low"></script>
+<script src="{{ 'cart-drawer.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% if template.name == 'product' %}
+  <link rel="modulepreload" href="{{ 'product-cart.js' | asset_url }}" fetchpriority="low">
+  <link rel="modulepreload" href="{{ 'variant-picker.js' | asset_url }}" fetchpriority="low">
+  <script src="{{ 'product-cart.js' | asset_url }}" type="module" fetchpriority="low"></script>
+  <script src="{{ 'variant-picker.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+
+{% if template.name == 'collection' %}
+  <link rel="modulepreload" href="{{ 'collection-facets.js' | asset_url }}" fetchpriority="low">
+  <script src="{{ 'collection-facets.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+
+<script>
+  const Theme = {
+    translations: {
+      add_to_cart_loading: {{ 'products.add_to_cart.loading' | t | json }},
+      add_to_cart_success: {{ 'products.add_to_cart.success' | t | json }},
+      add_to_cart_error: {{ 'products.add_to_cart.error' | t | json }},
+    },
+    routes: {
+      cart_add_url: '{{ routes.cart_add_url | append: '.js' }}',
+      cart_change_url: '{{ routes.cart_change_url | append: '.js' }}',
+      cart_update_url: '{{ routes.cart_update_url }}',
+      cart_url: '{{ routes.cart_url }}',
+    },
+    template: {
+      name: '{{ template.name }}',
+    },
+  };
+</script>

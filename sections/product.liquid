@@ -1,0 +1,86 @@
+{% comment %}
+  Product page with variant picker and AJAX add to cart.
+{% endcomment %}
+
+<variant-picker
+  data-section-id="{{ section.id }}"
+  data-product-url="{{ product.url }}"
+  data-product-id="{{ product.id }}"
+  class="product"
+>
+  <div class="product-images">
+    {% for image in product.images %}
+      {% render 'image', class: 'product-image', image: image %}
+    {% endfor %}
+  </div>
+
+  <div class="product-info">
+    <h1>{{ product.title }}</h1>
+    <p data-variant-price>{{ product.selected_or_first_available_variant.price | money }}</p>
+    <p>{{ product.description }}</p>
+  </div>
+
+  <div class="product-form" data-product-form>
+    {% form 'product', product %}
+      {% assign current_variant = product.selected_or_first_available_variant %}
+
+      <label for="product-variant-{{ section.id }}">{{ 'products.variant_label' | t }}</label>
+      <select id="product-variant-{{ section.id }}" name="id">
+        {% for variant in product.variants %}
+          <option
+            value="{{ variant.id }}"
+            {% if variant == current_variant %}
+              selected="selected"
+            {% endif %}
+            {% unless variant.available %}
+              disabled
+            {% endunless %}
+          >
+            {{ variant.title }} - {{ variant.price | money }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <label for="product-quantity-{{ section.id }}">{{ 'products.quantity_label' | t }}</label>
+      <input id="product-quantity-{{ section.id }}" type="number" name="quantity" min="1" value="1">
+
+      <input type="submit" value="{{ 'products.add_to_cart.label' | t }}">
+      {{ form | payment_button }}
+    {% endform %}
+  </div>
+</variant-picker>
+
+{% stylesheet %}
+  .product {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 48rem) {
+    .product {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .product-form__status {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.product",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

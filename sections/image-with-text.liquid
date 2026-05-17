@@ -1,0 +1,225 @@
+{% liquid
+  assign image_position = section.settings.image_position
+%}
+{% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
+
+<section
+  id="shopify-section-{{ section.id }}"
+  class="image-with-text full-width py-14 md:py-20 {{ section_bg }}"
+>
+  <div class="section-inner image-with-text__inner image-with-text__inner--image-{{ image_position }}">
+    <div class="image-with-text__media">
+      {% if section.settings.image != blank %}
+        {{
+          section.settings.image
+          | image_url: width: 1400
+          | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            widths: '600,900,1200,1400',
+            class: 'image-with-text__img',
+            alt: section.settings.image.alt
+            | default: section.settings.heading
+        }}
+      {% else %}
+        <div class="image-with-text__placeholder">
+          {{ 'lifestyle-1' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="image-with-text__content">
+      {% if section.settings.eyebrow != blank %}
+        <p class="image-with-text__eyebrow type-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="image-with-text__heading">{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+
+      {% if section.settings.text != blank %}
+        <div class="image-with-text__text rte">{{ section.settings.text }}</div>
+      {% endif %}
+
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <div class="image-with-text__cta">
+          {% render 'button',
+            label: section.settings.button_label,
+            url: section.settings.button_link,
+            style: section.settings.button_style
+          %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .image-with-text__inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 990px) {
+    .image-with-text__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .image-with-text__inner--image-right .image-with-text__media {
+      order: 2;
+    }
+  }
+
+  .image-with-text__media {
+    overflow: hidden;
+    border-radius: 2px;
+    aspect-ratio: 4 / 5;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  .image-with-text__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-with-text__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .image-with-text__placeholder svg {
+    width: 70%;
+    opacity: 0.35;
+  }
+
+  .image-with-text__eyebrow {
+    margin: 0 0 0.5rem;
+    color: var(--color-brand-rust, #c57639);
+  }
+
+  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .image-with-text__eyebrow {
+    color: var(--color-brand-warmth, #ea7657);
+  }
+
+  .image-with-text__heading {
+    margin: 0 0 1rem;
+    font-size: clamp(1.875rem, 3.5vw, 2.375rem);
+    line-height: 1.1;
+  }
+
+  .image-with-text__text {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .image-with-text__text :where(p) {
+    margin: 0 0 1rem;
+  }
+
+  .image-with-text__text :where(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .image-with-text__cta {
+    margin-top: 1.5rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.image_with_text.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.image_with_text.image_label"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.image_with_text.image_position_label",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "t:options.alignment.left" },
+        { "value": "right", "label": "t:options.alignment.right" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shared.content_header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:sections.shared.eyebrow_label"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.shared.heading_label",
+      "default": "Crafted with care"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.shared.text_label",
+      "default": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:sections.shared.button_label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:sections.shared.button_link_label"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:sections.shared.button_style_label",
+      "default": "primary",
+      "options": [
+        { "value": "primary", "label": "t:options.button_style.primary" },
+        { "value": "secondary", "label": "t:options.button_style.secondary" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_with_text.presets.default_name",
+      "settings": {
+        "heading": "Crafted with care",
+        "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
+        "button_label": "Our story",
+        "image_position": "left",
+        "color_scheme": "white"
+      }
+    }
+  ]
+}
+{% endschema %}

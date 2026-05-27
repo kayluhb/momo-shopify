@@ -21,10 +21,10 @@
             "subheading": "Subheading",
             "button_label": "Shop Now",
             "button_link": "shopify://collections/frontpage",
-            "button_2_label": "Secondary",
-            "button_2_link": "shopify://metaobjects/content/style-studio",
-            "text_color": "white",
-            "text_placement": "bl"
+            "button_2_label": "",
+            "button_2_link": "",
+            "text_color": "warmth",
+            "text_placement": "center"
           }
         },
         "slide_1": {
@@ -61,13 +61,13 @@
         "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
         "heading_alignment": "left",
         "collection": "ann-demeulemeester",
-        "products_to_show": 4,
+        "products_to_show": 6,
         "columns": 4,
         "show_view_all": true,
         "view_all_label": "View all",
         "view_all_link": "",
-        "gap": 12,
-        "color_scheme": "steel"
+        "gap": 16,
+        "color_scheme": "canvas"
       }
     },
     "bento": {
@@ -78,7 +78,7 @@
           "settings": {
             "layout": "featured",
             "image": "shopify://shop_images/iced-latte-at-coffee-shop-window.jpg",
-            "eyebrow": "",
+            "eyebrow": "asfdadsf",
             "title": "Blankets",
             "link": "shopify://collections/all",
             "overlay_opacity": 0
@@ -200,7 +200,7 @@
         "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
         "button_label": "Our story",
         "button_link": "shopify://products/the-inventory-not-tracked-snowboard",
-        "button_style": "primary",
+        "button_style": "secondary",
         "color_scheme": "canvas"
       }
     },
@@ -210,6 +210,7 @@
         "column_1": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/lenses-lattes.jpg",
             "heading": "Heritage materials",
             "text": "<p>Thoughtfully sourced materials chosen for longevity and character.</p>",
             "link_label": "",
@@ -246,7 +247,7 @@
         "subheading": "<p>subheading</p>",
         "heading_alignment": "left",
         "columns": 3,
-        "text_alignment": "left",
+        "text_alignment": "center",
         "color_scheme": "steel"
       }
     },
@@ -297,6 +298,12 @@
     "logos": {
       "type": "logo-list",
       "blocks": {
+        "logo_H4zcRe": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
+        },
         "logo_1": {
           "type": "logo",
           "settings": {
@@ -329,6 +336,7 @@
         }
       },
       "block_order": [
+        "logo_H4zcRe",
         "logo_1",
         "logo_2",
         "logo_3",
@@ -422,8 +430,22 @@
         "button_link": "shopify://pages/about-us",
         "button_style": "secondary",
         "text_alignment": "center",
-        "color_scheme": "white",
+        "color_scheme": "steel",
         "use_gradient": false
+      }
+    },
+    "image_with_text_K6Qtep": {
+      "type": "image-with-text",
+      "name": "t:sections.image_with_text.presets.default_name",
+      "settings": {
+        "image_position": "right",
+        "eyebrow": "",
+        "heading": "Crafted with care",
+        "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
+        "button_label": "Our story",
+        "button_link": "shopify://products/the-collection-snowboard-liquid",
+        "button_style": "secondary",
+        "color_scheme": "steel"
       }
     }
   },
@@ -438,6 +460,7 @@
     "testimonials",
     "logos",
     "faq",
-    "editorial"
+    "editorial",
+    "image_with_text_K6Qtep"
   ]
 }

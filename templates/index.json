@@ -49,7 +49,7 @@
       ],
       "settings": {
         "color_scheme": "earth",
-        "font_scheme": "editorial",
+        "font_scheme": "display",
         "autoplay": true,
         "autoplay_interval": 5,
         "show_dots": true

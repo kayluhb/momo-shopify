@@ -22,7 +22,7 @@
     %}
 
     {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-      <div class="rich-text__cta flex mt-5{% if text_align == 'center' %} justify-center{% endif %}">
+      <div class="rich-text__cta">
         {% render 'button',
           label: section.settings.button_label,
           url: section.settings.button_link,
@@ -49,6 +49,15 @@
   .rich-text .section-heading__subheading {
     font-size: 1.0625rem;
     line-height: 1.7;
+  }
+
+  .rich-text__cta {
+    display: flex;
+    margin-top: 1.5rem;
+  }
+
+  .rich-text__inner.text-center .rich-text__cta {
+    justify-content: center;
   }
 {% endstylesheet %}
 

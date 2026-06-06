@@ -35,7 +35,6 @@
       <div class="styleguide-index__panel">
         <h2 class="styleguide-index__panel-title">{{ 'sections.styleguide.index.on_page_title' | t }}</h2>
         <ul class="styleguide-index__list list-none p-0" role="list">
-          <li><a class="styleguide-index__link" href="#announcement-bar">{{ 'sections.styleguide.names.announcement_bar' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#hero-fullscreen">{{ 'sections.styleguide.names.hero_fullscreen' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#promo-banner">{{ 'sections.styleguide.names.promo_banner' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#bento-grid">{{ 'sections.styleguide.names.bento_grid' | t }}</a></li>
@@ -44,12 +43,12 @@
           <li><a class="styleguide-index__link" href="#image-with-text">{{ 'sections.styleguide.names.image_with_text' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#multicolumn">{{ 'sections.styleguide.names.multicolumn' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#testimonials">{{ 'sections.styleguide.names.testimonials' | t }}</a></li>
-          <li><a class="styleguide-index__link" href="#logo-list">{{ 'sections.styleguide.names.logo_list' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#faq">{{ 'sections.styleguide.names.faq' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#rich-text">{{ 'sections.styleguide.names.rich_text' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#collections">{{ 'sections.styleguide.names.collections_grid' | t }}</a></li>
           <li><a class="styleguide-index__link" href="#custom-section">{{ 'sections.styleguide.names.custom_section' | t }}</a></li>
         </ul>
+        <p class="styleguide-index__omitted">{{ 'sections.styleguide.index.omitted_note' | t }}</p>
       </div>
 
       <div class="styleguide-index__panel">
@@ -189,6 +188,13 @@
     display: block;
     margin-bottom: 0.35rem;
     font-size: 0.8125rem;
+    color: rgb(var(--color-foreground-rgb) / 55%);
+  }
+
+  .styleguide-index__omitted {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
     color: rgb(var(--color-foreground-rgb) / 55%);
   }
 {% endstylesheet %}

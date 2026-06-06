@@ -145,7 +145,8 @@
         "on_page_title": "On this page",
         "template_title": "Template-specific sections",
         "global_note": "Always visible on every page:",
-        "search_query": "coffee"
+        "search_query": "coffee",
+        "omitted_note": "Announcement bar previews in the site header. Logo list is on the homepage template."
       },
       "names": {
         "announcement_bar": "Announcement bar",

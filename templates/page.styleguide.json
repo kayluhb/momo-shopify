@@ -6,41 +6,6 @@
         "preview_collection": "frontpage"
       }
     },
-    "label_announcement_bar": {
-      "type": "styleguide-label",
-      "settings": {
-        "title": "Announcement bar",
-        "anchor_id": "announcement-bar"
-      }
-    },
-    "announcement_bar": {
-      "type": "announcement-bar",
-      "blocks": {
-        "announcement_1": {
-          "type": "announcement",
-          "settings": {
-            "text": "Free shipping on orders over $100",
-            "link": "shopify://collections/all"
-          }
-        },
-        "announcement_2": {
-          "type": "announcement",
-          "settings": {
-            "text": "New design drops — explore the collection",
-            "link": "shopify://collections/all"
-          }
-        }
-      },
-      "block_order": [
-        "announcement_1",
-        "announcement_2"
-      ],
-      "settings": {
-        "color_scheme": "steel",
-        "autoplay_interval": 5,
-        "show_arrows": false
-      }
-    },
     "label_hero": {
       "type": "styleguide-label",
       "settings": {
@@ -380,64 +345,6 @@
         "color_scheme": "canvas"
       }
     },
-    "label_logo_list": {
-      "type": "styleguide-label",
-      "settings": {
-        "title": "Logo list",
-        "anchor_id": "logo-list"
-      }
-    },
-    "logo_list": {
-      "type": "logo-list",
-      "blocks": {
-        "logo_1": {
-          "type": "logo",
-          "settings": {
-            "link": ""
-          }
-        },
-        "logo_2": {
-          "type": "logo",
-          "settings": {
-            "link": ""
-          }
-        },
-        "logo_3": {
-          "type": "logo",
-          "settings": {
-            "link": ""
-          }
-        },
-        "logo_4": {
-          "type": "logo",
-          "settings": {
-            "link": ""
-          }
-        },
-        "logo_5": {
-          "type": "logo",
-          "settings": {
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "logo_1",
-        "logo_2",
-        "logo_3",
-        "logo_4",
-        "logo_5"
-      ],
-      "settings": {
-        "eyebrow": "",
-        "heading": "As seen in",
-        "subheading": "",
-        "columns": 5,
-        "logo_height": 40,
-        "grayscale": true,
-        "color_scheme": "canvas"
-      }
-    },
     "label_faq": {
       "type": "styleguide-label",
       "settings": {
@@ -557,8 +464,6 @@
   },
   "order": [
     "index",
-    "label_announcement_bar",
-    "announcement_bar",
     "label_hero",
     "hero",
     "label_promo",
@@ -575,8 +480,6 @@
     "multicolumn",
     "label_testimonials",
     "testimonials",
-    "label_logo_list",
-    "logo_list",
     "label_faq",
     "faq",
     "label_rich_text",

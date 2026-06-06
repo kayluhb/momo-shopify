@@ -160,6 +160,22 @@
   "class": "section-product",
   "settings": [
     {
+      "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "canvas",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    },
+    {
       "type": "select",
       "id": "layout",
       "label": "t:sections.product.layout_label",
@@ -202,22 +218,6 @@
       "label": "t:sections.product.overlay_opacity_label",
       "default": 35,
       "visible_if": "{{ section.settings.layout == 'hero' }}"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.shared.appearance_header"
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "t:sections.shared.color_scheme_label",
-      "default": "canvas",
-      "options": [
-        { "value": "white", "label": "t:options.color_scheme.white" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
-        { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
     }
   ],
   "disabled_on": {

@@ -101,6 +101,18 @@
   "name": "t:general.collection",
   "settings": [
     {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "canvas",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    },
+    {
       "type": "range",
       "id": "products_per_page",
       "label": "t:sections.collection.settings.products_per_page_label",
@@ -142,18 +154,6 @@
       "label": "t:sections.collection.settings.show_rating_label",
       "info": "t:sections.collection.settings.show_rating_info",
       "default": false
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "t:sections.shared.color_scheme_label",
-      "default": "canvas",
-      "options": [
-        { "value": "white", "label": "t:options.color_scheme.white" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
-        { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
     }
   ]
 }

@@ -13,7 +13,6 @@
     "article": "Article",
     "block": "Block",
     "blog": "Blog",
-    "branding": "Branding",
     "cart": "Cart",
     "empty_states": "Empty states",
     "cart_drawer": "Cart drawer",
@@ -51,8 +50,6 @@
     "grid_item_width": "Grid item width",
     "layout_direction": "Layout direction",
     "menu": "Menu",
-    "logo": "Logo",
-    "logo_info": "Shown in the header and on gift cards. If empty, the theme logo.svg asset is used in the header.",
     "cart_drawer_auto_open": "Open cart drawer when a product is added",
     "empty_state_menu": "Empty state links",
     "empty_state_menu_info": "Shown on the empty cart drawer and 404 page. Add links to collections or products.",
@@ -60,7 +57,6 @@
     "padding": "Padding",
     "page_margin": "Page margin",
     "page_margin_mobile": "Mobile page margin",
-    "page_width": "Page width",
     "text_style": "Text style",
     "text": "Text"
   },
@@ -73,10 +69,6 @@
     "direction": {
       "horizontal": "Horizontal",
       "vertical": "Vertical"
-    },
-    "page_width": {
-      "narrow": "Narrow",
-      "wide": "Wide"
     },
     "size": {
       "large": "Large",

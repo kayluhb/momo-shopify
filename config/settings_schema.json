@@ -11,22 +11,6 @@
     "name": "t:general.layout",
     "settings": [
       {
-        "type": "select",
-        "id": "max_page_width",
-        "label": "t:labels.page_width",
-        "options": [
-          {
-            "value": "90rem",
-            "label": "t:options.page_width.narrow"
-          },
-          {
-            "value": "110rem",
-            "label": "t:options.page_width.wide"
-          }
-        ],
-        "default": "90rem"
-      },
-      {
         "type": "range",
         "id": "min_page_margin",
         "min": 10,
@@ -93,17 +77,6 @@
         "unit": "px",
         "label": "t:labels.section_padding_mobile",
         "default": 32
-      }
-    ]
-  },
-  {
-    "name": "t:general.branding",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "logo",
-        "label": "t:labels.logo",
-        "info": "t:labels.logo_info"
       }
     ]
   },

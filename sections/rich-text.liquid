@@ -76,6 +76,38 @@
   "settings": [
     {
       "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient",
+      "label": "t:sections.rich_text.use_gradient_label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.shared.heading_alignment_label",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" }
+      ]
+    },
+    {
+      "type": "header",
       "content": "t:sections.shared.content_header"
     },
     {
@@ -120,38 +152,6 @@
         { "value": "primary", "label": "t:options.button_style.primary" },
         { "value": "secondary", "label": "t:options.button_style.secondary" }
       ]
-    },
-    {
-      "type": "select",
-      "id": "text_alignment",
-      "label": "t:sections.shared.heading_alignment_label",
-      "default": "center",
-      "options": [
-        { "value": "left", "label": "t:options.alignment.left" },
-        { "value": "center", "label": "t:options.alignment.center" }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "t:sections.shared.appearance_header"
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "t:sections.shared.color_scheme_label",
-      "default": "white",
-      "options": [
-        { "value": "white", "label": "t:options.color_scheme.white" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
-        { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
-    },
-    {
-      "type": "checkbox",
-      "id": "use_gradient",
-      "label": "t:sections.rich_text.use_gradient_label",
-      "default": false
     }
   ],
   "presets": [

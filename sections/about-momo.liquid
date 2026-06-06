@@ -297,19 +297,21 @@
   },
   "settings": [
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "t:sections.about_momo.image_label",
-      "info": "t:sections.about_momo.image_info"
+      "type": "header",
+      "content": "t:sections.shared.appearance_header"
     },
     {
       "type": "select",
-      "id": "image_position",
-      "label": "t:sections.about_momo.image_position_label",
-      "default": "left",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "steel",
       "options": [
-        { "value": "left", "label": "t:options.alignment.left" },
-        { "value": "right", "label": "t:options.alignment.right" }
+        { "value": "steel", "label": "t:options.color_scheme.steel" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "rust", "label": "t:sections.about_momo.color_rust" },
+        { "value": "warmth", "label": "t:sections.about_momo.color_warmth" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "white", "label": "t:options.color_scheme.white" }
       ]
     },
     {
@@ -327,6 +329,22 @@
       "id": "heading",
       "label": "t:sections.shared.heading_label",
       "default": "t:sections.about_momo.presets.heading"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.about_momo.image_label",
+      "info": "t:sections.about_momo.image_info"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.about_momo.image_position_label",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "t:options.alignment.left" },
+        { "value": "right", "label": "t:options.alignment.right" }
+      ]
     },
     {
       "type": "richtext",
@@ -358,24 +376,6 @@
       "options": [
         { "value": "primary", "label": "t:options.button_style.primary" },
         { "value": "secondary", "label": "t:options.button_style.secondary" }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "t:sections.shared.appearance_header"
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "t:sections.shared.color_scheme_label",
-      "default": "steel",
-      "options": [
-        { "value": "steel", "label": "t:options.color_scheme.steel" },
-        { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "rust", "label": "t:sections.about_momo.color_rust" },
-        { "value": "warmth", "label": "t:sections.about_momo.color_warmth" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
-        { "value": "white", "label": "t:options.color_scheme.white" }
       ]
     }
   ],

@@ -175,10 +175,25 @@
   },
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_recently_viewed",
-      "label": "t:sections.product_recommendations.show_recently_viewed_label",
-      "default": true
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "t:sections.shared.columns_desktop_label",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
     },
     {
       "type": "range",
@@ -190,13 +205,10 @@
       "default": 4
     },
     {
-      "type": "range",
-      "id": "columns",
-      "label": "t:sections.shared.columns_desktop_label",
-      "min": 2,
-      "max": 4,
-      "step": 1,
-      "default": 4
+      "type": "checkbox",
+      "id": "show_recently_viewed",
+      "label": "t:sections.product_recommendations.show_recently_viewed_label",
+      "default": true
     },
     {
       "type": "checkbox",
@@ -216,18 +228,6 @@
       "label": "t:sections.collection.settings.show_rating_label",
       "info": "t:sections.collection.settings.show_rating_info",
       "default": false
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "t:sections.shared.color_scheme_label",
-      "default": "white",
-      "options": [
-        { "value": "white", "label": "t:options.color_scheme.white" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
-        { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
     }
   ],
   "presets": [

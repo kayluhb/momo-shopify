@@ -73,6 +73,22 @@
   "settings": [
     {
       "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    },
+    {
+      "type": "header",
       "content": "t:sections.shared.content_header"
     },
     {
@@ -145,22 +161,6 @@
       "id": "view_all_link",
       "label": "t:sections.featured_collection.view_all_link_label",
       "info": "t:sections.featured_collection.view_all_link_info"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.shared.appearance_header"
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "t:sections.shared.color_scheme_label",
-      "default": "white",
-      "options": [
-        { "value": "white", "label": "t:options.color_scheme.white" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
-        { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
     }
   ],
   "presets": [

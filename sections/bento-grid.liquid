@@ -268,6 +268,32 @@
   "settings": [
     {
       "type": "header",
+      "content": "t:sections.shared.appearance_header"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "t:sections.bento_grid.min_height_label",
+      "min": 400,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "header",
       "content": "t:sections.shared.content_header"
     },
     {
@@ -294,32 +320,6 @@
         { "value": "left", "label": "t:options.alignment.left" },
         { "value": "center", "label": "t:options.alignment.center" }
       ]
-    },
-    {
-      "type": "header",
-      "content": "t:sections.shared.appearance_header"
-    },
-    {
-      "type": "range",
-      "id": "min_height",
-      "label": "t:sections.bento_grid.min_height_label",
-      "min": 400,
-      "max": 800,
-      "step": 20,
-      "unit": "px",
-      "default": 520
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "t:sections.shared.color_scheme_label",
-      "default": "white",
-      "options": [
-        { "value": "white", "label": "t:options.color_scheme.white" },
-        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
-        { "value": "earth", "label": "t:options.color_scheme.earth" },
-        { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
     }
   ],
   "blocks": [
@@ -345,6 +345,16 @@
           "label": "t:sections.bento_grid.blocks.tile.image_label"
         },
         {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "t:sections.bento_grid.blocks.tile.overlay_opacity_label",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "unit": "%",
+          "default": 25
+        },
+        {
           "type": "text",
           "id": "eyebrow",
           "label": "t:sections.shared.eyebrow_label",
@@ -360,16 +370,6 @@
           "type": "url",
           "id": "link",
           "label": "t:sections.shared.link_url_label"
-        },
-        {
-          "type": "range",
-          "id": "overlay_opacity",
-          "label": "t:sections.bento_grid.blocks.tile.overlay_opacity_label",
-          "min": 0,
-          "max": 80,
-          "step": 5,
-          "unit": "%",
-          "default": 25
         }
       ]
     }

@@ -51,6 +51,7 @@
         "autoplay": true,
         "autoplay_interval": 5,
         "show_dots": true,
+        "color_scheme": "steel",
         "font_scheme": "display"
       }
     },

@@ -27,10 +27,11 @@
     endif
   endfor
 %}
+{% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
 {% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <div
-  class="hero full-width hero--parallax{% if show_slideshow_chrome %} hero--slideshow{% endif %} {{ section_font }}"
+  class="hero full-width hero--parallax{% if show_slideshow_chrome %} hero--slideshow{% endif %} {{ section_bg }} {{ section_font }}"
   data-hero-parallax
   data-hero-fullscreen
   data-enable-carousel="{% if show_slideshow_chrome %}1{% else %}0{% endif %}"
@@ -705,6 +706,20 @@
     },
     {
       "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.shared.color_scheme_label",
+      "default": "steel",
+      "options": [
+        { "value": "white", "label": "t:options.color_scheme.white" },
+        { "value": "canvas", "label": "t:options.color_scheme.canvas" },
+        { "value": "earth", "label": "t:options.color_scheme.earth" },
+        { "value": "steel", "label": "t:options.color_scheme.steel" },
+        { "value": "warmth", "label": "t:options.color_scheme.warmth" },
+        { "value": "heart", "label": "t:options.color_scheme.heart" }
+      ]
+    },
+    {
+      "type": "select",
       "id": "font_scheme",
       "label": "t:sections.shared.font_scheme_label",
       "default": "display",
@@ -857,6 +872,7 @@
     {
       "name": "t:sections.hero_fullscreen.presets.default_name",
       "settings": {
+        "color_scheme": "steel",
         "font_scheme": "display"
       },
       "blocks": [

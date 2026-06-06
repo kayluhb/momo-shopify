@@ -17,14 +17,14 @@
           "settings": {
             "image": "shopify://shop_images/bare-stony-room-with-two-wooden-benches-and-coffee-tables.jpg",
             "overlay_opacity": 35,
+            "text_color": "white",
+            "text_placement": "center",
             "heading": "Heading",
             "subheading": "Subheading",
             "button_label": "Shop Now",
             "button_link": "shopify://collections/frontpage",
             "button_2_label": "",
-            "button_2_link": "",
-            "text_color": "white",
-            "text_placement": "center"
+            "button_2_link": ""
           }
         },
         "slide_1": {
@@ -32,14 +32,14 @@
           "settings": {
             "image": "shopify://shop_images/long-espresso-sits-on-a-wooden-stool.jpg",
             "overlay_opacity": 40,
+            "text_color": "white",
+            "text_placement": "bl",
             "heading": "Sleek, sculptural, striking",
             "subheading": "A modern statement in form and finish, designed to stand apart.",
             "button_label": "Shop all",
             "button_link": "/collections/all",
             "button_2_label": "",
-            "button_2_link": "",
-            "text_color": "white",
-            "text_placement": "bl"
+            "button_2_link": ""
           }
         }
       },
@@ -48,16 +48,18 @@
         "slide_1"
       ],
       "settings": {
+        "color_scheme": "earth",
+        "font_scheme": "editorial",
         "autoplay": true,
         "autoplay_interval": 5,
-        "show_dots": true,
-        "color_scheme": "steel",
-        "font_scheme": "display"
+        "show_dots": true
       }
     },
     "featured": {
       "type": "featured-collection",
       "settings": {
+        "color_scheme": "steel",
+        "font_scheme": "editorial",
         "eyebrow": "Eyebrow",
         "heading": "New Arrivals",
         "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
@@ -67,9 +69,7 @@
         "columns": 4,
         "show_view_all": true,
         "view_all_label": "View all",
-        "view_all_link": "",
-        "color_scheme": "steel",
-        "font_scheme": "editorial"
+        "view_all_link": ""
       }
     },
     "bento": {
@@ -80,10 +80,10 @@
           "settings": {
             "layout": "featured",
             "image": "shopify://shop_images/iced-latte-at-coffee-shop-window.jpg",
+            "overlay_opacity": 0,
             "eyebrow": "asfdadsf",
             "title": "Blankets",
-            "link": "shopify://collections/all",
-            "overlay_opacity": 0
+            "link": "shopify://collections/all"
           }
         },
         "tile_small_left": {
@@ -91,10 +91,10 @@
           "settings": {
             "layout": "small_left",
             "image": "shopify://shop_images/long-espresso-sits-on-a-wooden-stool.jpg",
+            "overlay_opacity": 0,
             "eyebrow": "",
             "title": "Coffee",
-            "link": "shopify://collections/all",
-            "overlay_opacity": 0
+            "link": "shopify://collections/all"
           }
         },
         "tile_small_right": {
@@ -102,10 +102,10 @@
           "settings": {
             "layout": "small_right",
             "image": "shopify://shop_images/coffee-and-cake.jpg",
+            "overlay_opacity": 0,
             "eyebrow": "",
             "title": "Fragrance",
-            "link": "shopify://collections/all",
-            "overlay_opacity": 0
+            "link": "shopify://collections/all"
           }
         },
         "tile_wide": {
@@ -113,10 +113,10 @@
           "settings": {
             "layout": "wide",
             "image": "shopify://shop_images/lenses-lattes.jpg",
+            "overlay_opacity": 0,
             "eyebrow": "",
             "title": "Fire Pits",
-            "link": "shopify://collections/all",
-            "overlay_opacity": 0
+            "link": "shopify://collections/all"
           }
         }
       },
@@ -127,26 +127,26 @@
         "tile_wide"
       ],
       "settings": {
+        "color_scheme": "earth",
+        "font_scheme": "display",
+        "min_height": 520,
         "eyebrow": "",
         "heading": "",
         "subheading": "",
-        "heading_alignment": "center",
-        "min_height": 520,
-        "color_scheme": "earth",
-        "font_scheme": "bold"
+        "heading_alignment": "center"
       }
     },
     "promo": {
       "type": "promo-banner",
       "settings": {
+        "color_scheme": "heart",
+        "font_scheme": "soft",
+        "use_gradient": false,
+        "overlay_opacity": 0,
         "heading": "Free shipping on orders over $100",
         "text": "",
         "button_label": "Shop now",
-        "button_link": "shopify://collections/all",
-        "color_scheme": "warmth",
-        "use_gradient": false,
-        "overlay_opacity": 0,
-        "font_scheme": "display"
+        "button_link": "shopify://collections/all"
       }
     },
     "category_cards": {
@@ -187,25 +187,25 @@
       ],
       "settings": {
         "color_scheme": "canvas",
+        "font_scheme": "soft",
         "columns": 3,
         "card_aspect_ratio": "4 / 5",
-        "overlay_opacity": 55,
-        "font_scheme": "soft"
+        "overlay_opacity": 55
       }
     },
     "split": {
       "type": "image-with-text",
       "settings": {
-        "image": "shopify://shop_images/coffee-beans-from-above.jpg",
+        "color_scheme": "canvas",
+        "font_scheme": "editorial",
         "image_position": "left",
+        "image": "shopify://shop_images/coffee-beans-from-above.jpg",
         "eyebrow": "Eyebrow",
         "heading": "Crafted with care",
         "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
         "button_label": "Our story",
         "button_link": "shopify://products/the-inventory-not-tracked-snowboard",
-        "button_style": "secondary",
-        "color_scheme": "canvas",
-        "font_scheme": "editorial"
+        "button_style": "secondary"
       }
     },
     "columns": {
@@ -246,14 +246,14 @@
         "column_3"
       ],
       "settings": {
+        "color_scheme": "steel",
+        "font_scheme": "editorial",
         "eyebrow": "Eyebrow",
         "heading": "About Momo",
         "subheading": "<p>subheading</p>",
         "heading_alignment": "left",
         "columns": 3,
-        "text_alignment": "center",
-        "color_scheme": "steel",
-        "font_scheme": "editorial"
+        "text_alignment": "center"
       }
     },
     "testimonials": {
@@ -293,12 +293,12 @@
         "testimonial_3"
       ],
       "settings": {
+        "color_scheme": "canvas",
+        "font_scheme": "display",
         "eyebrow": "",
         "heading": "What customers say",
         "subheading": "",
-        "heading_alignment": "center",
-        "color_scheme": "canvas",
-        "font_scheme": "soft"
+        "heading_alignment": "center"
       }
     },
     "logos": {
@@ -351,13 +351,14 @@
       ],
       "disabled": true,
       "settings": {
+        "color_scheme": "canvas",
+        "font_scheme": "display",
+        "grayscale": true,
         "eyebrow": "",
         "heading": "As seen in",
         "subheading": "",
         "columns": 5,
-        "logo_height": 40,
-        "grayscale": true,
-        "color_scheme": "canvas"
+        "logo_height": 40
       }
     },
     "faq": {
@@ -415,43 +416,31 @@
         "question_6"
       ],
       "settings": {
+        "color_scheme": "canvas",
+        "font_scheme": "editorial",
         "heading": "Have a question ? We are here to help.",
         "subheading": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>",
         "show_online_status": true,
         "support_hours": "Our customer support is available monday to friday: 8am-8:30pm.",
         "support_response_time": "Average answer time: 24h",
         "contact_label": "",
-        "contact_link": "",
-        "color_scheme": "canvas"
+        "contact_link": ""
       }
     },
     "editorial": {
       "type": "rich-text",
       "settings": {
+        "color_scheme": "steel",
+        "font_scheme": "editorial",
+        "use_gradient": false,
+        "text_alignment": "center",
         "eyebrow": "Eyebrow",
         "heading": "Designed to endure",
         "display_size": true,
         "text": "<p>We believe in objects that earn their place — pieces shaped by material honesty, refined proportion, and the quiet confidence of lasting craft.</p>",
         "button_label": "Button Label",
         "button_link": "shopify://pages/about-us",
-        "button_style": "secondary",
-        "text_alignment": "center",
-        "color_scheme": "steel",
-        "use_gradient": false
-      }
-    },
-    "image_with_text_K6Qtep": {
-      "type": "image-with-text",
-      "name": "t:sections.image_with_text.presets.default_name",
-      "settings": {
-        "image_position": "right",
-        "eyebrow": "",
-        "heading": "Crafted with care",
-        "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
-        "button_label": "Our story",
-        "button_link": "shopify://products/the-collection-snowboard-liquid",
-        "button_style": "secondary",
-        "color_scheme": "steel"
+        "button_style": "secondary"
       }
     }
   },
@@ -466,7 +455,6 @@
     "testimonials",
     "logos",
     "faq",
-    "editorial",
-    "image_with_text_K6Qtep"
+    "editorial"
   ]
 }

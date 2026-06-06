@@ -34,7 +34,7 @@
         "announcement_2"
       ],
       "settings": {
-        "color_scheme": "steel",
+        "color_scheme": "earth",
         "autoplay_interval": 5,
         "show_arrows": false
       }
@@ -42,9 +42,9 @@
     "header": {
       "type": "header",
       "settings": {
+        "text_color": "white",
         "menu": "main-menu",
-        "customer_account_menu": "customer-account-main-menu",
-        "text_color": "white"
+        "customer_account_menu": "customer-account-main-menu"
       }
     }
   },

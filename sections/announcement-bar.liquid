@@ -13,11 +13,10 @@
   endif
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
-{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 {% if announcement_count > 0 %}
   <section
-    class="announcement-bar full-width {{ section_bg }} {{ section_font }}"
+    class="announcement-bar full-width {{ section_bg }}"
     data-announcement-bar
     data-rotate="{% if rotate_announcements %}1{% else %}0{% endif %}"
     data-interval="{{ section.settings.autoplay_interval }}"
@@ -326,19 +325,6 @@
       ]
     },
     {
-      "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
-      ]
-    },
-    {
       "type": "range",
       "id": "autoplay_interval",
       "label": "t:sections.announcement_bar.autoplay_interval_label",
@@ -380,8 +366,7 @@
       "settings": {
         "color_scheme": "steel",
         "autoplay_interval": 5,
-        "show_arrows": false,
-        "font_scheme": "display"
+        "show_arrows": false
       },
       "blocks": [
         {

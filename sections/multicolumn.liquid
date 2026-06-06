@@ -3,10 +3,11 @@
   assign text_align = section.settings.text_alignment
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
+{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="multicolumn full-width section-padding {{ section_bg }}"
+  class="multicolumn full-width section-padding {{ section_bg }} {{ section_font }}"
 >
   <div class="section-inner">
     {% render 'section-heading',
@@ -185,6 +186,19 @@
       ]
     },
     {
+      "type": "select",
+      "id": "font_scheme",
+      "label": "t:sections.shared.font_scheme_label",
+      "default": "display",
+      "options": [
+        { "value": "display", "label": "t:options.font_scheme.display" },
+        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
+        { "value": "soft", "label": "t:options.font_scheme.soft" },
+        { "value": "bold", "label": "t:options.font_scheme.bold" },
+        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
+      ]
+    },
+    {
       "type": "header",
       "content": "t:sections.shared.content_header"
     },
@@ -277,7 +291,8 @@
         "heading_alignment": "center",
         "columns": 3,
         "text_alignment": "center",
-        "color_scheme": "white"
+        "color_scheme": "white",
+        "font_scheme": "editorial"
       },
       "blocks": [
         {

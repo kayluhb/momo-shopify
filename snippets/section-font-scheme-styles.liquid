@@ -1,0 +1,89 @@
+{% doc %}
+  Global CSS for section font scheme variable overrides.
+
+  @example
+  {% render 'section-font-scheme-styles' %}
+{% enddoc %}
+
+{% stylesheet %}
+  .font-scheme-display {
+    --font-display--family: "degular-display-thin", "degular-display", sans-serif;
+    --font-body--family: "degular-thin", "degular", sans-serif;
+    --font-brand--family: var(--font-display--family);
+    --font-display--weight: 400;
+    --font-display--weight-bold: 700;
+    --font-body--weight: 400;
+    --font-body--weight-bold: 700;
+    --font-weight-thin: 400;
+    --font-weight-bold: 700;
+    --font-heading-letter-spacing: -0.03em;
+    --type-eyebrow-letter-spacing: 0.1em;
+    --font-body-line-height: 1.6;
+  }
+
+  .font-scheme-editorial {
+    --font-display--family: "degular-display-thin", "degular-display", sans-serif;
+    --font-body--family: "degular-thin", "degular", sans-serif;
+    --font-brand--family: var(--font-display--family);
+    --font-display--weight: 400;
+    --font-display--weight-bold: 700;
+    --font-body--weight: 400;
+    --font-body--weight-bold: 700;
+    --font-weight-thin: 400;
+    --font-weight-bold: 700;
+    --font-heading-letter-spacing: -0.02em;
+    --type-eyebrow-letter-spacing: 0.08em;
+    --font-body-line-height: 1.65;
+  }
+
+  .font-scheme-soft {
+    --font-display--family: "degular-thin", "degular", sans-serif;
+    --font-body--family: "degular-thin", "degular", sans-serif;
+    --font-brand--family: var(--font-body--family);
+    --font-display--weight: 400;
+    --font-display--weight-bold: 400;
+    --font-body--weight: 400;
+    --font-body--weight-bold: 700;
+    --font-weight-thin: 400;
+    --font-weight-bold: 700;
+    --font-heading-letter-spacing: 0.01em;
+    --type-eyebrow-letter-spacing: 0.14em;
+    --font-body-line-height: 1.7;
+  }
+
+  .font-scheme-bold {
+    --font-display--family: "degular-display-thin", "degular-display", sans-serif;
+    --font-body--family: "degular-display-thin", "degular-display", sans-serif;
+    --font-brand--family: var(--font-display--family);
+    --font-display--weight: 700;
+    --font-display--weight-bold: 700;
+    --font-body--weight: 700;
+    --font-body--weight-bold: 700;
+    --font-weight-thin: 700;
+    --font-weight-bold: 700;
+    --font-heading-letter-spacing: -0.03em;
+    --type-eyebrow-letter-spacing: 0.1em;
+    --font-body-line-height: 1.55;
+  }
+
+  .font-scheme-uniform {
+    --font-display--family: "degular-display-thin", "degular-display", sans-serif;
+    --font-body--family: "degular-display-thin", "degular-display", sans-serif;
+    --font-brand--family: var(--font-display--family);
+    --font-display--weight: 400;
+    --font-display--weight-bold: 400;
+    --font-body--weight: 400;
+    --font-body--weight-bold: 400;
+    --font-weight-thin: 400;
+    --font-weight-bold: 400;
+    --font-heading-letter-spacing: -0.01em;
+    --type-eyebrow-letter-spacing: 0.08em;
+    --font-body-line-height: 1.6;
+  }
+
+  :where(.font-scheme-display, .font-scheme-editorial, .font-scheme-soft, .font-scheme-bold, .font-scheme-uniform) {
+    font-family: var(--font-body--family, var(--font-primary--family));
+    font-weight: var(--font-body--weight, 400);
+    line-height: var(--font-body-line-height, 1.6);
+  }
+{% endstylesheet %}

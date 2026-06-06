@@ -3,6 +3,7 @@
   assign promo_scheme = section.settings.color_scheme | default: 'steel'
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: promo_scheme %}{% endcapture %}
+{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 {% liquid
   if use_gradient
     assign section_bg = section_bg | append: ' promo-banner--gradient'
@@ -11,7 +12,7 @@
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="promo-banner full-width section-padding {{ section_bg }}"
+  class="promo-banner full-width section-padding {{ section_bg }} {{ section_font }}"
 >
   {% if section.settings.background_image != blank %}
     <div class="promo-banner__bg" aria-hidden="true">
@@ -133,6 +134,19 @@
       ]
     },
     {
+      "type": "select",
+      "id": "font_scheme",
+      "label": "t:sections.shared.font_scheme_label",
+      "default": "display",
+      "options": [
+        { "value": "display", "label": "t:options.font_scheme.display" },
+        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
+        { "value": "soft", "label": "t:options.font_scheme.soft" },
+        { "value": "bold", "label": "t:options.font_scheme.bold" },
+        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
+      ]
+    },
+    {
       "type": "checkbox",
       "id": "use_gradient",
       "label": "t:sections.promo_banner.use_gradient_label",
@@ -187,7 +201,8 @@
         "heading": "Free shipping on orders over $100",
         "button_label": "Shop now",
         "button_link": "shopify://collections/all",
-        "color_scheme": "steel"
+        "color_scheme": "steel",
+        "font_scheme": "display"
       }
     }
   ]

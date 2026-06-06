@@ -95,6 +95,13 @@
       "warmth": "Warmth",
       "heart": "Heart"
     },
+    "font_scheme": {
+      "display": "Display",
+      "editorial": "Editorial",
+      "soft": "Soft",
+      "bold": "Bold",
+      "uniform": "Uniform"
+    },
     "button_style": {
       "primary": "Primary",
       "secondary": "Secondary"
@@ -110,6 +117,7 @@
       "text_label": "Text",
       "heading_alignment_label": "Heading alignment",
       "color_scheme_label": "Color scheme",
+      "font_scheme_label": "Font scheme",
       "columns_desktop_label": "Columns on desktop",
       "button_label": "Button label",
       "button_link_label": "Button link",

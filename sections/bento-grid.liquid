@@ -1,8 +1,9 @@
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
+{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="bento-grid full-width section-padding {{ section_bg }}"
+  class="bento-grid full-width section-padding {{ section_bg }} {{ section_font }}"
   style="--bento-min-height: {{ section.settings.min_height }}px;"
 >
   <div class="section-inner">
@@ -280,6 +281,19 @@
         { "value": "canvas", "label": "t:options.color_scheme.canvas" },
         { "value": "earth", "label": "t:options.color_scheme.earth" },
         { "value": "steel", "label": "t:options.color_scheme.steel" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "font_scheme",
+      "label": "t:sections.shared.font_scheme_label",
+      "default": "display",
+      "options": [
+        { "value": "display", "label": "t:options.font_scheme.display" },
+        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
+        { "value": "soft", "label": "t:options.font_scheme.soft" },
+        { "value": "bold", "label": "t:options.font_scheme.bold" },
+        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
       ]
     },
     {

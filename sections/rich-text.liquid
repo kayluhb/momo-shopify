@@ -3,13 +3,14 @@
   assign use_gradient = section.settings.use_gradient
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
+{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 {% if use_gradient %}
   {% assign section_bg = section_bg | append: ' rich-text--gradient' %}
 {% endif %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="rich-text full-width section-padding {{ section_bg }}"
+  class="rich-text full-width section-padding {{ section_bg }} {{ section_font }}"
 >
   <div class="section-inner rich-text__inner rich-text__inner--{{ text_align }}">
     {% render 'section-heading',
@@ -91,6 +92,19 @@
       ]
     },
     {
+      "type": "select",
+      "id": "font_scheme",
+      "label": "t:sections.shared.font_scheme_label",
+      "default": "display",
+      "options": [
+        { "value": "display", "label": "t:options.font_scheme.display" },
+        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
+        { "value": "soft", "label": "t:options.font_scheme.soft" },
+        { "value": "bold", "label": "t:options.font_scheme.bold" },
+        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
+      ]
+    },
+    {
       "type": "checkbox",
       "id": "use_gradient",
       "label": "t:sections.rich_text.use_gradient_label",
@@ -162,7 +176,8 @@
         "display_size": true,
         "text": "<p>We believe in objects that earn their place — pieces shaped by material honesty, refined proportion, and the quiet confidence of lasting craft.</p>",
         "text_alignment": "center",
-        "color_scheme": "white"
+        "color_scheme": "white",
+        "font_scheme": "editorial"
       }
     }
   ]

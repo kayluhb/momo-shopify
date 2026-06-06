@@ -134,7 +134,7 @@ h6 {
   font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
   font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
   line-height: 1.12;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--font-heading-letter-spacing, -0.03em);
 }
 
 strong,
@@ -145,14 +145,14 @@ b {
 :where(.font-display) {
   font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
   font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
-  letter-spacing: -0.03em;
+  letter-spacing: var(--font-heading-letter-spacing, -0.03em);
 }
 
 :where(.type-eyebrow) {
   font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
   font-size: 0.75rem;
   font-weight: var(--font-weight-bold, 700);
-  letter-spacing: 0.1em;
+  letter-spacing: var(--type-eyebrow-letter-spacing, 0.1em);
   line-height: 1.3;
   text-transform: uppercase;
   color: var(--color-brand-rust, #c57639);

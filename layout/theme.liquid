@@ -9,6 +9,8 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {% render 'section-font-scheme-styles' %}
+
     {% # Tailwind utilities (build: pnpm run css:build in shopify/) %}
     {{ 'tailwind.css' | asset_url | stylesheet_tag }}
 

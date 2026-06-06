@@ -1,0 +1,22 @@
+{% doc %}
+  Returns a CSS class for a section font scheme.
+
+  @param {string} scheme - display, editorial, soft, bold, or uniform
+
+  @example
+  {% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
+{% enddoc %}
+{% liquid
+  case scheme
+    when 'editorial'
+      echo 'font-scheme-editorial'
+    when 'soft'
+      echo 'font-scheme-soft'
+    when 'bold'
+      echo 'font-scheme-bold'
+    when 'uniform'
+      echo 'font-scheme-uniform'
+    else
+      echo 'font-scheme-display'
+  endcase
+%}

@@ -26,7 +26,7 @@
   {% else %}
     <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
 
-    <div class="search-results">
+    <div class="search-results grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] [&_.prev]:col-span-full [&_.page]:col-span-full [&_.next]:col-span-full">
       {% paginate search.results by 20 %}
         {% # Search result items may be an article, a page, or a product. %}
         {% for result in search.results %}
@@ -52,18 +52,6 @@
     </div>
   {% endif %}
 {% endif %}
-
-{% stylesheet %}
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
-    grid-column: 1 / -1;
-  }
-{% endstylesheet %}
 
 {% schema %}
 {

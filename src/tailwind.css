@@ -34,14 +34,6 @@
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  button,
-  input[type='submit'],
-  input[type='button'],
-  input[type='reset'],
-  .btn {
-    border-radius: var(--style-border-radius);
-  }
-
   shopify-account::part(signed-out-avatar) {
     transition-property: color, background-color, border-color, text-decoration-color, box-shadow,
       opacity, transform;

@@ -19,7 +19,7 @@
   <div class="site-header__inner flex min-h-0 w-full flex-nowrap items-center gap-4">
     <button
       type="button"
-      class="site-header__icon-btn site-header__menu-trigger"
+      class="site-header__icon-btn site-header__menu-trigger focus-ring-brand"
       data-menu-drawer-open
       aria-label="{{ 'sections.header.menu_open' | t }}"
     >
@@ -75,7 +75,7 @@
 
       <button
         type="button"
-        class="site-header__icon-btn site-header__cart-trigger"
+        class="site-header__icon-btn site-header__cart-trigger focus-ring-brand"
         data-cart-drawer-open
         aria-label="{% if cart.item_count == 0 %}{{ 'cart.drawer_title' | t }}{% elsif cart.item_count == 1 %}{{ 'cart.drawer_title_one' | t }}{% else %}{{ 'cart.drawer_title_with_count' | t: count: cart.item_count }}{% endif %}"
       >
@@ -108,7 +108,7 @@
           </h2>
           <button
             type="button"
-            class="dialog-drawer__close menu-drawer__close"
+            class="dialog-drawer__close menu-drawer__close focus-ring-brand"
             on:click="menu-drawer-component/close"
             aria-label="{{ 'sections.header.menu_close' | t }}"
           >
@@ -121,7 +121,7 @@
             {% for link in section.settings.menu.links %}
               <li class="menu-drawer__item">
                 <a
-                  class="menu-drawer__link"
+                  class="menu-drawer__link focus-ring-brand"
                   href="{{ link.url }}"
                   on:click="menu-drawer-component/close"
                   {% if link.active %}
@@ -139,7 +139,7 @@
   </menu-drawer-component>
 </header>
 
-{% style %}
+{% stylesheet %}
   /* Shopify section groups have no wrapper — only this section is sticky. */
   .shopify-section.header-section {
     position: sticky;
@@ -268,11 +268,6 @@
     color: var(--color-brand-rust);
   }
 
-  .site-header__icon-btn:focus-visible {
-    outline: 2px solid var(--color-brand-rust);
-    outline-offset: 2px;
-  }
-
   .site-header__cart-trigger {
     overflow: visible;
   }
@@ -298,7 +293,7 @@
     height: 1.125rem;
     padding-inline: 0.3rem;
     border-radius: var(--style-border-radius);
-    background-color: var(--color-brand-rust, #c57639);
+    background-color: var(--color-brand-rust);
     color: #fff;
     font-family: var(--font-brand--family, var(--font-display--family, sans-serif));
     font-size: 0.625rem;
@@ -412,7 +407,7 @@
     padding: 0;
     border: none;
     background: #fff;
-    color: var(--color-brand-steel, #00253f);
+    color: var(--color-brand-steel);
     box-shadow: 4px 0 24px rgb(0 0 0 / 12%);
   }
 
@@ -506,11 +501,6 @@
     text-transform: uppercase;
   }
 
-  .menu-drawer__link:focus-visible {
-    outline: 2px solid var(--color-brand-rust);
-    outline-offset: 2px;
-  }
-
   .menu-drawer__list {
     margin: 0;
     padding: 0;
@@ -540,7 +530,7 @@
   .menu-drawer__link[aria-current='page'] {
     color: var(--color-brand-rust);
   }
-{% endstyle %}
+{% endstylesheet %}
 
 <script>
   (function () {

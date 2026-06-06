@@ -21,7 +21,7 @@
     <ul class="shopping-links__list">
       {% for link in menu.links %}
         <li class="shopping-links__item">
-          <a class="shopping-links__link" href="{{ link.url }}">
+          <a class="shopping-links__link focus-ring-brand" href="{{ link.url }}">
             {{ link.title | escape }}
           </a>
         </li>
@@ -55,10 +55,5 @@
 
   .shopping-links__link:hover {
     color: var(--color-brand-rust);
-  }
-
-  .shopping-links__link:focus-visible {
-    outline: 2px solid var(--color-brand-rust);
-    outline-offset: 2px;
   }
 {% endstylesheet %}

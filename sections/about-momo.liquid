@@ -39,7 +39,7 @@
     <div class="about-momo__rule" aria-hidden="true"></div>
 
     <div class="about-momo__masthead">
-      <p class="about-momo__eyebrow">
+      <p class="about-momo__eyebrow type-eyebrow">
         {% if section.settings.eyebrow != blank %}
           {{ section.settings.eyebrow | escape }}
         {% endif %}
@@ -99,7 +99,7 @@
 
 {% stylesheet %}
   .about-momo {
-    --about-momo-accent: var(--color-brand-rust, #c57639);
+    --about-momo-accent: var(--color-brand-rust);
     --about-momo-rule: color-mix(in srgb, currentColor 22%, transparent);
   }
 
@@ -108,12 +108,12 @@
   .bg-brand-rust,
   .bg-brand-warmth,
   .bg-brand-heart {
-    --about-momo-accent: var(--color-brand-warmth, #ea7657);
+    --about-momo-accent: var(--color-brand-warmth);
   }
 
   .bg-brand-warmth,
   .bg-brand-heart {
-    --about-momo-accent: var(--color-brand-steel, #00253f);
+    --about-momo-accent: var(--color-brand-steel);
   }
 
   .about-momo__frame {
@@ -136,12 +136,6 @@
 
   .about-momo__eyebrow {
     margin: 0;
-    font-family: var(--font-brand--family, var(--font-display--family));
-    font-size: 0.75rem;
-    font-weight: var(--font-weight-bold, 700);
-    letter-spacing: 0.14em;
-    line-height: 1.2;
-    text-transform: uppercase;
     color: var(--about-momo-accent);
   }
 
@@ -168,9 +162,7 @@
     margin: 0;
     max-width: 11ch;
     font-size: clamp(2.5rem, 7.5vw, 4.25rem);
-    font-weight: var(--font-weight-bold, 700);
     line-height: 0.95;
-    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
@@ -201,8 +193,6 @@
 
   .about-momo__text {
     font-size: 1rem;
-    line-height: 1.7;
-    letter-spacing: 0.01em;
   }
 
   .about-momo__text :where(p) {
@@ -224,9 +214,9 @@
     margin: 0;
     font-family: var(--font-brand--family, var(--font-display--family));
     font-size: 1.0625rem;
-    font-weight: var(--font-weight-bold, 700);
+    font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
     line-height: 1.4;
-    letter-spacing: 0;
+    letter-spacing: var(--font-heading-letter-spacing, -0.02em);
     color: inherit;
   }
 

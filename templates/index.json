@@ -66,12 +66,7 @@
         "show_view_all": true,
         "view_all_label": "View all",
         "view_all_link": "",
-<<<<<<< HEAD
-        "gap": 16,
-        "color_scheme": "canvas"
-=======
         "color_scheme": "steel"
->>>>>>> 2aef0eb (Use global settings for gaps)
       }
     },
     "bento": {

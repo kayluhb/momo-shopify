@@ -57,7 +57,7 @@
           <input
             type="email"
             id="{{ email_id }}"
-            class="back-in-stock__input"
+            class="back-in-stock__input focus-ring-brand"
             name="contact[email]"
             autocomplete="email"
             required
@@ -104,7 +104,7 @@
     border: none;
     border-radius: var(--style-border-radius);
     background: #fff;
-    color: var(--color-brand-steel, #00253f);
+    color: var(--color-brand-steel);
     overflow: auto;
     box-shadow: 0 24px 48px rgb(0 0 0 / 18%);
   }
@@ -167,15 +167,10 @@
     font: inherit;
   }
 
-  .back-in-stock__input:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
-  }
-
   .back-in-stock__status {
     margin: 0;
     font-size: 0.875rem;
-    color: var(--color-brand-rust, #c57639);
+    color: var(--color-brand-rust);
   }
 
   .back-in-stock__actions .btn {

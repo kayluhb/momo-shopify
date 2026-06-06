@@ -79,7 +79,7 @@
 %}
 
 <article class="product-card{% if is_grid_card %} product-card--grid{% endif %}" data-product-card>
-  <a class="product-card__link" href="{{ product.url }}">
+  <a class="product-card__link focus-ring-brand" href="{{ product.url }}">
     <div class="product-card__media">
       {% if product.featured_image %}
         <div class="product-card__image product-card__image--primary">
@@ -175,7 +175,7 @@
     height: 100%;
     border-radius: var(--style-border-radius);
     background: #fff;
-    color: var(--color-brand-steel, #00253f);
+    color: var(--color-brand-steel);
     box-shadow: 0 1px 0 rgb(0 37 63 / 6%);
     transition: box-shadow 200ms ease, transform 200ms ease;
   }
@@ -193,11 +193,6 @@
     min-height: 0;
     color: inherit;
     text-decoration: none;
-  }
-
-  .product-card__link:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
     border-radius: var(--style-border-radius);
   }
 
@@ -276,7 +271,7 @@
     z-index: 1;
     padding: 0.25rem 0.5rem;
     border-radius: var(--style-border-radius);
-    background-color: var(--color-brand-heart, #ff5e6e);
+    background-color: var(--color-brand-heart);
     color: #fff;
     font-size: 0.6875rem;
     font-weight: 700;
@@ -286,7 +281,7 @@
   }
 
   .product-card__badge--new {
-    background-color: var(--color-brand-steel, #00253f);
+    background-color: var(--color-brand-steel);
   }
 
   .product-card__badge--sold-out {
@@ -319,7 +314,7 @@
   }
 
   .product-card__link:hover .product-card__title {
-    color: var(--color-brand-rust, #c57639);
+    color: var(--color-brand-rust);
   }
 
   .product-card__rating {
@@ -346,7 +341,7 @@
     margin: 0;
     font-size: 0.875rem;
     line-height: 1.4;
-    color: color-mix(in srgb, var(--color-brand-steel, #00253f) 72%, transparent);
+    color: color-mix(in srgb, var(--color-brand-steel) 72%, transparent);
   }
 
   .product-card--grid .product-card__price {
@@ -354,12 +349,12 @@
   }
 
   .product-card__price-sale {
-    color: var(--color-brand-heart, #ff5e6e);
+    color: var(--color-brand-heart);
   }
 
   .product-card__price-compare {
     margin-left: 0.35rem;
-    color: color-mix(in srgb, var(--color-brand-steel, #00253f) 65%, transparent);
+    color: color-mix(in srgb, var(--color-brand-steel) 65%, transparent);
   }
 
   .product-card__swatches {
@@ -385,8 +380,8 @@
     width: 1rem;
     height: 1rem;
     border-radius: var(--style-border-radius);
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 18%, transparent);
-    background-color: var(--swatch-bg, color-mix(in srgb, var(--color-brand-steel, #00253f) 8%, white));
+    border: 1px solid color-mix(in srgb, var(--color-brand-steel) 18%, transparent);
+    background-color: var(--swatch-bg, color-mix(in srgb, var(--color-brand-steel) 8%, white));
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -399,13 +394,8 @@
     transform: scale(1.08);
   }
 
-  .product-card__swatch:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
-  }
-
   .product-card__swatch.is-selected {
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--color-brand-steel, #00253f);
+    box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--color-brand-steel);
   }
 
   .product-card__swatch-img {

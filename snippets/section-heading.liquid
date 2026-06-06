@@ -74,13 +74,9 @@
 
   .section-heading__subheading :where(a) {
     font-weight: var(--font-weight-bold, 700);
-    color: var(--color-brand-rust, #c57639);
+    color: var(--color-brand-rust);
     text-decoration: underline;
     text-underline-offset: 0.15em;
-  }
-
-  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .section-heading__subheading :where(a) {
-    color: #fff;
   }
 
   .section-heading__title {
@@ -92,7 +88,7 @@
   .section-heading__title--display {
     font-size: clamp(2.5rem, 6vw, 3.75rem);
     line-height: 1.02;
-    letter-spacing: -0.03em;
+    letter-spacing: var(--font-heading-letter-spacing, -0.03em);
   }
 
   .section-heading__subheading {
@@ -100,7 +96,7 @@
     margin: 0;
     max-width: 42rem;
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: var(--font-body-line-height, 1.6);
   }
 
   .section-heading--center .section-heading__subheading {

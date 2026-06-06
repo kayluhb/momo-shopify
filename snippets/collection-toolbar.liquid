@@ -137,7 +137,7 @@
 
   <div class="collection-toolbar__sort">
     <label class="sr-only" for="CollectionSort-{{ section_id }}">{{ 'collections.sort_label' | t }}</label>
-    <select id="CollectionSort-{{ section_id }}" class="collection-toolbar__sort-select" name="sort_by">
+    <select id="CollectionSort-{{ section_id }}" class="collection-toolbar__sort-select focus-ring-brand" name="sort_by">
       {% for option in collection.sort_options %}
         <option
           value="{{ option.value }}"
@@ -191,7 +191,7 @@
     width: 2.25rem;
     height: 1.25rem;
     border-radius: var(--style-border-radius);
-    background: color-mix(in srgb, var(--color-brand-steel, #00253f) 14%, white);
+    background: color-mix(in srgb, var(--color-brand-steel) 14%, white);
     transition: background 200ms ease;
   }
 
@@ -209,7 +209,7 @@
   }
 
   .collection-toolbar__toggle-input:checked + .collection-toolbar__toggle-track {
-    background: var(--color-brand-steel, #00253f);
+    background: var(--color-brand-steel);
   }
 
   .collection-toolbar__toggle-input:checked + .collection-toolbar__toggle-track::after {
@@ -217,7 +217,7 @@
   }
 
   .collection-toolbar__toggle-input:focus-visible + .collection-toolbar__toggle-track {
-    outline: 2px solid var(--color-brand-rust, #c57639);
+    outline: 2px solid var(--color-brand-rust);
     outline-offset: 2px;
   }
 
@@ -245,7 +245,7 @@
     align-items: center;
     gap: 0.375rem;
     padding: 0.5rem 0.75rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-brand-steel) 12%, transparent);
     border-radius: var(--style-border-radius);
     background: #fff;
     font-size: 0.875rem;
@@ -260,7 +260,7 @@
   }
 
   .collection-filter[open] .collection-filter__trigger {
-    border-color: color-mix(in srgb, var(--color-brand-steel, #00253f) 22%, transparent);
+    border-color: color-mix(in srgb, var(--color-brand-steel) 22%, transparent);
   }
 
   .collection-filter__count {
@@ -271,7 +271,7 @@
     height: 1.125rem;
     padding-inline: 0.25rem;
     border-radius: var(--style-border-radius);
-    background: var(--color-brand-steel, #00253f);
+    background: var(--color-brand-steel);
     color: #fff;
     font-size: 0.6875rem;
     font-weight: 700;
@@ -297,7 +297,7 @@
     max-height: 16rem;
     overflow: auto;
     padding: 0.5rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-brand-steel) 10%, transparent);
     border-radius: var(--style-border-radius);
     background: #fff;
     box-shadow: 0 8px 24px rgb(0 37 63 / 10%);
@@ -320,7 +320,7 @@
   }
 
   .collection-filter__option:hover {
-    background: color-mix(in srgb, var(--color-brand-steel, #00253f) 5%, white);
+    background: color-mix(in srgb, var(--color-brand-steel) 5%, white);
   }
 
   .collection-filter__option-label {
@@ -328,7 +328,7 @@
   }
 
   .collection-filter__option-count {
-    color: color-mix(in srgb, var(--color-brand-steel, #00253f) 55%, transparent);
+    color: color-mix(in srgb, var(--color-brand-steel) 55%, transparent);
     font-size: 0.8125rem;
   }
 
@@ -347,7 +347,7 @@
   .collection-filter__price-field input {
     width: 100%;
     padding: 0.4rem 0.5rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-brand-steel) 14%, transparent);
     border-radius: var(--style-border-radius);
   }
 
@@ -360,17 +360,12 @@
   .collection-toolbar__sort-select {
     appearance: none;
     padding: 0.5rem 2rem 0.5rem 0.75rem;
-    border: 1px solid color-mix(in srgb, var(--color-brand-steel, #00253f) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-brand-steel) 12%, transparent);
     border-radius: var(--style-border-radius);
     background: #fff;
     font-size: 0.875rem;
     line-height: 1.2;
     cursor: pointer;
-  }
-
-  .collection-toolbar__sort-select:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
   }
 
   .collection-toolbar__sort-chevron {

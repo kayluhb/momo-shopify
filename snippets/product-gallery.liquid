@@ -86,7 +86,7 @@
     {% render 'product-gallery-thumbs', product: product, initial_media: initial_media %}
   {% elsif gallery_layout == 'split_half' %}
     <div
-      class="product-gallery__stack"
+      class="product-gallery__stack focus-ring-brand"
       data-gallery-mobile-track
       data-gallery-zoom
       tabindex="0"
@@ -111,7 +111,7 @@
         {% for media in product.media %}
           <button
             type="button"
-            class="product-gallery__dot{% if forloop.first %} is-active{% endif %}"
+            class="product-gallery__dot focus-ring-brand{% if forloop.first %} is-active{% endif %}"
             data-gallery-dot
             data-slide-index="{{ forloop.index0 }}"
             role="tab"
@@ -250,13 +250,8 @@
   }
 
   .product-gallery__zoom:hover {
-    border-color: var(--color-brand-rust, #c57639);
-    color: var(--color-brand-rust, #c57639);
-  }
-
-  .product-gallery__zoom:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
+    border-color: var(--color-brand-rust);
+    color: var(--color-brand-rust);
   }
 
   .product-gallery__zoom:disabled,
@@ -357,8 +352,7 @@
       min-height: 0;
     }
 
-    .product-gallery--split_half .product-gallery__stack:focus-visible {
-      outline: 2px solid var(--color-brand-rust, #c57639);
+    .product-gallery--split_half .product-gallery__stack.focus-ring-brand:focus-visible {
       outline-offset: -2px;
     }
 
@@ -393,12 +387,7 @@
   }
 
   .product-gallery__dot.is-active {
-    background-color: var(--color-brand-rust, #c57639);
-  }
-
-  .product-gallery__dot:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
+    background-color: var(--color-brand-rust);
   }
 
   .product-gallery__panel {
@@ -473,12 +462,7 @@
   }
 
   .product-gallery__thumbs-scroll:hover {
-    color: var(--color-brand-rust, #c57639);
-  }
-
-  .product-gallery__thumbs-scroll:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
+    color: var(--color-brand-rust);
   }
 
   .product-gallery__thumbs-scroll[hidden] {
@@ -524,12 +508,7 @@
   }
 
   .product-gallery__thumb.is-active {
-    border-color: var(--color-brand-rust, #c57639);
-  }
-
-  .product-gallery__thumb:focus-visible {
-    outline: 2px solid var(--color-brand-rust, #c57639);
-    outline-offset: 2px;
+    border-color: var(--color-brand-rust);
   }
 
   .product-gallery__thumb-img {

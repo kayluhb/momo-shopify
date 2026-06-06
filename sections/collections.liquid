@@ -8,10 +8,10 @@
 <h1>{{ 'collections.title' | t }}</h1>
 
 <div
-  class="collections {{ section.settings.grid_item_width }}"
+  class="collections grid gap-[var(--grid-gap-active)] grid-cols-[repeat(auto-fill,minmax(min(var(--collection-card-size),100%),1fr))] {{ section.settings.grid_item_width }}"
 >
   {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
+    <a class="collection-card flex flex-col w-full" href="{{ collection.url }}">
       {% if collection.featured_image %}
         {% assign collection_image_alt = collection.featured_image.alt | default: collection.title %}
         {% render 'image',
@@ -36,21 +36,11 @@
 </div>
 
 {% stylesheet %}
-  .collections {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap-active);
-  }
   .collections--compact {
     --collection-card-size: 160px;
   }
   .collections--full {
     --collection-card-size: 280px;
-  }
-  .collection-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
   }
 {% endstylesheet %}
 

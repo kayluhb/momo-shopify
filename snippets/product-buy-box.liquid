@@ -235,7 +235,7 @@
     border-radius: var(--style-border-radius) !important;
     background-color: transparent !important;
     color: inherit !important;
-    font-family: var(--font-display--family, var(--font-primary--family)) !important;
+    font-family: var(--font-display--family) !important;
     font-size: 0.875rem !important;
     font-weight: var(--font-weight-bold, var(--font-body--weight-bold, 700)) !important;
     letter-spacing: 0.04em !important;
@@ -247,12 +247,6 @@
   .product-buy__payment .shopify-payment-button__button--unbranded:hover:not([disabled]) {
     background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
     opacity: 1 !important;
-  }
-
-  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart, .hero__panel)
-    .product-buy__payment
-    .shopify-payment-button__button--unbranded:hover:not([disabled]) {
-    background-color: rgb(255 255 255 / 12%) !important;
   }
 
   @media (max-width: 749px) {

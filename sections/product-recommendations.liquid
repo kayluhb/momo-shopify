@@ -118,8 +118,6 @@
     color: inherit;
     font: inherit;
     font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
     text-transform: uppercase;
     cursor: pointer;
     opacity: 0.55;
@@ -151,18 +149,6 @@
 
   .product-recommendations__panel[hidden] {
     display: none;
-  }
-
-  .product-recommendations .collection-page__grid {
-    display: grid;
-    gap: var(--grid-gap-active);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (min-width: 750px) {
-    .product-recommendations .collection-page__grid {
-      grid-template-columns: repeat(var(--product-grid-columns, 4), minmax(0, 1fr));
-    }
   }
 {% endstylesheet %}
 

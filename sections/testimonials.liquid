@@ -86,14 +86,9 @@
     margin: 0;
     padding: 1.5rem;
     border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
-    border-top: 3px solid var(--color-brand-rust, #c57639);
+    border-top: 3px solid var(--color-brand-rust);
     border-radius: var(--style-border-radius);
-    background: color-mix(in srgb, var(--color-brand-canvas, #f7f8f9) 55%, transparent);
-  }
-
-  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) .testimonials__card {
-    border-top-color: var(--color-brand-warmth, #ea7657);
-    background: rgb(255 255 255 / 0.06);
+    background: color-mix(in srgb, var(--color-brand-canvas) 55%, transparent);
   }
 
   .testimonials__stars {
@@ -108,7 +103,7 @@
   }
 
   .testimonials__star--filled {
-    color: var(--color-brand-warmth, #ea7657);
+    color: var(--color-brand-warmth);
   }
 
   .testimonials__quote {
@@ -152,7 +147,6 @@
   .testimonials__name {
     font-style: normal;
     font-size: 0.875rem;
-    font-weight: 700;
   }
 
   .testimonials__role {

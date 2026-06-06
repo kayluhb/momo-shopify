@@ -110,11 +110,17 @@ p:empty {
   outline-offset: 2px;
 }
 
+:focus-visible.focus-ring-brand,
+.focus-ring-brand:focus-visible {
+  outline: 2px solid var(--color-brand-rust);
+  outline-offset: 2px;
+}
+
 /** Theme styles below */
 body {
-  font-family: var(--font-brand--family, var(--font-body--family, var(--font-primary--family)));
+  font-family: var(--font-brand--family, var(--font-body--family));
   font-size: 1rem;
-  font-weight: var(--font-weight-thin, var(--font-body--weight, 400));
+  font-weight: var(--font-weight-normal, var(--font-body--weight, 400));
   line-height: 1.6;
   letter-spacing: 0.015em;
   background-color: var(--color-background);
@@ -131,7 +137,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-family: var(--font-brand--family, var(--font-display--family));
   font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
   line-height: 1.12;
   letter-spacing: var(--font-heading-letter-spacing, -0.03em);
@@ -143,23 +149,23 @@ b {
 }
 
 :where(.font-display) {
-  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-family: var(--font-brand--family, var(--font-display--family));
   font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
   letter-spacing: var(--font-heading-letter-spacing, -0.03em);
 }
 
 :where(.type-eyebrow) {
-  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-family: var(--font-brand--family, var(--font-display--family));
   font-size: 0.75rem;
-  font-weight: var(--font-weight-bold, 700);
+  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
   letter-spacing: var(--type-eyebrow-letter-spacing, 0.1em);
   line-height: 1.3;
   text-transform: uppercase;
-  color: var(--color-brand-rust, #c57639);
+  color: var(--color-brand-rust);
 }
 
-:where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart) :where(.type-eyebrow) {
-  color: var(--color-brand-warmth, #ea7657);
+:where(.scheme-dark) :where(.type-eyebrow) {
+  color: var(--color-brand-warmth);
 }
 
 .product-grid {
@@ -190,33 +196,47 @@ b {
     .page-content__body,
     .rte
   ) {
-  font-family: var(--font-brand--family, var(--font-body--family, var(--font-primary--family)));
-  font-weight: var(--font-weight-medium, 400);
-  letter-spacing: 0.015em;
+  font-family: var(--font-brand--family, var(--font-body--family));
+  font-weight: var(--font-weight-normal, var(--font-body--weight, 400));
+  line-height: var(--font-body-line-height, 1.6);
+  letter-spacing: var(--font-body-letter-spacing, 0.015em);
 }
 
 :where(.faq__support-response, .testimonials__role) {
-  font-weight: var(--font-weight-thin, 400);
-  letter-spacing: 0.02em;
+  font-weight: var(--font-weight-normal, 400);
+  letter-spacing: var(--font-body-letter-spacing, 0.015em);
 }
 
 :where(.faq__question, .faq__question-text) {
-  font-weight: var(--font-weight-medium, 400);
-  letter-spacing: 0.01em;
+  font-family: var(--font-brand--family, var(--font-body--family));
+  font-weight: var(--font-weight-normal, var(--font-body--weight, 400));
+  letter-spacing: var(--font-body-letter-spacing, 0.015em);
+}
+
+:where(.category-cards__line, .bento-grid__title, .testimonials__name) {
+  font-family: var(--font-brand--family, var(--font-display--family));
+  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
+  letter-spacing: var(--font-heading-letter-spacing, -0.03em);
+}
+
+:where(.announcement-bar__message, .product-recommendations__tab, .multicolumn__link) {
+  font-family: var(--font-brand--family, var(--font-display--family));
+  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
+  letter-spacing: var(--type-eyebrow-letter-spacing, 0.1em);
 }
 
 :where(.btn) {
-  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
-  font-weight: var(--font-weight-bold, 700);
+  font-family: var(--font-brand--family, var(--font-display--family));
+  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
 }
 
 :where(.product-card__title, .product-card__badge) {
-  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
-  font-weight: var(--font-weight-bold, 700);
+  font-family: var(--font-brand--family, var(--font-display--family));
+  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
 }
 
 :where(.product-card__price, .product-card__price-compare) {
-  font-family: var(--font-brand--family, var(--font-body--family, var(--font-primary--family)));
+  font-family: var(--font-brand--family, var(--font-body--family));
   font-weight: var(--font-weight-medium, 400);
   letter-spacing: 0.01em;
 }
@@ -225,13 +245,8 @@ b {
   font-weight: var(--font-weight-bold, 700);
 }
 
-:where(.bento-grid__eyebrow) {
-  font-weight: var(--font-weight-bold, 700);
-  letter-spacing: 0.14em;
-}
-
 .site-header__nav {
-  font-family: var(--font-brand--family, var(--font-display--family, var(--font-primary--family)));
+  font-family: var(--font-brand--family, var(--font-display--family));
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -266,8 +281,7 @@ b {
 }
 
 .dialog-drawer__close:focus-visible {
-  outline: 2px solid var(--color-brand-rust);
-  outline-offset: 2px;
+  outline-color: var(--color-brand-rust);
 }
 
 /** Section layout utilities */

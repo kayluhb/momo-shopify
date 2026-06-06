@@ -1,0 +1,105 @@
+{% doc %}
+  Shared dark color-scheme overrides for sections using scheme-dark.
+
+  @example
+  {% render 'dark-scheme-overrides' %}
+{% enddoc %}
+
+{% stylesheet %}
+  :where(.scheme-dark) .section-heading__subheading :where(a) {
+    color: #fff;
+  }
+
+  :where(.scheme-dark, .hero__panel) .btn--secondary {
+    --btn-focus-ring: #fff;
+  }
+
+  :where(.scheme-dark, .hero__panel) .btn--secondary:hover {
+    background-color: rgb(255 255 255 / 12%);
+  }
+
+  :where(.scheme-dark, .hero__panel)
+    .product-buy__payment
+    .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+    background-color: rgb(255 255 255 / 12%) !important;
+  }
+
+  :where(.scheme-dark)
+    .multicolumn__item:not(:has(.multicolumn__media))
+    .multicolumn__title::before {
+    background: var(--color-brand-warmth);
+  }
+
+  :where(.scheme-dark) .multicolumn__link {
+    color: #fff;
+  }
+
+  :where(.scheme-dark) .multicolumn__link:hover {
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  :where(.scheme-dark) .page-content__body :where(a) {
+    color: #fff;
+  }
+
+  :where(.scheme-dark) .testimonials__card {
+    border-top-color: var(--color-brand-warmth);
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  :where(.scheme-dark) .faq__card {
+    background: rgb(255 255 255 / 0.08);
+    box-shadow: none;
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  :where(.scheme-dark) .faq .section-heading__subheading {
+    color: rgb(255 255 255 / 0.92);
+  }
+
+  :where(.scheme-dark) .faq__avatar {
+    border-color: rgb(255 255 255 / 0.2);
+  }
+
+  :where(.scheme-dark) .faq__avatar-status {
+    border-color: rgb(255 255 255 / 0.35);
+  }
+
+  :where(.scheme-dark) .faq__support-hours {
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  :where(.scheme-dark) .faq__support-response {
+    color: rgb(255 255 255 / 0.55);
+  }
+
+  :where(.scheme-dark) .faq__support-contact a {
+    color: #fff;
+  }
+
+  :where(.scheme-dark) .faq__panel {
+    background: rgb(0 0 0 / 0.18);
+  }
+
+  :where(.scheme-dark) .faq__list {
+    background: transparent;
+  }
+
+  :where(.scheme-dark) .faq__item {
+    border-bottom-color: rgb(255 255 255 / 0.12);
+  }
+
+  :where(.scheme-dark) .faq__icon {
+    background: rgb(255 255 255 / 0.14);
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  :where(.scheme-dark) .faq__item[open] .faq__icon {
+    background: var(--color-brand-warmth);
+    color: #fff;
+  }
+
+  :where(.scheme-dark) .faq__answer {
+    color: rgb(255 255 255 / 0.78);
+  }
+{% endstylesheet %}

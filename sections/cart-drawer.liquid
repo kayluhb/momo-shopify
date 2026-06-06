@@ -24,7 +24,7 @@
         </h2>
         <button
           type="button"
-          class="dialog-drawer__close cart-drawer__close"
+          class="dialog-drawer__close cart-drawer__close focus-ring-brand"
           on:click="cart-drawer-component/close"
           aria-label="{{ 'cart.drawer_close' | t }}"
         >
@@ -38,11 +38,11 @@
 
       {% unless cart.empty? %}
         <footer class="cart-drawer__footer">
-          <a class="cart-drawer__view-cart" href="{{ routes.cart_url }}">
+          <a class="cart-drawer__view-cart focus-ring-brand" href="{{ routes.cart_url }}">
             {{ 'cart.view_cart' | t }}
           </a>
           <form action="{{ routes.cart_url }}" method="post">
-            <button type="submit" name="checkout">
+            <button type="submit" name="checkout" class="focus-ring-brand">
               {{ 'cart.checkout' | t }}
             </button>
           </form>
@@ -69,7 +69,7 @@
     padding: 0;
     border: none;
     background: #fff;
-    color: var(--color-brand-steel, #00253f);
+    color: var(--color-brand-steel);
     box-shadow: -4px 0 24px rgb(0 0 0 / 12%);
   }
 
@@ -160,12 +160,6 @@
     font-weight: 700;
   }
 
-  .cart-drawer__view-cart:focus-visible,
-  .cart-drawer__footer button:focus-visible {
-    outline: 2px solid var(--color-brand-rust);
-    outline-offset: 2px;
-  }
-
   .cart-drawer__content {
     flex: 1;
     overflow: auto;
@@ -191,7 +185,7 @@
   .cart-drawer__footer button {
     border-radius: var(--style-border-radius);
     border: none;
-    background: var(--color-brand-steel, #00253f);
+    background: var(--color-brand-steel);
     color: #fff;
     cursor: pointer;
     font: inherit;
@@ -239,11 +233,6 @@
     cursor: pointer;
     font: inherit;
     text-decoration: underline;
-  }
-
-  .cart-items__remove-button:focus-visible {
-    outline: 2px solid var(--color-brand-rust);
-    outline-offset: 2px;
   }
 
   .cart-items__remove-button[aria-busy='true'] {

@@ -14,11 +14,12 @@
     --font-display--weight-bold: 700;
     --font-body--weight: 400;
     --font-body--weight-bold: 700;
-    --font-weight-thin: 400;
+    --font-weight-normal: 400;
     --font-weight-bold: 700;
     --font-heading-letter-spacing: -0.03em;
     --type-eyebrow-letter-spacing: 0.1em;
     --font-body-line-height: 1.6;
+    --font-body-letter-spacing: 0.015em;
   }
 
   .font-scheme-editorial {
@@ -29,11 +30,12 @@
     --font-display--weight-bold: 700;
     --font-body--weight: 400;
     --font-body--weight-bold: 700;
-    --font-weight-thin: 400;
+    --font-weight-normal: 400;
     --font-weight-bold: 700;
     --font-heading-letter-spacing: -0.02em;
     --type-eyebrow-letter-spacing: 0.08em;
     --font-body-line-height: 1.65;
+    --font-body-letter-spacing: 0.012em;
   }
 
   .font-scheme-soft {
@@ -44,11 +46,12 @@
     --font-display--weight-bold: 400;
     --font-body--weight: 400;
     --font-body--weight-bold: 700;
-    --font-weight-thin: 400;
+    --font-weight-normal: 400;
     --font-weight-bold: 700;
     --font-heading-letter-spacing: 0.01em;
     --type-eyebrow-letter-spacing: 0.14em;
     --font-body-line-height: 1.7;
+    --font-body-letter-spacing: 0.02em;
   }
 
   .font-scheme-bold {
@@ -59,11 +62,12 @@
     --font-display--weight-bold: 700;
     --font-body--weight: 700;
     --font-body--weight-bold: 700;
-    --font-weight-thin: 700;
+    --font-weight-normal: 700;
     --font-weight-bold: 700;
     --font-heading-letter-spacing: -0.03em;
     --type-eyebrow-letter-spacing: 0.1em;
     --font-body-line-height: 1.55;
+    --font-body-letter-spacing: 0.01em;
   }
 
   .font-scheme-uniform {
@@ -74,15 +78,16 @@
     --font-display--weight-bold: 400;
     --font-body--weight: 400;
     --font-body--weight-bold: 400;
-    --font-weight-thin: 400;
+    --font-weight-normal: 400;
     --font-weight-bold: 400;
     --font-heading-letter-spacing: -0.01em;
     --type-eyebrow-letter-spacing: 0.08em;
     --font-body-line-height: 1.6;
+    --font-body-letter-spacing: 0.015em;
   }
 
   :where(.font-scheme-display, .font-scheme-editorial, .font-scheme-soft, .font-scheme-bold, .font-scheme-uniform) {
-    font-family: var(--font-body--family, var(--font-primary--family));
+    font-family: var(--font-body--family, var(--font-display--family));
     font-weight: var(--font-body--weight, 400);
     line-height: var(--font-body-line-height, 1.6);
   }

@@ -49,7 +49,7 @@
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: var(--font-weight-bold, var(--font-body--weight-bold, 700));
-    font-family: var(--font-display--family, var(--font-primary--family));
+    font-family: var(--font-display--family);
     letter-spacing: 0.04em;
     line-height: 1.2;
     text-decoration: none;
@@ -68,15 +68,15 @@
   }
 
   .btn--primary {
-    border-color: var(--color-brand-steel, #00253f);
-    background-color: var(--color-brand-steel, #00253f);
+    border-color: var(--color-brand-steel);
+    background-color: var(--color-brand-steel);
     color: #fff;
-    --btn-focus-ring: var(--color-brand-steel, #00253f);
+    --btn-focus-ring: var(--color-brand-steel);
   }
 
   .btn--primary:hover {
-    border-color: var(--color-brand-rust, #c57639);
-    background-color: var(--color-brand-rust, #c57639);
+    border-color: var(--color-brand-rust);
+    background-color: var(--color-brand-rust);
     color: #fff;
   }
 
@@ -102,13 +102,5 @@
   .btn--secondary:hover {
     background-color: color-mix(in srgb, currentColor 12%, transparent);
     opacity: 1;
-  }
-
-  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart, .hero__panel) .btn--secondary {
-    --btn-focus-ring: #fff;
-  }
-
-  :where(.bg-brand-earth, .bg-brand-steel, .bg-brand-warmth, .bg-brand-heart, .hero__panel) .btn--secondary:hover {
-    background-color: rgb(255 255 255 / 12%);
   }
 {% endstylesheet %}

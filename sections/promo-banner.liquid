@@ -11,7 +11,7 @@
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="promo-banner full-width {{ section_bg }}"
+  class="promo-banner full-width section-padding {{ section_bg }}"
 >
   {% if section.settings.background_image != blank %}
     <div class="promo-banner__bg" aria-hidden="true">
@@ -49,7 +49,6 @@
 {% stylesheet %}
   .promo-banner {
     position: relative;
-    padding: 2.5rem 0;
   }
 
   .promo-banner--gradient {

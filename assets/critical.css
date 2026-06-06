@@ -1,5 +1,21 @@
 /** Critical CSS for the theme. This file is included on every page. */
 
+:root {
+  --grid-gap-active: var(--grid-gap-mobile);
+  --section-padding-block-active: var(--section-padding-block-mobile);
+}
+
+@media (min-width: 990px) {
+  :root {
+    --grid-gap-active: var(--grid-gap);
+    --section-padding-block-active: var(--section-padding-block);
+  }
+}
+
+.section-padding {
+  padding-block: var(--section-padding-block-active);
+}
+
 /* Reset styles inspired by https://www.joshwcomeau.com/css/custom-css-reset/ */
 * {
   box-sizing: border-box;
@@ -148,7 +164,7 @@ b {
 
 .product-grid {
   display: grid;
-  gap: var(--product-grid-gap, 12px);
+  gap: var(--grid-gap-active);
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 

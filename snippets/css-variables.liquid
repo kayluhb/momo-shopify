@@ -4,6 +4,9 @@
   Layout spacing:
   - `--page-margin`: desktop horizontal gutter (from theme settings)
   - `--page-margin-mobile`: mobile horizontal gutter (from theme settings)
+  - `--grid-gap` / `--grid-gap-mobile`: grid spacing (from theme settings)
+  - `--section-padding-block` / `--section-padding-block-mobile`: vertical section spacing
+  - `--grid-gap-active` / `--section-padding-block-active`: responsive values (set in critical.css)
 
   @example
   {% render 'css-variables' %}
@@ -26,6 +29,10 @@
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin | default: 20 }}px;
     --page-margin-mobile: {{ settings.min_page_margin_mobile | default: 12 }}px;
+    --grid-gap: {{ settings.grid_gap | default: 12 }}px;
+    --grid-gap-mobile: {{ settings.grid_gap_mobile | default: 12 }}px;
+    --section-padding-block: {{ settings.section_padding | default: 80 }}px;
+    --section-padding-block-mobile: {{ settings.section_padding_mobile | default: 32 }}px;
     --drawer-width: min(28rem, 100vw);
     --header-padding-y: 2rem;
     --header-padding-y-scrolled: 0.75rem;

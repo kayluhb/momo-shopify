@@ -2,7 +2,6 @@
   assign collection = section.settings.collection
   assign products_limit = section.settings.products_to_show
   assign columns = section.settings.columns
-  assign gap = section.settings.gap
   assign view_all_url = collection.url
   if section.settings.view_all_link != blank
     assign view_all_url = section.settings.view_all_link
@@ -12,7 +11,7 @@
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="featured-collection full-width py-8 md:py-20 {{ section_bg }}"
+  class="featured-collection full-width section-padding {{ section_bg }}"
 >
   <div class="section-inner">
     {% render 'section-heading',
@@ -25,7 +24,7 @@
     {% if collection != blank and collection.products_count > 0 %}
       <ul
         class="featured-collection__grid product-grid list-none p-0"
-        style="--product-grid-columns: {{ columns }}; --product-grid-gap: {{ gap }}px;"
+        style="--product-grid-columns: {{ columns }};"
         role="list"
       >
         {% for product in collection.products limit: products_limit %}
@@ -152,16 +151,6 @@
       "content": "t:sections.shared.appearance_header"
     },
     {
-      "type": "range",
-      "id": "gap",
-      "label": "t:sections.featured_collection.gap_label",
-      "min": 4,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "default": 12
-    },
-    {
       "type": "select",
       "id": "color_scheme",
       "label": "t:sections.shared.color_scheme_label",
@@ -183,7 +172,6 @@
         "heading_alignment": "center",
         "products_to_show": 4,
         "columns": 4,
-        "gap": 12,
         "show_view_all": true,
         "view_all_label": "t:sections.featured_collection.presets.default_view_all_label",
         "color_scheme": "white"

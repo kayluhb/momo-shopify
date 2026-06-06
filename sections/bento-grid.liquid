@@ -2,11 +2,8 @@
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="bento-grid full-width py-8 md:py-20 {{ section_bg }}"
-  style="
-    --bento-gap: {{ section.settings.gap }}px;
-    --bento-min-height: {{ section.settings.min_height }}px;
-  "
+  class="bento-grid full-width section-padding {{ section_bg }}"
+  style="--bento-min-height: {{ section.settings.min_height }}px;"
 >
   <div class="section-inner">
     {% if section.settings.heading != blank or section.settings.subheading != blank %}
@@ -106,7 +103,7 @@
 
   .bento-grid__grid {
     display: grid;
-    gap: var(--bento-gap, 12px);
+    gap: var(--grid-gap-active);
     grid-template-columns: 1fr;
     grid-auto-rows: minmax(220px, auto);
     margin: 0;
@@ -301,16 +298,6 @@
     {
       "type": "header",
       "content": "t:sections.shared.appearance_header"
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "t:sections.bento_grid.gap_label",
-      "min": 4,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "default": 12
     },
     {
       "type": "range",

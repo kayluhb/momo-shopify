@@ -66,8 +66,12 @@
         "show_view_all": true,
         "view_all_label": "View all",
         "view_all_link": "",
+<<<<<<< HEAD
         "gap": 16,
         "color_scheme": "canvas"
+=======
+        "color_scheme": "steel"
+>>>>>>> 2aef0eb (Use global settings for gaps)
       }
     },
     "bento": {
@@ -129,7 +133,6 @@
         "heading": "",
         "subheading": "",
         "heading_alignment": "center",
-        "gap": 12,
         "min_height": 520,
         "color_scheme": "earth"
       }
@@ -185,7 +188,6 @@
       "settings": {
         "color_scheme": "canvas",
         "columns": 3,
-        "gap": 12,
         "card_aspect_ratio": "4 / 5",
         "overlay_opacity": 55
       }

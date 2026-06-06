@@ -9,7 +9,6 @@
 
 <div
   class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
 >
   {% for collection in collections %}
     <a class="collection-card" href="{{ collection.url }}">
@@ -40,7 +39,7 @@
   .collections {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap);
+    gap: var(--grid-gap-active);
   }
   .collections--compact {
     --collection-card-size: 160px;
@@ -68,16 +67,6 @@
         { "value": "collections--full", "label": "t:options.size.large" }
       ],
       "default": "collections--full"
-    },
-    {
-      "type": "range",
-      "id": "grid_gap",
-      "label": "t:labels.grid_gap",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "unit": "px",
-      "default": 10
     }
   ],
   "presets": [{ "name": "t:general.collections_grid" }]

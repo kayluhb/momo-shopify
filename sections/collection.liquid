@@ -1,7 +1,6 @@
 {% liquid
   assign products_per_page = section.settings.products_per_page
   assign columns = section.settings.columns
-  assign grid_gap = section.settings.grid_gap
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
 
@@ -29,7 +28,7 @@
           {% if collection.products.size > 0 %}
             <ul
               class="collection-page__grid product-grid list-none p-0"
-              style="--collection-columns: {{ columns }}; --collection-gap: {{ grid_gap }}px;"
+              style="--product-grid-columns: {{ columns }};"
               role="list"
             >
               {% for product in collection.products %}
@@ -85,11 +84,6 @@
     text-decoration: underline;
   }
 
-  .collection-page__grid {
-    --product-grid-columns: var(--collection-columns, 4);
-    --product-grid-gap: var(--collection-gap, 12px);
-  }
-
   .collection-page__empty {
     margin: 0;
     padding: 3rem 0;
@@ -123,16 +117,6 @@
       "max": 4,
       "step": 1,
       "default": 4
-    },
-    {
-      "type": "range",
-      "id": "grid_gap",
-      "label": "t:sections.collection.settings.grid_gap_label",
-      "min": 4,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "default": 12
     },
     {
       "type": "checkbox",

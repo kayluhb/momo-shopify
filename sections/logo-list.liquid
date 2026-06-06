@@ -6,7 +6,7 @@
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="logo-list full-width py-12 md:py-16 {{ section_bg }}{% if section.settings.grayscale %} logo-list--grayscale{% endif %}"
+  class="logo-list full-width section-padding {{ section_bg }}{% if section.settings.grayscale %} logo-list--grayscale{% endif %}"
   style="--logo-height: {{ logo_height }}px"
 >
   <div class="section-inner">
@@ -62,14 +62,14 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 2rem 3rem;
+    gap: var(--grid-gap-active) calc(var(--grid-gap-active) * 1.5);
   }
 
   @media (min-width: 750px) {
     .logo-list__grid {
       display: grid;
       grid-template-columns: repeat(var(--columns, 5), minmax(0, 1fr));
-      gap: 2rem;
+      gap: var(--grid-gap-active);
     }
   }
 

@@ -1,6 +1,5 @@
 {% liquid
   assign columns = section.settings.columns
-  assign grid_gap = section.settings.grid_gap
   assign products_limit = section.settings.products_to_show
   assign show_recently_viewed = section.settings.show_recently_viewed
 %}
@@ -8,7 +7,7 @@
 
 <product-recommendations-component
   id="ProductRecommendations-{{ section.id }}"
-  class="product-recommendations full-width {{ section_bg }}"
+  class="product-recommendations full-width section-padding {{ section_bg }}"
   data-section-id="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-product-handle="{{ product.handle }}"
@@ -16,7 +15,7 @@
   data-show-recently-viewed="{% if show_recently_viewed %}true{% else %}false{% endif %}"
   data-recommendations-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ products_limit }}&intent=related"
   data-recently-viewed-url="{{ routes.search_url }}?view=recently-viewed"
-  style="--collection-columns: {{ columns }}; --collection-gap: {{ grid_gap }}px;"
+  style="--product-grid-columns: {{ columns }};"
   {{ section.shopify_attributes }}
 >
   <div class="section-inner product-recommendations__inner">
@@ -92,10 +91,6 @@
 </product-recommendations-component>
 
 {% stylesheet %}
-  .product-recommendations {
-    padding-block: 3rem 4rem;
-  }
-
   .product-recommendations__inner {
     display: flex;
     flex-direction: column;
@@ -159,13 +154,13 @@
 
   .product-recommendations .collection-page__grid {
     display: grid;
-    gap: var(--collection-gap, 12px);
+    gap: var(--grid-gap-active);
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @media (min-width: 750px) {
     .product-recommendations .collection-page__grid {
-      grid-template-columns: repeat(var(--collection-columns, 4), minmax(0, 1fr));
+      grid-template-columns: repeat(var(--product-grid-columns, 4), minmax(0, 1fr));
     }
   }
 {% endstylesheet %}
@@ -202,16 +197,6 @@
       "max": 4,
       "step": 1,
       "default": 4
-    },
-    {
-      "type": "range",
-      "id": "grid_gap",
-      "label": "t:sections.collection.settings.grid_gap_label",
-      "min": 4,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "default": 12
     },
     {
       "type": "checkbox",

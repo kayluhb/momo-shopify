@@ -45,6 +45,54 @@
         "unit": "px",
         "label": "t:labels.page_margin_mobile",
         "default": 12
+      },
+      {
+        "type": "header",
+        "content": "t:labels.grid_spacing_header"
+      },
+      {
+        "type": "range",
+        "id": "grid_gap",
+        "min": 0,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "label": "t:labels.grid_gap",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "grid_gap_mobile",
+        "min": 0,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "label": "t:labels.grid_gap_mobile",
+        "default": 12
+      },
+      {
+        "type": "header",
+        "content": "t:labels.section_spacing_header"
+      },
+      {
+        "type": "range",
+        "id": "section_padding",
+        "min": 0,
+        "max": 160,
+        "step": 4,
+        "unit": "px",
+        "label": "t:labels.section_padding",
+        "default": 80
+      },
+      {
+        "type": "range",
+        "id": "section_padding_mobile",
+        "min": 0,
+        "max": 120,
+        "step": 4,
+        "unit": "px",
+        "label": "t:labels.section_padding_mobile",
+        "default": 32
       }
     ]
   },

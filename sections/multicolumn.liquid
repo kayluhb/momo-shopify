@@ -6,7 +6,7 @@
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="multicolumn full-width py-8 md:py-20 {{ section_bg }}"
+  class="multicolumn full-width section-padding {{ section_bg }}"
 >
   <div class="section-inner">
     {% render 'section-heading',
@@ -63,7 +63,7 @@
 {% stylesheet %}
   .multicolumn__grid {
     display: grid;
-    gap: 2rem;
+    gap: var(--grid-gap-active);
     grid-template-columns: 1fr;
   }
 

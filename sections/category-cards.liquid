@@ -1,6 +1,5 @@
 {% liquid
   assign columns = section.settings.columns
-  assign gap = section.settings.gap
   assign overlay_opacity = section.settings.overlay_opacity
   assign card_ratio = section.settings.card_aspect_ratio
 %}
@@ -8,13 +7,13 @@
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="category-cards full-width py-8 md:py-10 {{ section_bg }}"
+  class="category-cards full-width section-padding {{ section_bg }}"
 >
   <div class="section-inner">
     {% if section.blocks.size > 0 %}
       <ul
         class="category-cards__grid list-none p-0 m-0"
-        style="--columns: {{ columns }}; --gap: {{ gap }}px; --card-ratio: {{ card_ratio }};"
+        style="--columns: {{ columns }}; --card-ratio: {{ card_ratio }};"
         role="list"
       >
         {% for block in section.blocks %}
@@ -99,7 +98,7 @@
 {% stylesheet %}
   .category-cards__grid {
     display: grid;
-    gap: var(--gap, 12px);
+    gap: var(--grid-gap-active);
     grid-template-columns: 1fr;
   }
 
@@ -111,11 +110,11 @@
 
     .category-cards__grid {
       --slide-peek: min(3rem, 12vw);
-      --slide-width: calc(100% - var(--slide-peek) - var(--gap, 12px));
+      --slide-width: calc(100% - var(--slide-peek) - var(--grid-gap-active));
 
       display: flex;
       flex-wrap: nowrap;
-      gap: var(--gap, 12px);
+      gap: var(--grid-gap-active);
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
@@ -256,16 +255,6 @@
       "default": 3
     },
     {
-      "type": "range",
-      "id": "gap",
-      "label": "t:sections.category_cards.gap_label",
-      "min": 0,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "default": 12
-    },
-    {
       "type": "select",
       "id": "card_aspect_ratio",
       "label": "t:sections.category_cards.card_aspect_ratio_label",
@@ -322,7 +311,6 @@
       "name": "t:sections.category_cards.presets.default_name",
       "settings": {
         "columns": 3,
-        "gap": 12,
         "card_aspect_ratio": "4 / 5",
         "overlay_opacity": 55
       },

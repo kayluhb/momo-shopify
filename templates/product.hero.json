@@ -34,7 +34,6 @@
         "show_recently_viewed": true,
         "products_to_show": 4,
         "columns": 4,
-        "grid_gap": 12,
         "show_secondary_image": true,
         "show_color_swatches": true,
         "show_rating": false,

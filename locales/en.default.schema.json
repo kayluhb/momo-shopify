@@ -43,6 +43,11 @@
   "labels": {
     "alignment": "Alignment",
     "grid_gap": "Grid spacing",
+    "grid_gap_mobile": "Mobile grid spacing",
+    "grid_spacing_header": "Grid spacing",
+    "section_padding": "Section spacing",
+    "section_padding_mobile": "Mobile section spacing",
+    "section_spacing_header": "Section spacing",
     "grid_item_width": "Grid item width",
     "layout_direction": "Layout direction",
     "menu": "Menu",

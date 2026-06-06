@@ -138,8 +138,9 @@ h4,
 h5,
 h6 {
   font-family: var(--font-brand--family, var(--font-display--family));
-  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
-  line-height: 1.12;
+  font-weight: var(--font-heading-weight, var(--font-weight-bold, var(--font-display--weight-bold, 700)));
+  font-style: var(--font-heading-font-style, normal);
+  line-height: var(--font-heading-line-height, 1.12);
   letter-spacing: var(--font-heading-letter-spacing, -0.03em);
   text-transform: var(--font-heading-text-transform, none);
 }
@@ -151,7 +152,8 @@ b {
 
 :where(.font-display) {
   font-family: var(--font-brand--family, var(--font-display--family));
-  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
+  font-weight: var(--font-heading-weight, var(--font-weight-bold, var(--font-display--weight-bold, 700)));
+  font-style: var(--font-heading-font-style, normal);
   letter-spacing: var(--font-heading-letter-spacing, -0.03em);
 }
 
@@ -198,6 +200,7 @@ b {
     .rte
   ) {
   font-family: var(--font-brand--family, var(--font-body--family));
+  font-size: var(--font-body-size, 1rem);
   font-weight: var(--font-weight-normal, var(--font-body--weight, 400));
   line-height: var(--font-body-line-height, 1.6);
   letter-spacing: var(--font-body-letter-spacing, 0.015em);
@@ -216,7 +219,8 @@ b {
 
 :where(.category-cards__line, .bento-grid__title, .testimonials__name) {
   font-family: var(--font-brand--family, var(--font-display--family));
-  font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
+  font-weight: var(--font-heading-weight, var(--font-weight-bold, var(--font-display--weight-bold, 700)));
+  font-style: var(--font-heading-font-style, normal);
   letter-spacing: var(--font-heading-letter-spacing, -0.03em);
 }
 

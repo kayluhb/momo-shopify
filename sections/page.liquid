@@ -33,7 +33,9 @@
   .page-content__title {
     margin: 0 0 clamp(1.25rem, 3vw, 2rem);
     font-size: var(--page-heading-size, clamp(2rem, 5vw, 3rem));
-    line-height: 1.05;
+    font-weight: var(--font-heading-weight, var(--font-weight-bold, 700));
+    font-style: var(--font-heading-font-style, normal);
+    line-height: var(--font-heading-line-height, 1.05);
     text-wrap: balance;
     text-transform: var(--font-heading-text-transform, none);
   }

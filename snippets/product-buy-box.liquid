@@ -143,8 +143,9 @@
   .product-buy__title {
     margin: 0 0 0.75rem;
     font-size: var(--product-buy-title-size, clamp(1.875rem, 3.5vw, 2.375rem));
-    line-height: 1.1;
-    font-weight: 700;
+    line-height: var(--font-heading-line-height, 1.1);
+    font-weight: var(--font-heading-weight, 700);
+    font-style: var(--font-heading-font-style, normal);
     text-transform: var(--font-heading-text-transform, none);
   }
 

@@ -162,7 +162,9 @@
     margin: 0;
     max-width: 11ch;
     font-size: var(--about-momo-headline-size, clamp(2.5rem, 7.5vw, 4.25rem));
-    line-height: 0.95;
+    font-weight: var(--font-heading-weight, var(--font-weight-bold, 700));
+    font-style: var(--font-heading-font-style, normal);
+    line-height: var(--font-heading-line-height, 0.95);
     text-wrap: balance;
     text-transform: var(--font-heading-text-transform, none);
   }

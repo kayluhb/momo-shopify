@@ -119,9 +119,10 @@
 
   .collection-hero__heading {
     margin: 0 0 0.5rem;
-    font-size: clamp(1.75rem, 3vw + 0.5rem, 2.5rem);
+    font-size: var(--collection-hero-heading-size, clamp(1.75rem, 3vw + 0.5rem, 2.5rem));
     line-height: 1.1;
     font-weight: 700;
+    text-transform: var(--font-heading-text-transform, none);
   }
 
   .collection-hero__description {

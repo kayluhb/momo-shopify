@@ -141,6 +141,7 @@ h6 {
   font-weight: var(--font-weight-bold, var(--font-display--weight-bold, 700));
   line-height: 1.12;
   letter-spacing: var(--font-heading-letter-spacing, -0.03em);
+  text-transform: var(--font-heading-text-transform, none);
 }
 
 strong,

@@ -142,9 +142,10 @@
 
   .product-buy__title {
     margin: 0 0 0.75rem;
-    font-size: clamp(1.875rem, 3.5vw, 2.375rem);
+    font-size: var(--product-buy-title-size, clamp(1.875rem, 3.5vw, 2.375rem));
     line-height: 1.1;
     font-weight: 700;
+    text-transform: var(--font-heading-text-transform, none);
   }
 
   .product-buy__price {

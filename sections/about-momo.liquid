@@ -161,9 +161,10 @@
   .about-momo__headline {
     margin: 0;
     max-width: 11ch;
-    font-size: clamp(2.5rem, 7.5vw, 4.25rem);
+    font-size: var(--about-momo-headline-size, clamp(2.5rem, 7.5vw, 4.25rem));
     line-height: 0.95;
     text-wrap: balance;
+    text-transform: var(--font-heading-text-transform, none);
   }
 
   .about-momo__body {
@@ -256,7 +257,7 @@
       grid-row: 1;
       align-self: end;
       max-width: none;
-      font-size: clamp(3rem, 5.5vw, 4.75rem);
+      font-size: var(--about-momo-headline-size, clamp(3rem, 5.5vw, 4.75rem));
     }
 
     .about-momo__body {

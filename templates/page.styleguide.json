@@ -1,33 +1,72 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
+    "index": {
+      "type": "styleguide-index",
+      "settings": {
+        "preview_collection": "frontpage"
+      }
+    },
+    "label_announcement_bar": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Announcement bar",
+        "anchor_id": "announcement-bar"
+      }
+    },
+    "announcement_bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free shipping on orders over $100",
+            "link": "shopify://collections/all"
+          }
+        },
+        "announcement_2": {
+          "type": "announcement",
+          "settings": {
+            "text": "New design drops — explore the collection",
+            "link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_1",
+        "announcement_2"
+      ],
+      "settings": {
+        "color_scheme": "steel",
+        "autoplay_interval": 5,
+        "show_arrows": false
+      }
+    },
+    "label_hero": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Full screen hero",
+        "anchor_id": "hero-fullscreen"
+      }
+    },
     "hero": {
       "type": "hero-fullscreen",
       "blocks": {
-        "slide_JmewBq": {
+        "slide_1": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/bare-stony-room-with-two-wooden-benches-and-coffee-tables.jpg",
             "overlay_opacity": 35,
             "heading": "Heading",
             "subheading": "Subheading",
-            "button_label": "Shop Now",
-            "button_link": "shopify://collections/frontpage",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all",
             "button_2_label": "",
             "button_2_link": "",
             "text_color": "white",
             "text_placement": "center"
           }
         },
-        "slide_1": {
+        "slide_2": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/long-espresso-sits-on-a-wooden-stool.jpg",
@@ -44,31 +83,39 @@
         }
       },
       "block_order": [
-        "slide_JmewBq",
-        "slide_1"
+        "slide_1",
+        "slide_2"
       ],
       "settings": {
         "autoplay": true,
         "autoplay_interval": 5,
-        "show_dots": true,
-        "font_scheme": "display"
+        "show_dots": true
       }
     },
-    "featured": {
-      "type": "featured-collection",
+    "label_promo": {
+      "type": "styleguide-label",
       "settings": {
-        "eyebrow": "Eyebrow",
-        "heading": "New Arrivals",
-        "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
-        "heading_alignment": "left",
-        "collection": "ann-demeulemeester",
-        "products_to_show": 6,
-        "columns": 4,
-        "show_view_all": true,
-        "view_all_label": "View all",
-        "view_all_link": "",
-        "color_scheme": "steel",
-        "font_scheme": "editorial"
+        "title": "Promo banner",
+        "anchor_id": "promo-banner"
+      }
+    },
+    "promo": {
+      "type": "promo-banner",
+      "settings": {
+        "heading": "Free shipping on orders over $100",
+        "text": "",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "color_scheme": "warmth",
+        "use_gradient": false,
+        "overlay_opacity": 0
+      }
+    },
+    "label_bento": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Bento grid",
+        "anchor_id": "bento-grid"
       }
     },
     "bento": {
@@ -79,7 +126,7 @@
           "settings": {
             "layout": "featured",
             "image": "shopify://shop_images/iced-latte-at-coffee-shop-window.jpg",
-            "eyebrow": "asfdadsf",
+            "eyebrow": "Featured",
             "title": "Blankets",
             "link": "shopify://collections/all",
             "overlay_opacity": 0
@@ -113,7 +160,7 @@
             "layout": "wide",
             "image": "shopify://shop_images/lenses-lattes.jpg",
             "eyebrow": "",
-            "title": "Fire Pits",
+            "title": "Fire pits",
             "link": "shopify://collections/all",
             "overlay_opacity": 0
           }
@@ -131,21 +178,37 @@
         "subheading": "",
         "heading_alignment": "center",
         "min_height": 520,
-        "color_scheme": "earth",
-        "font_scheme": "bold"
+        "color_scheme": "earth"
       }
     },
-    "promo": {
-      "type": "promo-banner",
+    "label_featured": {
+      "type": "styleguide-label",
       "settings": {
-        "heading": "Free shipping on orders over $100",
-        "text": "",
-        "button_label": "Shop now",
-        "button_link": "shopify://collections/all",
-        "color_scheme": "warmth",
-        "use_gradient": false,
-        "overlay_opacity": 0,
-        "font_scheme": "display"
+        "title": "Featured collection",
+        "anchor_id": "featured-collection"
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Eyebrow",
+        "heading": "New arrivals",
+        "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
+        "heading_alignment": "left",
+        "collection": "ann-demeulemeester",
+        "products_to_show": 6,
+        "columns": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_link": "",
+        "color_scheme": "steel"
+      }
+    },
+    "label_category_cards": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Category cards",
+        "anchor_id": "category-cards"
       }
     },
     "category_cards": {
@@ -188,11 +251,17 @@
         "color_scheme": "canvas",
         "columns": 3,
         "card_aspect_ratio": "4 / 5",
-        "overlay_opacity": 55,
-        "font_scheme": "soft"
+        "overlay_opacity": 55
       }
     },
-    "split": {
+    "label_image_with_text": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Image with text",
+        "anchor_id": "image-with-text"
+      }
+    },
+    "image_with_text": {
       "type": "image-with-text",
       "settings": {
         "image": "shopify://shop_images/coffee-beans-from-above.jpg",
@@ -203,11 +272,17 @@
         "button_label": "Our story",
         "button_link": "shopify://products/the-inventory-not-tracked-snowboard",
         "button_style": "secondary",
-        "color_scheme": "canvas",
-        "font_scheme": "editorial"
+        "color_scheme": "canvas"
       }
     },
-    "columns": {
+    "label_multicolumn": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Multicolumn",
+        "anchor_id": "multicolumn"
+      }
+    },
+    "multicolumn": {
       "type": "multicolumn",
       "blocks": {
         "column_1": {
@@ -247,12 +322,18 @@
       "settings": {
         "eyebrow": "Eyebrow",
         "heading": "About Momo",
-        "subheading": "<p>subheading</p>",
+        "subheading": "<p>Three pillars of the collection.</p>",
         "heading_alignment": "left",
         "columns": 3,
         "text_alignment": "center",
-        "color_scheme": "steel",
-        "font_scheme": "editorial"
+        "color_scheme": "steel"
+      }
+    },
+    "label_testimonials": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Testimonials",
+        "anchor_id": "testimonials"
       }
     },
     "testimonials": {
@@ -296,19 +377,19 @@
         "heading": "What customers say",
         "subheading": "",
         "heading_alignment": "center",
-        "color_scheme": "canvas",
-        "font_scheme": "soft"
+        "color_scheme": "canvas"
       }
     },
-    "logos": {
+    "label_logo_list": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Logo list",
+        "anchor_id": "logo-list"
+      }
+    },
+    "logo_list": {
       "type": "logo-list",
       "blocks": {
-        "logo_H4zcRe": {
-          "type": "logo",
-          "settings": {
-            "link": ""
-          }
-        },
         "logo_1": {
           "type": "logo",
           "settings": {
@@ -341,14 +422,12 @@
         }
       },
       "block_order": [
-        "logo_H4zcRe",
         "logo_1",
         "logo_2",
         "logo_3",
         "logo_4",
         "logo_5"
       ],
-      "disabled": true,
       "settings": {
         "eyebrow": "",
         "heading": "As seen in",
@@ -357,6 +436,13 @@
         "logo_height": 40,
         "grayscale": true,
         "color_scheme": "canvas"
+      }
+    },
+    "label_faq": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "FAQ",
+        "anchor_id": "faq"
       }
     },
     "faq": {
@@ -379,43 +465,19 @@
         "question_3": {
           "type": "question",
           "settings": {
-            "question": "Do you offer gift wrapping",
-            "answer": "<p>Yes, gift wrapping is available at checkout for select items. Add a note at checkout if you would like a personalized message included.</p>"
-          }
-        },
-        "question_4": {
-          "type": "question",
-          "settings": {
-            "question": "How long will it take to get my orders?",
-            "answer": "<p>Orders typically ship within 2–4 business days. Delivery times depend on your location and selected shipping method.</p>"
-          }
-        },
-        "question_5": {
-          "type": "question",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>We accept returns within 30 days of delivery on unused items in original packaging.</p>"
-          }
-        },
-        "question_6": {
-          "type": "question",
-          "settings": {
-            "question": "Any question?",
-            "answer": "<p>Reach out to our customer support team and we will get back to you as soon as possible.</p>"
+            "question": "Do you offer gift wrapping?",
+            "answer": "<p>Yes, gift wrapping is available at checkout for select items.</p>"
           }
         }
       },
       "block_order": [
         "question_1",
         "question_2",
-        "question_3",
-        "question_4",
-        "question_5",
-        "question_6"
+        "question_3"
       ],
       "settings": {
-        "heading": "Have a question ? We are here to help.",
-        "subheading": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>",
+        "heading": "Have a question? We are here to help.",
+        "subheading": "<p>Check out the most common questions our customers asked.</p>",
         "show_online_status": true,
         "support_hours": "Our customer support is available monday to friday: 8am-8:30pm.",
         "support_response_time": "Average answer time: 24h",
@@ -424,14 +486,21 @@
         "color_scheme": "canvas"
       }
     },
-    "editorial": {
+    "label_rich_text": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Rich text",
+        "anchor_id": "rich-text"
+      }
+    },
+    "rich_text": {
       "type": "rich-text",
       "settings": {
         "eyebrow": "Eyebrow",
         "heading": "Designed to endure",
         "display_size": true,
         "text": "<p>We believe in objects that earn their place — pieces shaped by material honesty, refined proportion, and the quiet confidence of lasting craft.</p>",
-        "button_label": "Button Label",
+        "button_label": "Button label",
         "button_link": "shopify://pages/about-us",
         "button_style": "secondary",
         "text_alignment": "center",
@@ -439,33 +508,82 @@
         "use_gradient": false
       }
     },
-    "image_with_text_K6Qtep": {
-      "type": "image-with-text",
-      "name": "t:sections.image_with_text.presets.default_name",
+    "label_collections": {
+      "type": "styleguide-label",
       "settings": {
-        "image_position": "right",
-        "eyebrow": "",
-        "heading": "Crafted with care",
-        "text": "<p>Every piece tells a story of heritage, material honesty, and modern form.</p>",
-        "button_label": "Our story",
-        "button_link": "shopify://products/the-collection-snowboard-liquid",
-        "button_style": "secondary",
-        "color_scheme": "steel"
+        "title": "Collections grid",
+        "anchor_id": "collections"
       }
+    },
+    "collections": {
+      "type": "collections",
+      "settings": {
+        "grid_item_width": "collections--full"
+      }
+    },
+    "label_custom_section": {
+      "type": "styleguide-label",
+      "settings": {
+        "title": "Custom section",
+        "anchor_id": "custom-section"
+      }
+    },
+    "custom_section": {
+      "type": "custom-section",
+      "blocks": {
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "text": "Custom section with theme blocks",
+            "text_style": "text--title",
+            "alignment": "center"
+          }
+        },
+        "text_2": {
+          "type": "text",
+          "settings": {
+            "text": "Compose layouts from reusable blocks in the theme editor.",
+            "text_style": "text--normal",
+            "alignment": "center"
+          }
+        }
+      },
+      "block_order": [
+        "text_1",
+        "text_2"
+      ],
+      "settings": {}
     }
   },
   "order": [
+    "index",
+    "label_announcement_bar",
+    "announcement_bar",
+    "label_hero",
     "hero",
-    "featured",
-    "bento",
+    "label_promo",
     "promo",
+    "label_bento",
+    "bento",
+    "label_featured",
+    "featured",
+    "label_category_cards",
     "category_cards",
-    "split",
-    "columns",
+    "label_image_with_text",
+    "image_with_text",
+    "label_multicolumn",
+    "multicolumn",
+    "label_testimonials",
     "testimonials",
-    "logos",
+    "label_logo_list",
+    "logo_list",
+    "label_faq",
     "faq",
-    "editorial",
-    "image_with_text_K6Qtep"
+    "label_rich_text",
+    "rich_text",
+    "label_collections",
+    "collections",
+    "label_custom_section",
+    "custom_section"
   ]
 }

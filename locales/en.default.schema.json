@@ -411,6 +411,21 @@
       "presets": {
         "default_name": "Full screen hero"
       }
+    },
+    "styleguide": {
+      "label": {
+        "name": "Styleguide label",
+        "title_label": "Section title",
+        "anchor_label": "Anchor ID",
+        "anchor_info": "Used for in-page navigation links. Leave empty to generate from the title."
+      },
+      "index": {
+        "name": "Styleguide index",
+        "preview_header": "Preview links",
+        "preview_product_label": "Product preview",
+        "preview_collection_label": "Collection preview",
+        "preview_blog_label": "Blog preview"
+      }
     }
   }
 }

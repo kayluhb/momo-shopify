@@ -616,8 +616,9 @@
 
   .hero__heading {
     margin: 0 0 var(--section-header-title-gap, 0.375rem);
-    font-size: clamp(2rem, 4.5vw + 1rem, 3.5rem);
+    font-size: var(--hero-heading-size, clamp(2rem, 4.5vw + 1rem, 3.5rem));
     line-height: 1.05;
+    text-transform: var(--font-heading-text-transform, none);
   }
 
   .hero__subheading {

@@ -32,9 +32,10 @@
 
   .page-content__title {
     margin: 0 0 clamp(1.25rem, 3vw, 2rem);
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: var(--page-heading-size, clamp(2rem, 5vw, 3rem));
     line-height: 1.05;
     text-wrap: balance;
+    text-transform: var(--font-heading-text-transform, none);
   }
 
   .page-content__body {

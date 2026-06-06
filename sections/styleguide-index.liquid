@@ -1,0 +1,231 @@
+{% liquid
+  assign preview_product = section.settings.preview_product
+  if preview_product == blank
+    assign preview_product = all_products.first
+  endif
+
+  assign preview_collection = section.settings.preview_collection
+  if preview_collection == blank
+    assign preview_collection = collections.all
+  endif
+
+  assign preview_blog = section.settings.preview_blog
+  if preview_blog == blank
+    assign preview_blog = blogs.first
+  endif
+
+  assign preview_article = blank
+  if preview_blog != blank
+    assign preview_article = preview_blog.articles.first
+  endif
+%}
+
+<section
+  class="styleguide-index full-width section-padding"
+  {{ section.shopify_attributes }}
+>
+  <div class="section-inner styleguide-index__inner">
+    <header class="styleguide-index__header">
+      <p class="styleguide-index__eyebrow">{{ 'sections.styleguide.index.eyebrow' | t }}</p>
+      <h1 class="styleguide-index__title">{{ 'sections.styleguide.index.title' | t }}</h1>
+      <p class="styleguide-index__intro">{{ 'sections.styleguide.index.intro' | t }}</p>
+    </header>
+
+    <div class="styleguide-index__grid">
+      <div class="styleguide-index__panel">
+        <h2 class="styleguide-index__panel-title">{{ 'sections.styleguide.index.on_page_title' | t }}</h2>
+        <ul class="styleguide-index__list list-none p-0" role="list">
+          <li><a class="styleguide-index__link" href="#announcement-bar">{{ 'sections.styleguide.names.announcement_bar' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#hero-fullscreen">{{ 'sections.styleguide.names.hero_fullscreen' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#promo-banner">{{ 'sections.styleguide.names.promo_banner' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#bento-grid">{{ 'sections.styleguide.names.bento_grid' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#featured-collection">{{ 'sections.styleguide.names.featured_collection' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#category-cards">{{ 'sections.styleguide.names.category_cards' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#image-with-text">{{ 'sections.styleguide.names.image_with_text' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#multicolumn">{{ 'sections.styleguide.names.multicolumn' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#testimonials">{{ 'sections.styleguide.names.testimonials' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#logo-list">{{ 'sections.styleguide.names.logo_list' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#faq">{{ 'sections.styleguide.names.faq' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#rich-text">{{ 'sections.styleguide.names.rich_text' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#collections">{{ 'sections.styleguide.names.collections_grid' | t }}</a></li>
+          <li><a class="styleguide-index__link" href="#custom-section">{{ 'sections.styleguide.names.custom_section' | t }}</a></li>
+        </ul>
+      </div>
+
+      <div class="styleguide-index__panel">
+        <h2 class="styleguide-index__panel-title">{{ 'sections.styleguide.index.template_title' | t }}</h2>
+        <ul class="styleguide-index__list list-none p-0" role="list">
+          <li>
+            <span class="styleguide-index__note">{{ 'sections.styleguide.index.global_note' | t }}</span>
+            {{ 'sections.styleguide.names.header' | t }}, {{ 'sections.styleguide.names.footer' | t }}, {{ 'sections.styleguide.names.cart_drawer' | t }}
+          </li>
+          {% if preview_product != blank %}
+            <li>
+              <a class="styleguide-index__link" href="{{ preview_product.url }}">{{ 'sections.styleguide.names.product' | t }}</a>
+            </li>
+            <li>
+              <a class="styleguide-index__link" href="{{ preview_product.url }}">{{ 'sections.styleguide.names.about_momo' | t }}</a>
+            </li>
+            <li>
+              <a class="styleguide-index__link" href="{{ preview_product.url }}">{{ 'sections.styleguide.names.product_recommendations' | t }}</a>
+            </li>
+          {% endif %}
+          {% if preview_collection != blank %}
+            <li>
+              <a class="styleguide-index__link" href="{{ preview_collection.url }}">{{ 'sections.styleguide.names.collection_hero' | t }}</a>
+            </li>
+            <li>
+              <a class="styleguide-index__link" href="{{ preview_collection.url }}">{{ 'sections.styleguide.names.collection' | t }}</a>
+            </li>
+          {% endif %}
+          <li>
+            <a class="styleguide-index__link" href="{{ routes.collections_url }}">{{ 'sections.styleguide.names.collections' | t }}</a>
+          </li>
+          {% if preview_blog != blank %}
+            <li>
+              <a class="styleguide-index__link" href="{{ preview_blog.url }}">{{ 'sections.styleguide.names.blog' | t }}</a>
+            </li>
+          {% endif %}
+          {% if preview_article != blank %}
+            <li>
+              <a class="styleguide-index__link" href="{{ preview_article.url }}">{{ 'sections.styleguide.names.article' | t }}</a>
+            </li>
+          {% endif %}
+          <li>
+            <a class="styleguide-index__link" href="{{ routes.search_url }}?q={{ 'sections.styleguide.index.search_query' | t | url_param_escape }}">{{ 'sections.styleguide.names.search' | t }}</a>
+          </li>
+          <li>
+            <a class="styleguide-index__link" href="{{ routes.cart_url }}">{{ 'sections.styleguide.names.cart' | t }}</a>
+          </li>
+          <li>
+            <a class="styleguide-index__link" href="{{ routes.root_url }}">{{ 'sections.styleguide.names.page' | t }}</a>
+          </li>
+          <li>
+            <a class="styleguide-index__link" href="{{ routes.root_url }}pages/styleguide-404-preview">{{ 'sections.styleguide.names.not_found' | t }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .styleguide-index__inner {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .styleguide-index__header {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 42rem;
+  }
+
+  .styleguide-index__eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / 55%);
+  }
+
+  .styleguide-index__title {
+    margin: 0;
+    font-size: clamp(2rem, 2vw + 1.5rem, 3rem);
+    line-height: 1.05;
+  }
+
+  .styleguide-index__intro {
+    margin: 0;
+    max-width: 38rem;
+    line-height: 1.6;
+    color: rgb(var(--color-foreground-rgb) / 72%);
+  }
+
+  .styleguide-index__grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 750px) {
+    .styleguide-index__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .styleguide-index__panel {
+    display: grid;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 12%);
+    border-radius: 0.5rem;
+    background: rgb(var(--color-background-rgb));
+  }
+
+  .styleguide-index__panel-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .styleguide-index__list {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .styleguide-index__link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .styleguide-index__link:hover {
+    opacity: 0.72;
+  }
+
+  .styleguide-index__note {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.8125rem;
+    color: rgb(var(--color-foreground-rgb) / 55%);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.styleguide.index.name",
+  "tag": "section",
+  "class": "section-styleguide-index",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.styleguide.index.preview_header"
+    },
+    {
+      "type": "product",
+      "id": "preview_product",
+      "label": "t:sections.styleguide.index.preview_product_label"
+    },
+    {
+      "type": "collection",
+      "id": "preview_collection",
+      "label": "t:sections.styleguide.index.preview_collection_label"
+    },
+    {
+      "type": "blog",
+      "id": "preview_blog",
+      "label": "t:sections.styleguide.index.preview_blog_label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.styleguide.index.name"
+    }
+  ]
+}
+{% endschema %}

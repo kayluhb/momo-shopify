@@ -135,6 +135,49 @@
     },
     "faq": {
       "support_avatars_label": "Customer support team"
+    },
+    "styleguide": {
+      "label_prefix": "Section",
+      "index": {
+        "eyebrow": "Theme styleguide",
+        "title": "Section library",
+        "intro": "Browse every reusable section in one place. Sections on this page render below. Template-specific sections link to live previews on your dev store.",
+        "on_page_title": "On this page",
+        "template_title": "Template-specific sections",
+        "global_note": "Always visible on every page:",
+        "search_query": "coffee"
+      },
+      "names": {
+        "announcement_bar": "Announcement bar",
+        "hero_fullscreen": "Full screen hero",
+        "promo_banner": "Promo banner",
+        "bento_grid": "Bento grid",
+        "featured_collection": "Featured collection",
+        "category_cards": "Category cards",
+        "image_with_text": "Image with text",
+        "multicolumn": "Multicolumn",
+        "testimonials": "Testimonials",
+        "logo_list": "Logo list",
+        "faq": "FAQ",
+        "rich_text": "Rich text",
+        "collections_grid": "Collections grid",
+        "custom_section": "Custom section",
+        "header": "Header",
+        "footer": "Footer",
+        "cart_drawer": "Cart drawer",
+        "product": "Product",
+        "about_momo": "About Momo",
+        "product_recommendations": "Product recommendations",
+        "collection_hero": "Collection hero",
+        "collection": "Collection",
+        "collections": "Collections list",
+        "blog": "Blog",
+        "article": "Article",
+        "search": "Search",
+        "cart": "Cart",
+        "page": "Page",
+        "not_found": "404"
+      }
     }
   },
   "404": {

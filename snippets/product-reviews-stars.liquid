@@ -1,0 +1,22 @@
+{% doc %}
+  Renders a 1–5 star row.
+
+  @param {number} rating - Rating value (rounded for display)
+  @param {string} [class_prefix] - CSS class prefix
+{% enddoc %}
+
+{% liquid
+  assign prefix = class_prefix | default: 'product-reviews'
+  assign star_rating = rating | round
+%}
+
+<span class="{{ prefix }}__stars">
+  {% for i in (1..5) %}
+    <span
+      class="{{ prefix }}__star{% if i <= star_rating %} {{ prefix }}__star--filled{% endif %}"
+      aria-hidden="true"
+    >
+      ★
+    </span>
+  {% endfor %}
+</span>

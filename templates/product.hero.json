@@ -28,6 +28,15 @@
         "color_scheme": "steel"
       }
     },
+    "product_reviews": {
+      "type": "product-reviews",
+      "settings": {
+        "eyebrow": "Reviews",
+        "heading": "Customer reviews",
+        "color_scheme": "canvas",
+        "font_scheme": "display"
+      }
+    },
     "product_recommendations": {
       "type": "product-recommendations",
       "settings": {
@@ -44,6 +53,7 @@
   "order": [
     "main",
     "about_momo",
+    "product_reviews",
     "product_recommendations"
   ]
 }

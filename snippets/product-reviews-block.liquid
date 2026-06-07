@@ -1,0 +1,163 @@
+{% doc %}
+  Loads approved product reviews from the product metafield and renders summary or section content.
+
+  @param {product} product - Current product
+  @param {string} [variant] - summary or section
+{% enddoc %}
+
+{% liquid
+  assign block_variant = variant | default: 'section'
+  assign reviews_namespace = shop.metafields.custom.momo_storefront_namespace.value
+  assign published_reviews = blank
+  if reviews_namespace != blank
+    assign published_reviews = product.metafields[reviews_namespace].published_reviews.value
+  endif
+  assign rating_sum = 0
+  assign rating_count = 0
+  assign review_count = 0
+%}
+
+{% if published_reviews != blank %}
+  {% for review in published_reviews %}
+    {% liquid
+      assign rating_data = review.rating.value
+      assign rating_value = rating_data.rating | default: rating_data.value | default: rating_data
+      if rating_value == blank
+        assign rating_value = review.rating.rating | default: 0
+      endif
+    %}
+    {% assign review_count = review_count | plus: 1 %}
+    {% if rating_value and rating_value != 0 %}
+      {% assign rating_sum = rating_sum | plus: rating_value %}
+      {% assign rating_count = rating_count | plus: 1 %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% liquid
+  assign average_rating = 0
+  if rating_count > 0
+    assign average_rating = rating_sum | times: 1.0 | divided_by: rating_count | round: 1
+  endif
+%}
+
+{% if block_variant == 'summary' %}
+  {% if review_count > 0 %}
+    <p class="product-buy__reviews">
+      <a class="product-buy__reviews-link" href="#product-reviews">
+        <span
+          class="product-buy__reviews-stars"
+          aria-label="{{ 'products.rating_label' | t: rating: average_rating, count: review_count }}"
+        >
+          {% render 'product-reviews-stars', rating: average_rating, class_prefix: 'product-buy-review' %}
+        </span>
+        <span class="product-buy__reviews-meta">
+          <span class="product-buy__reviews-score">{{ average_rating }}</span>
+          <span class="product-buy__reviews-divider" aria-hidden="true">·</span>
+          <span class="product-buy__reviews-count">
+            {%- if review_count == 1 -%}
+              {{- 'products.reviews.review_count' | t: count: review_count -}}
+            {%- else -%}
+              {{- 'products.reviews.review_count_other' | t: count: review_count -}}
+            {%- endif -%}
+          </span>
+        </span>
+      </a>
+    </p>
+  {% endif %}
+{% else %}
+  {% if review_count > 0 %}
+    <div class="product-reviews__summary">
+      <span
+        class="product-reviews__summary-stars"
+        aria-label="{{ 'products.rating_label' | t: rating: average_rating, count: review_count }}"
+      >
+        {% render 'product-reviews-stars', rating: average_rating %}
+      </span>
+      <span class="product-reviews__summary-meta">
+        {{ average_rating }}
+        ·
+        {%- if review_count == 1 -%}
+          {{ 'products.reviews.review_count' | t: count: review_count }}
+        {%- else -%}
+          {{ 'products.reviews.review_count_other' | t: count: review_count }}
+        {%- endif -%}
+      </span>
+    </div>
+  {% endif %}
+
+  {% if review_count == 0 %}
+    <p class="product-reviews__empty">{{ 'products.reviews.no_reviews' | t }}</p>
+  {% else %}
+    <ul class="product-reviews__list list-none p-0" role="list">
+      {% for review in published_reviews %}
+        {% liquid
+          assign rating_data = review.rating.value
+          assign stars = rating_data.rating | default: rating_data.value | default: rating_data | default: 0
+          if stars == blank
+            assign stars = review.rating.rating | default: 0
+          endif
+        %}
+        <li class="product-reviews__item">
+          <div class="product-reviews__item-header">
+            <span
+              class="product-reviews__item-stars"
+              aria-label="{{ 'products.rating_label' | t: rating: stars }}"
+            >
+              {% render 'product-reviews-stars', rating: stars %}
+            </span>
+            {% if review.reviewer_name.value != blank %}
+              <span class="product-reviews__author">{{ review.reviewer_name.value | escape }}</span>
+            {% endif %}
+          </div>
+
+          {% if review.title.value != blank %}
+            <h3 class="product-reviews__title">{{ review.title.value | escape }}</h3>
+          {% endif %}
+
+          {% if review.body.value != blank %}
+            <div class="product-reviews__body rte">{{ review.body.value }}</div>
+          {% endif %}
+
+          {% if review.media.value != blank %}
+            <div class="product-reviews__media">
+              {% for asset in review.media.value %}
+                {% if asset.media_type == 'video' %}
+                  {{
+                    asset
+                    | video_tag:
+                      class: 'product-reviews__media-video',
+                      image_size: '480x480',
+                      controls: true
+                  }}
+                {% else %}
+                  {{
+                    asset
+                    | image_url: width: 480
+                    | image_tag:
+                      class: 'product-reviews__media-image',
+                      loading: 'lazy',
+                      widths: '160,320,480',
+                      sizes: '160px',
+                      alt: review.title.value | default: 'Review photo'
+                  }}
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if review.momo_response.value != blank %}
+            <div class="product-reviews__response">
+              <p class="product-reviews__response-label">
+                {{ 'products.reviews.momo_response_label' | t }}
+              </p>
+              <div class="product-reviews__response-body rte">
+                {{ review.momo_response.value }}
+              </div>
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endif %}

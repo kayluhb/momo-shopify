@@ -1,0 +1,204 @@
+{% doc %}
+  Renders pre-order purchase options for products with selling plans.
+
+  @param {product} product - The product to display purchase options for
+  @param {form} form - Product form object for payment terms
+  @param {string} section_id - Section ID for unique field names
+  @param {object} current_variant - Selected variant
+
+  @example
+  {% render 'product-purchase-options', product: product, form: form, section_id: section.id, current_variant: current_variant %}
+{% enddoc %}
+
+{% liquid
+  assign selected_variant = current_variant | default: product.selected_or_first_available_variant
+%}
+
+{% if product.selling_plan_groups.size > 0 %}
+  <div
+    class="product-purchase-options"
+    data-product-purchase-options
+    data-section-id="{{ section_id }}"
+  >
+    <fieldset class="product-purchase-options__fieldset">
+      <legend class="product-purchase-options__legend">
+        {{ 'products.preorder.purchase_options' | t }}
+      </legend>
+
+      <div class="product-purchase-options__choices">
+        {% unless product.requires_selling_plan %}
+          <label class="product-purchase-options__choice">
+            <input
+              type="radio"
+              name="purchase_option_{{ section_id }}"
+              value=""
+              data-purchase-option="one_time"
+              data-variant-id="{{ selected_variant.id }}"
+              checked
+            >
+            <span class="product-purchase-options__choice-label">
+              {{ 'products.preorder.one_time_purchase' | t }}
+            </span>
+            <span class="product-purchase-options__choice-price" data-one-time-price>
+              {{ selected_variant.price | money }}
+            </span>
+          </label>
+        {% endunless %}
+
+        {% for variant in product.variants %}
+          {% if variant.selling_plan_allocations.size > 0 %}
+            {% assign group_ids = variant.selling_plan_allocations | map: 'selling_plan_group_id' | uniq %}
+
+            {% for group_id in group_ids %}
+              {% liquid
+                assign plan_group = product.selling_plan_groups | where: 'id', group_id | first
+                assign allocations = variant.selling_plan_allocations | where: 'selling_plan_group_id', group_id
+              %}
+
+              {% if plan_group != blank %}
+                <div
+                  class="product-purchase-options__group{% if variant.id != selected_variant.id %} product-purchase-options__group--hidden{% endif %}"
+                  data-variant-id="{{ variant.id }}"
+                >
+                  <p class="product-purchase-options__group-name">
+                    {{ plan_group.name | escape }}
+                  </p>
+
+                  {% for allocation in allocations %}
+                    {% liquid
+                      assign selling_plan = allocation.selling_plan
+                      assign balance_due = allocation.price | minus: allocation.checkout_price
+                      capture deposit_amount
+                        echo allocation.checkout_price | money
+                      endcapture
+                      capture balance_amount
+                        echo balance_due | money
+                      endcapture
+                    %}
+                    <label class="product-purchase-options__choice">
+                      <input
+                        type="radio"
+                        name="purchase_option_{{ section_id }}"
+                        value="{{ selling_plan.id }}"
+                        data-purchase-option="preorder"
+                        data-selling-plan-id="{{ selling_plan.id }}"
+                        data-variant-id="{{ variant.id }}"
+                        data-display-price="{{ allocation.checkout_price | money }}"
+                        {% if product.requires_selling_plan and forloop.first and variant == selected_variant %}
+                          checked
+                        {% endif %}
+                      >
+                      <span class="product-purchase-options__choice-label">
+                        {{ selling_plan.name | escape }}
+                      </span>
+                      {% if selling_plan.description != blank %}
+                        <span class="product-purchase-options__choice-description">
+                          {{ selling_plan.description }}
+                        </span>
+                      {% endif %}
+                      <span class="product-purchase-options__choice-price">
+                        {{ 'products.preorder.deposit_today' | t: amount: deposit_amount }}
+                      </span>
+                      <span class="product-purchase-options__choice-balance">
+                        {{ 'products.preorder.balance_on_ship' | t: amount: balance_amount }}
+                      </span>
+                    </label>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <input
+      type="hidden"
+      name="selling_plan"
+      value=""
+      data-selling-plan-input
+      {% if product.requires_selling_plan %}
+        {% assign first_allocation = selected_variant.selling_plan_allocations | first %}
+        {% if first_allocation %}
+          value="{{ first_allocation.selling_plan.id }}"
+        {% endif %}
+      {% endif %}
+    >
+
+    <div class="product-purchase-options__terms" data-payment-terms>
+      {{ form | payment_terms }}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .product-purchase-options {
+    width: 100%;
+    margin-block: 1rem 0.5rem;
+  }
+
+  .product-purchase-options__fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .product-purchase-options__legend {
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .product-purchase-options__choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .product-purchase-options__group--hidden {
+    display: none;
+  }
+
+  .product-purchase-options__group-name {
+    margin: 0 0 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .product-purchase-options__choice {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: var(--style-border-radius);
+    cursor: pointer;
+  }
+
+  .product-purchase-options__choice:has(input:checked) {
+    border-color: currentColor;
+    background: color-mix(in srgb, currentColor 6%, transparent);
+  }
+
+  .product-purchase-options__choice input {
+    margin-right: 0.5rem;
+  }
+
+  .product-purchase-options__choice-label {
+    font-weight: 600;
+  }
+
+  .product-purchase-options__choice-description,
+  .product-purchase-options__choice-balance,
+  .product-purchase-options__choice-price {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .product-purchase-options__terms {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+{% endstylesheet %}

@@ -11,62 +11,191 @@
       {% render 'shopping-links' %}
     </div>
   {% else %}
-    <table class="cart-items">
-      <thead>
-        <tr>
-          <th scope="col">{{ 'cart.product' | t }}</th>
-          <th scope="col">{{ 'cart.quantity' | t }}</th>
-          <th scope="col">{{ 'cart.total' | t }}</th>
-          <th scope="col"><span class="sr-only">{{ 'cart.remove' | t }}</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in cart.items %}
-          <tr class="cart-items__row">
-            <td class="cart-items__product">
+    <div class="cart-items">
+      <div class="cart-items__header">
+        <span>{{ 'cart.product' | t }}</span>
+        <span>{{ 'cart.quantity' | t }}</span>
+        <span>{{ 'cart.total' | t }}</span>
+        <span class="sr-only">{{ 'cart.remove' | t }}</span>
+      </div>
+
+      {% for item in cart.items %}
+        {% liquid
+          assign unit_checkout_amount = nil
+          if item.selling_plan_allocation
+            assign checkout_charge = item.selling_plan_allocation.selling_plan.checkout_charge
+            if checkout_charge.value_type == 'percentage'
+              assign unit_checkout_amount = item.original_price | times: checkout_charge.value | divided_by: 100
+            else
+              assign unit_checkout_amount = checkout_charge.value
+            endif
+          endif
+        %}
+        <div class="cart-items__row">
+          <div class="cart-items__product">
+            <div class="cart-items__product-inner">
               {% assign line_image_alt = item.image.alt | default: item.product.title %}
-              {% render 'image', image: item.image, url: item.url, alt: line_image_alt %}
-              <div>
-                <p>
+              {% render 'image',
+                image: item.image,
+                url: item.url,
+                alt: line_image_alt,
+                width: 80,
+                class: 'cart-items__image'
+              %}
+              <div class="cart-items__product-details">
+                <p class="cart-items__title">
                   <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
                 </p>
                 {% unless item.variant.title == 'Default Title' %}
                   <p class="cart-items__variant">{{ item.variant.title | escape }}</p>
                 {% endunless %}
+                {% if item.selling_plan_allocation %}
+                  <p class="cart-items__selling-plan">
+                    {{ item.selling_plan_allocation.selling_plan.name | escape }}
+                  </p>
+                  <p class="cart-items__preorder-note">
+                    {% capture deposit_amount %}{{ unit_checkout_amount | money }}{% endcapture %}
+                    {{ 'products.preorder.deposit_today' | t: amount: deposit_amount }}
+                  </p>
+                {% endif %}
               </div>
-            </td>
-            <td class="cart-items__quantity">
-              <label class="sr-only" for="cart-quantity-{{ item.index | plus: 1 }}">
-                {{ 'cart.quantity' | t }}
-              </label>
-              <input
-                id="cart-quantity-{{ item.index | plus: 1 }}"
-                type="number"
-                name="updates[]"
-                value="{{ item.quantity }}"
-                min="0"
-                data-cart-quantity="{{ item.index | plus: 1 }}"
-              >
-            </td>
-            <td class="cart-items__line-total">
+            </div>
+          </div>
+          <div class="cart-items__quantity">
+            <label class="sr-only" for="cart-quantity-{{ item.index | plus: 1 }}">
+              {{ 'cart.quantity' | t }}
+            </label>
+            <input
+              id="cart-quantity-{{ item.index | plus: 1 }}"
+              type="number"
+              name="updates[]"
+              value="{{ item.quantity }}"
+              min="0"
+              data-cart-quantity="{{ item.index | plus: 1 }}"
+            >
+          </div>
+          <div class="cart-items__line-total">
+            {% if item.selling_plan_allocation %}
+              {{ unit_checkout_amount | times: item.quantity | money }}
+            {% else %}
               {{ item.line_price | money }}
-            </td>
-            <td class="cart-items__remove">
-              <button
-                type="button"
-                class="cart-items__remove-button focus-ring-brand"
-                data-cart-remove="{{ item.index | plus: 1 }}"
-              >
-                {{ 'cart.remove' | t }}
-              </button>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+            {% endif %}
+          </div>
+          <div class="cart-items__remove">
+            <button
+              type="button"
+              class="cart-items__remove-button focus-ring-brand"
+              data-cart-remove="{{ item.index | plus: 1 }}"
+            >
+              {{ 'cart.remove' | t }}
+            </button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
 
     <p class="cart-items__subtotal">
       {{ 'cart.subtotal' | t }}: {{ cart.total_price | money }}
     </p>
   {% endif %}
 </cart-items-component>
+
+{% stylesheet %}
+  .cart-items {
+    width: 100%;
+  }
+
+  .cart-items__header,
+  .cart-items__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3.5rem 5rem 3.25rem;
+    column-gap: 0.75rem;
+    align-items: start;
+  }
+
+  .cart-items__header {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgb(0 37 63 / 12%);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .cart-items__row {
+    padding-block: 0.75rem;
+    border-bottom: 1px solid rgb(0 37 63 / 10%);
+  }
+
+  .cart-items__row:last-child {
+    border-bottom: none;
+  }
+
+  .cart-items__product-inner {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .cart-items__product-inner > .image {
+    flex: 0 0 4.5rem;
+    width: 4.5rem;
+    max-width: 4.5rem;
+  }
+
+  .cart-items__product-details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cart-items__title {
+    margin: 0;
+  }
+
+  .cart-items__variant {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .cart-items__selling-plan,
+  .cart-items__preorder-note {
+    margin: 0.25rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .cart-items__preorder-note {
+    opacity: 0.85;
+  }
+
+  .cart-items__line-total {
+    white-space: nowrap;
+  }
+
+  .cart-items__quantity input {
+    width: 100%;
+    max-width: 3.5rem;
+  }
+
+  .cart-items__subtotal {
+    margin: 1rem 0 0;
+    font-weight: 700;
+  }
+
+  .cart-items__remove-button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+
+  .cart-items__remove-button[aria-busy='true'] {
+    cursor: wait;
+    opacity: 0.65;
+    text-decoration: none;
+  }
+{% endstylesheet %}

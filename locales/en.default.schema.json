@@ -325,6 +325,12 @@
     "page": {
       "show_title_label": "Show page title"
     },
+    "product_reviews": {
+      "name": "Product reviews",
+      "presets": {
+        "default_name": "Product reviews"
+      }
+    },
     "about_momo": {
       "name": "About Momo",
       "image_label": "Image",

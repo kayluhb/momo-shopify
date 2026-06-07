@@ -1,0 +1,7 @@
+{% doc %}
+  Average rating summary under the product title. Links to #product-reviews when reviews exist.
+
+  @param {product} product - Current product
+{% enddoc %}
+
+{% render 'product-reviews-block', product: product, variant: 'summary' %}

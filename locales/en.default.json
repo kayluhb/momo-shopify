@@ -36,6 +36,12 @@
     "sold_out": {
       "label": "Sold out"
     },
+    "preorder": {
+      "purchase_options": "Purchase options",
+      "one_time_purchase": "Buy now",
+      "deposit_today": "{{ amount }} due today",
+      "balance_on_ship": "Remaining {{ amount }} charged when your order ships"
+    },
     "back_in_stock": {
       "open": "Notify me when available",
       "title": "Back in stock alert",
@@ -49,6 +55,12 @@
       "body": "Back in stock request for {{ product_title }} — {{ variant_title }} (Variant ID: {{ variant_id }})"
     },
     "rating_label": "{{ rating }} out of 5 stars{% if count %}, {{ count }} reviews{% endif %}",
+    "reviews": {
+      "review_count": "{{ count }} review",
+      "review_count_other": "{{ count }} reviews",
+      "no_reviews": "No reviews yet.",
+      "momo_response_label": "Response from Momo"
+    },
     "color_options": "{{ option }} options",
     "price": {
       "sale": "Sale price"

@@ -2,6 +2,8 @@
  * Syncs pre-order purchase option radios with the selling_plan form field,
  * price display, CTA labels, and disclosure copy.
  */
+import { ThemeEvents } from '@theme/events';
+
 class ProductPurchaseOptions {
   /** @param {HTMLElement} root */
   constructor(root) {
@@ -63,10 +65,16 @@ class ProductPurchaseOptions {
       this.syncFromSelection();
     });
 
-    this.variantSelect?.addEventListener('change', () => {
-      this.syncVariantGroups();
-      this.syncFromSelection();
-    });
+    document.querySelector('variant-picker')?.addEventListener(
+      ThemeEvents.variantUpdate,
+      () => {
+        this.variantSelect = document.querySelector(
+          `#product-variant-${this.sectionId}`,
+        );
+        this.syncVariantGroups();
+        this.syncFromSelection();
+      },
+    );
   }
 
   syncVariantGroups() {
@@ -93,15 +101,15 @@ class ProductPurchaseOptions {
   }
 
   getSelectedVariantId() {
-    if (this.variantSelect instanceof HTMLSelectElement) {
-      return this.variantSelect.value;
-    }
-
-    const hiddenVariant = document.querySelector(
-      '.product-buy__form input[name="id"]',
+    const idField = document.querySelector(
+      '.product-buy__form select[name="id"], .product-buy__form input[name="id"]',
     );
-    if (hiddenVariant instanceof HTMLInputElement) {
-      return hiddenVariant.value;
+
+    if (
+      idField instanceof HTMLSelectElement ||
+      idField instanceof HTMLInputElement
+    ) {
+      return idField.value;
     }
 
     return null;
@@ -172,19 +180,7 @@ class ProductPurchaseOptions {
     const subscriptionCadence = selected?.dataset.subscriptionCadence ?? '';
 
     if (this.addToCartButton) {
-      if (isDeferredPreorder) {
-        this.addToCartButton.textContent = this.fillTemplate(
-          Theme.translations.preorder_add_to_cart,
-          { deposit: depositAmount },
-        );
-      } else if (isSubscription) {
-        this.addToCartButton.textContent = this.fillTemplate(
-          Theme.translations.subscription_add_to_cart,
-          { price: depositAmount, cadence: subscriptionCadence },
-        );
-      } else {
-        this.addToCartButton.textContent = this.defaultAddToCartLabel;
-      }
+      this.addToCartButton.textContent = this.defaultAddToCartLabel;
     }
 
     if (this.paymentButton) {
@@ -244,13 +240,6 @@ class ProductPurchaseOptions {
       .querySelector('[data-one-time-price]')
       ?.textContent?.trim();
     if (oneTimePrice) return oneTimePrice;
-
-    if (this.variantSelect instanceof HTMLSelectElement) {
-      const option =
-        this.variantSelect.options[this.variantSelect.selectedIndex];
-      const match = option?.textContent?.match(/-\s*(.+)$/);
-      if (match?.[1]) return match[1].trim();
-    }
 
     return null;
   }

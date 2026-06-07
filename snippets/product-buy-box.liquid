@@ -13,17 +13,11 @@
     assign is_sticky = true
   endif
 
-  assign current_variant = product.selected_or_first_available_variant
+  assign current_variant = product.selected_variant
+  if current_variant == blank
+    assign current_variant = product.selected_or_first_available_variant
+  endif
   assign variant_available = current_variant.available
-  assign check_against_inventory = true
-  if current_variant.inventory_management != 'shopify' or current_variant.inventory_policy == 'continue'
-    assign check_against_inventory = false
-  endif
-  if check_against_inventory
-    if current_variant.quantity_rule.min > current_variant.inventory_quantity
-      assign variant_available = false
-    endif
-  endif
 %}
 
 <div class="product-buy product-buy--{{ buy_layout }}{% if is_sticky %} product-buy--sticky{% endif %}">
@@ -44,35 +38,165 @@
   {% endif %}
 
   <div class="product-buy__form" data-product-form>
-    {% if variant_available %}
-      {% form 'product', product %}
-        {% if product.variants.size > 1 %}
-          <label class="product-buy__label" for="product-variant-{{ section_id }}">
-            {{ 'products.variant_label' | t }}
-          </label>
-          <select
-            id="product-variant-{{ section_id }}"
-            class="product-buy__select"
-            name="id"
-          >
-            {% for variant in product.variants %}
-              <option
-                value="{{ variant.id }}"
-                {% if variant == current_variant %}
-                  selected="selected"
-                {% endif %}
-                {% unless variant.available %}
-                  disabled
-                {% endunless %}
-              >
-                {{ variant.title }}
-              </option>
-            {% endfor %}
-          </select>
-        {% else %}
-          <input type="hidden" name="id" value="{{ current_variant.id }}">
-        {% endif %}
+    {% form 'product', product %}
+      {% unless product.has_only_default_variant %}
+        <div class="product-buy__options" data-product-options>
+          {% for option in product.options_with_values %}
+            {% liquid
+              assign option_name_down = option.name | downcase
+              assign is_color_option = false
+              if option_name_down == 'color' or option_name_down == 'colour'
+                assign is_color_option = true
+              endif
+            %}
+            <fieldset class="product-buy__field product-buy__field--option">
+              <legend class="product-buy__label">
+                {{ option.name }}:
+                <span class="product-buy__label-value">{{ option.selected_value }}</span>
+              </legend>
+              <div class="product-buy__option-values">
+                {% for value in option.values %}
+                  {% liquid
+                    assign value_label = value.name | default: value
+                    assign value_selected = false
+                    if option.selected_value == value_label
+                      assign value_selected = true
+                    endif
 
+                    assign value_available = false
+                    for variant in product.variants
+                      assign option_value = nil
+                      case option.position
+                        when 1
+                          assign option_value = variant.option1
+                        when 2
+                          assign option_value = variant.option2
+                        when 3
+                          assign option_value = variant.option3
+                      endcase
+                      if option_value == value_label and variant.available
+                        assign value_available = true
+                        break
+                      endif
+                    endfor
+
+                    assign variant_for_value = value.variant
+                    if variant_for_value == blank
+                      for variant in product.variants
+                        case option.position
+                          when 1
+                            assign option_match = variant.option1
+                          when 2
+                            assign option_match = variant.option2
+                          when 3
+                            assign option_match = variant.option3
+                        endcase
+                        if option_match == value_label
+                          assign variant_for_value = variant
+                          break
+                        endif
+                      endfor
+                    endif
+
+                    assign swatch_bg = ''
+                    assign swatch_image = nil
+                    if is_color_option
+                      if value.swatch.image != blank
+                        assign swatch_image = value.swatch.image
+                      elsif variant_for_value.featured_image
+                        assign swatch_image = variant_for_value.featured_image
+                      endif
+                      if value.swatch.color != blank
+                        assign swatch_bg = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                      elsif swatch_image == blank
+                        assign color_key = value_label | downcase | strip
+                        assign swatch_color_translation = 'products.swatch_colors.' | append: color_key
+                        assign swatch_bg = swatch_color_translation | t
+                        if swatch_bg == swatch_color_translation
+                          assign swatch_bg = ''
+                        endif
+                      endif
+                    endif
+
+                    assign input_id = 'Option-'
+                    assign input_id = input_id | append: section_id
+                    assign input_id = input_id | append: '-'
+                    assign input_id = input_id | append: option.position
+                    assign input_id = input_id | append: '-'
+                    assign input_id = input_id | append: forloop.index
+                  %}
+                  <input
+                    type="radio"
+                    id="{{ input_id }}"
+                    class="product-buy__option-input"
+                    name="option-{{ section_id }}-{{ option.position }}"
+                    value="{{ value_label | escape }}"
+                    data-product-option="{{ option.position }}"
+                    {% if value_selected %}
+                      checked
+                    {% endif %}
+                  >
+                  <label
+                    for="{{ input_id }}"
+                    class="product-buy__option-btn focus-ring-brand{% if is_color_option %} product-buy__option-btn--swatch{% endif %}{% unless value_available %} product-buy__option-btn--unavailable{% endunless %}"
+                    {% if is_color_option %}
+                      aria-label="{{ option.name }}: {{ value_label }}{% unless value_available %} ({{ 'products.sold_out.label' | t }}){% endunless %}"
+                    {% endif %}
+                    {% if is_color_option and swatch_bg != blank %}
+                      style="--swatch-bg: {{ swatch_bg }};"
+                    {% endif %}
+                  >
+                    {% if is_color_option and swatch_image %}
+                      {{
+                        swatch_image
+                        | image_url: width: 80, height: 80, crop: 'center'
+                        | image_tag:
+                          class: 'product-buy__option-swatch-img',
+                          loading: 'lazy',
+                          widths: '40, 80',
+                          sizes: '44px',
+                          alt: ''
+                      }}
+                    {% elsif is_color_option == false %}
+                      <span class="product-buy__option-label">{{ value_label }}</span>
+                    {% endif %}
+                  </label>
+                {% endfor %}
+              </div>
+            </fieldset>
+          {% endfor %}
+        </div>
+
+        <select
+          id="product-variant-{{ section_id }}"
+          class="sr-only"
+          name="id"
+          tabindex="-1"
+          aria-hidden="true"
+        >
+          {% for variant in product.variants %}
+            <option
+              value="{{ variant.id }}"
+              {% if variant == current_variant %}
+                selected
+              {% endif %}
+              {% unless variant.available %}
+                disabled
+              {% endunless %}
+            >
+              {{ variant.title }}
+            </option>
+          {% endfor %}
+        </select>
+
+        <script type="application/json" data-product-variant-data>
+          {{ product.variants | json }}
+        </script>
+      {% else %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {% endunless %}
+
+      {% if variant_available %}
         {% render 'product-purchase-options',
           product: product,
           section_id: section_id,
@@ -124,21 +248,21 @@
             </span>
           </p>
         {% endif %}
-      {% endform %}
-    {% else %}
-      <div class="product-buy__sold-out" data-product-sold-out>
-        <p class="product-buy__availability">{{ 'products.sold_out.label' | t }}</p>
-        <div class="product-buy__submit">
-          <button
-            type="button"
-            class="btn btn--primary product-buy__notify-trigger"
-            on:click="#back-in-stock-{{ section_id }}/open"
-          >
-            {{ 'products.back_in_stock.open' | t }}
-          </button>
+      {% else %}
+        <div class="product-buy__sold-out" data-product-sold-out>
+          <p class="product-buy__availability">{{ 'products.sold_out.label' | t }}</p>
+          <div class="product-buy__submit">
+            <button
+              type="button"
+              class="btn btn--primary product-buy__notify-trigger"
+              on:click="#back-in-stock-{{ section_id }}/open"
+            >
+              {{ 'products.back_in_stock.open' | t }}
+            </button>
+          </div>
         </div>
-      </div>
-    {% endif %}
+      {% endif %}
+    {% endform %}
   </div>
 
   {% render 'back-in-stock-dialog', product: product, variant: current_variant, section_id: section_id %}
@@ -158,15 +282,6 @@
   .product-section__details .product-buy--sticky {
     position: static;
     top: auto;
-  }
-
-  .product-buy--split_half .product-buy__submit,
-  .product-buy--split_half .product-buy__payment {
-    max-width: none;
-  }
-
-  .product-buy--split_half .product-buy__select {
-    max-width: none;
   }
 
   .product-buy .breadcrumbs {
@@ -238,11 +353,136 @@
     margin-bottom: 0;
   }
 
-  .product-buy__form .shopify-product-form {
+  .product-buy__form .shopify-product-form,
+  .product-buy__form > form {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    align-items: flex-start;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .product-buy__options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .product-buy__field {
+    display: grid;
+    gap: 0.375rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .product-buy__field--option {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .product-buy__label {
+    margin-bottom: 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .product-buy__label-value {
+    font-weight: 700;
+  }
+
+  .product-buy__option-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .product-buy__option-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .product-buy__option-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--color-brand-steel) 22%, transparent);
+    border-radius: var(--style-border-radius);
+    background: #fff;
+    color: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .product-buy__option-btn .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .product-buy__option-input:focus-visible + .product-buy__option-btn {
+    outline: 2px solid var(--color-brand-rust);
+    outline-offset: 2px;
+  }
+
+  .product-buy__option-input:checked + .product-buy__option-btn:not(.product-buy__option-btn--swatch) {
+    border-color: var(--color-brand-steel);
+    background: var(--color-brand-steel);
+    color: #fff;
+  }
+
+  .product-buy__option-btn--swatch {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0;
+    overflow: hidden;
+    background: var(--swatch-bg, color-mix(in srgb, var(--color-brand-steel) 8%, white));
+  }
+
+  .product-buy__option-input:checked + .product-buy__option-btn--swatch {
+    box-shadow:
+      inset 0 0 0 2px #fff,
+      inset 0 0 0 3px var(--color-brand-steel);
+  }
+
+  .product-buy__option-swatch-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-buy__option-btn--unavailable {
+    opacity: 0.45;
   }
 
   .product-buy__availability {
@@ -257,35 +497,18 @@
     margin-top: 0;
   }
 
-  .product-buy__label {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .product-buy__select {
-    width: 100%;
-    max-width: 16rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-    border-radius: var(--style-border-radius);
-    background: transparent;
-    color: inherit;
-    font: inherit;
-  }
-
   .product-buy__submit {
     margin-top: 0.5rem;
     width: 100%;
-    max-width: 20rem;
   }
 
   .product-buy__submit .btn {
     width: 100%;
+    min-height: 48px;
   }
 
   .product-buy__payment {
     width: 100%;
-    max-width: 20rem;
   }
 
   .product-buy__payment .shopify-payment-button {
@@ -344,19 +567,5 @@
   .product-buy #shopify-buyer-consent,
   .product-buy shopify-payment-terms {
     display: none !important;
-  }
-
-  @media (max-width: 749px) {
-    .product-buy__form .shopify-product-form,
-    .product-buy__form > form {
-      align-items: stretch;
-      width: 100%;
-    }
-
-    .product-buy__select,
-    .product-buy__submit,
-    .product-buy__payment {
-      max-width: none;
-    }
   }
 {% endstylesheet %}

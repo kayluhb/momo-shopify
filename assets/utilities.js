@@ -322,6 +322,20 @@ export function onAnimationEnd(elements, callback, options = { subtree: true }) 
  * @returns {boolean} True if the click is outside the element, false otherwise.
  */
 export function isClickedOutside(event, element) {
+  const path = event.composedPath();
+  const elementIndex = path.indexOf(element);
+
+  if (elementIndex > 0) {
+    // Click originated on a descendant; composedPath is fixed at dispatch even if
+    // the target node is removed before other handlers run.
+    return false;
+  }
+
+  if (elementIndex === 0) {
+    // Target is the element itself (e.g. dialog backdrop).
+    return !isPointWithinElement(event.clientX, event.clientY, element);
+  }
+
   if (event.target instanceof HTMLDialogElement || !(event.target instanceof Element)) {
     return !isPointWithinElement(event.clientX, event.clientY, element);
   }

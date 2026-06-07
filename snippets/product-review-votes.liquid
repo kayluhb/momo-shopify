@@ -1,0 +1,46 @@
+{% doc %}
+  Renders helpful / not helpful vote controls for a review.
+
+  @param {object} review - Product review metaobject
+{% enddoc %}
+
+{% liquid
+  assign review_gid = review.system.id
+  assign helpful_count = review.helpful_count.value | default: 0 | plus: 0
+  assign not_helpful_count = review.not_helpful_count.value | default: 0 | plus: 0
+%}
+
+<div
+  class="product-review-votes"
+  data-review-votes
+  data-review-gid="{{ review_gid }}"
+  data-helpful-count="{{ helpful_count }}"
+  data-not-helpful-count="{{ not_helpful_count }}"
+  role="group"
+  aria-label="{{ 'products.reviews.votes_group_label' | t }}"
+>
+  <button
+    type="button"
+    class="product-review-votes__button"
+    data-vote="up"
+    aria-pressed="false"
+    aria-label="{{ 'products.reviews.vote_helpful_with_count' | t: count: helpful_count }}"
+  >
+    <span class="product-review-votes__icon" aria-hidden="true">
+      {{- 'icon-thumb-up.svg' | inline_asset_content -}}
+    </span>
+        <span class="product-review-votes__count" data-vote-count="up" aria-hidden="true">{{ helpful_count }}</span>
+  </button>
+  <button
+    type="button"
+    class="product-review-votes__button"
+    data-vote="down"
+    aria-pressed="false"
+    aria-label="{{ 'products.reviews.vote_not_helpful_with_count' | t: count: not_helpful_count }}"
+  >
+    <span class="product-review-votes__icon" aria-hidden="true">
+      {{- 'icon-thumb-down.svg' | inline_asset_content -}}
+    </span>
+        <span class="product-review-votes__count" data-vote-count="down" aria-hidden="true">{{ not_helpful_count }}</span>
+  </button>
+</div>

@@ -1,0 +1,308 @@
+{% doc %}
+  Horizontal gallery of review media with a detail dialog.
+
+  @param {array} published_reviews - Approved reviews from the product metafield
+  @param {product} product - Current product
+{% enddoc %}
+
+{% liquid
+  assign media_count = 0
+  for review in published_reviews
+    if review.media.value != blank
+      assign media_count = media_count | plus: review.media.value.size
+    endif
+  endfor
+%}
+
+{% if media_count > 0 %}
+  <product-reviews-gallery-component class="product-reviews__gallery-wrap">
+    <div class="product-reviews__gallery" role="region" aria-label="{{ 'products.reviews.gallery_label' | t }}">
+      <div class="product-reviews__gallery-track" data-gallery-track role="list">
+        {% assign global_media_index = 0 %}
+        {% for review in published_reviews %}
+          {% if review.media.value != blank %}
+            {% assign review_index = forloop.index0 %}
+            {% for asset in review.media.value %}
+              {% liquid
+                assign is_video = false
+                if asset.media_type == 'video'
+                  assign is_video = true
+                endif
+              %}
+              <button
+                type="button"
+                class="product-reviews__gallery-item{% if is_video %} product-reviews__gallery-item--video{% endif %}"
+                data-gallery-open
+                data-global-index="{{ global_media_index }}"
+                role="listitem"
+                aria-label="{% if is_video %}{{ 'products.reviews.open_review_video' | t: index: global_media_index | plus: 1, count: media_count }}{% else %}{{ 'products.reviews.open_review_media' | t: index: global_media_index | plus: 1, count: media_count }}{% endif %}"
+              >
+                {% if is_video %}
+                  {{
+                    asset.preview_image
+                    | image_url: width: 240
+                    | image_tag:
+                      class: 'product-reviews__gallery-image',
+                      loading: 'lazy',
+                      widths: '120,160,240',
+                      sizes: '120px',
+                      alt: ''
+                  }}
+                  <span class="product-reviews__gallery-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </span>
+                {% else %}
+                  {{
+                    asset
+                    | image_url: width: 240
+                    | image_tag:
+                      class: 'product-reviews__gallery-image',
+                      loading: 'lazy',
+                      widths: '120,160,240',
+                      sizes: '120px',
+                      alt: ''
+                  }}
+                {% endif %}
+              </button>
+              {% assign global_media_index = global_media_index | plus: 1 %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <dialog
+      ref="dialog"
+      class="product-reviews__dialog"
+      aria-labelledby="product-reviews-dialog-heading"
+      aria-modal="true"
+    >
+      <div class="product-reviews__dialog-layout">
+        <div class="product-reviews__dialog-media-pane">
+          <div
+            class="product-reviews__dialog-media-viewer"
+            data-dialog-media-viewer
+            role="group"
+            aria-label="{{ 'products.reviews.dialog_media_viewer_label' | t }}"
+          >
+            <p class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-dialog-media-status></p>
+            {% assign global_media_index = 0 %}
+            {% for review in published_reviews %}
+              {% if review.media.value != blank %}
+                {% assign review_index = forloop.index0 %}
+                {% for asset in review.media.value %}
+                  {% liquid
+                    assign is_video = false
+                    if asset.media_type == 'video'
+                      assign is_video = true
+                    endif
+                  %}
+                  <div
+                    class="product-reviews__dialog-media-panel{% if is_video %} product-reviews__dialog-media-panel--video{% endif %}"
+                    data-dialog-media-panel
+                    data-global-index="{{ global_media_index }}"
+                    data-review-index="{{ review_index }}"
+                    data-media-index="{{ forloop.index0 }}"
+                    hidden
+                  >
+                    {% if is_video %}
+                      {{
+                        asset
+                        | video_tag:
+                          class: 'product-reviews__dialog-video',
+                          image_size: '1200x1200',
+                          controls: true,
+                          autoplay: false
+                      }}
+                    {% else %}
+                      {{
+                        asset
+                        | image_url: width: 1600
+                        | image_tag:
+                          class: 'product-reviews__dialog-image',
+                          loading: 'lazy',
+                          widths: '640,960,1200,1600',
+                          sizes: '(min-width: 900px) 55vw, 100vw',
+                          alt: review.title.value | default: 'Review photo'
+                      }}
+                    {% endif %}
+                  </div>
+                  {% assign global_media_index = global_media_index | plus: 1 %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <button
+            type="button"
+            class="product-reviews__dialog-nav product-reviews__dialog-nav--prev"
+            data-dialog-prev-media
+            aria-label="{{ 'products.reviews.previous_media' | t }}"
+          >
+            <span class="product-reviews__dialog-nav-icon product-reviews__dialog-nav-icon--prev" aria-hidden="true">{{ 'icon-chevron.svg' | inline_asset_content }}</span>
+          </button>
+          <button
+            type="button"
+            class="product-reviews__dialog-nav product-reviews__dialog-nav--next"
+            data-dialog-next-media
+            aria-label="{{ 'products.reviews.next_media' | t }}"
+          >
+            <span class="product-reviews__dialog-nav-icon product-reviews__dialog-nav-icon--next" aria-hidden="true">{{ 'icon-chevron.svg' | inline_asset_content }}</span>
+          </button>
+        </div>
+
+        <div class="product-reviews__dialog-details">
+          <header class="product-reviews__dialog-header">
+            <div class="product-review-meta product-review-meta--dialog">
+              <div class="product-review-meta__primary">
+                <div class="product-review-meta__name-row">
+                  <h2 id="product-reviews-dialog-heading" class="product-review-meta__author" data-dialog-author></h2>
+                  <span class="product-review-meta__verified" data-dialog-verified hidden>
+                    <span class="product-review-meta__verified-icon" aria-hidden="true">{{ 'icon-verified.svg' | inline_asset_content }}</span>
+                    <span class="product-review-meta__verified-label">{{ 'products.reviews.verified_buyer' | t }}</span>
+                  </span>
+                </div>
+                <span class="product-review-meta__stars" data-dialog-stars></span>
+              </div>
+              <time class="product-review-meta__timestamp" data-dialog-timestamp hidden></time>
+            </div>
+            <button
+              type="button"
+              class="dialog-drawer__close product-reviews__dialog-close"
+              on:click="product-reviews-gallery-component/close"
+              aria-label="{{ 'products.reviews.close_dialog' | t }}"
+            >
+              <span class="dialog-drawer__close-icon" aria-hidden="true">{{ 'icon-close.svg' | inline_asset_content }}</span>
+            </button>
+          </header>
+
+          <div class="product-reviews__dialog-body">
+            <h3 class="product-reviews__dialog-title" data-dialog-title hidden></h3>
+            <div class="product-reviews__dialog-text rte" data-dialog-body hidden></div>
+            <p class="product-reviews__dialog-product" data-dialog-product>
+              {{ 'products.reviews.review_for_product' | t: product_title: product.title | escape }}
+            </p>
+          </div>
+
+          <div
+            class="product-reviews__dialog-thumbs"
+            data-dialog-thumbs
+            role="group"
+            aria-label="{{ 'products.reviews.dialog_thumbs_label' | t }}"
+            hidden
+          ></div>
+
+          <div class="product-reviews__dialog-response" data-dialog-response hidden>
+            <aside aria-label="{{ 'products.reviews.merchant_response_region' | t }}">
+              <p class="product-reviews__response-label">
+                {{ 'products.reviews.momo_response_label' | t }}
+              </p>
+              <div class="product-reviews__response-body rte" data-dialog-response-body></div>
+            </aside>
+          </div>
+
+          <div class="product-reviews__dialog-votes" data-dialog-votes hidden></div>
+
+          <footer class="product-reviews__dialog-footer">
+            <button
+              type="button"
+              class="product-reviews__dialog-review-nav"
+              data-dialog-prev-review
+              aria-label="{{ 'products.reviews.previous_review' | t }}"
+            >
+              <span class="product-reviews__dialog-nav-icon product-reviews__dialog-nav-icon--prev" aria-hidden="true">{{ 'icon-chevron.svg' | inline_asset_content }}</span>
+            </button>
+            <button
+              type="button"
+              class="product-reviews__dialog-review-nav"
+              data-dialog-next-review
+              aria-label="{{ 'products.reviews.next_review' | t }}"
+            >
+              <span class="product-reviews__dialog-nav-icon product-reviews__dialog-nav-icon--next" aria-hidden="true">{{ 'icon-chevron.svg' | inline_asset_content }}</span>
+            </button>
+          </footer>
+        </div>
+      </div>
+
+      {% for review in published_reviews %}
+        {% liquid
+          assign rating_data = review.rating.value
+          assign stars = rating_data.rating | default: rating_data.value | default: rating_data | default: 0
+          if stars == blank
+            assign stars = review.rating.rating | default: 0
+          endif
+          assign star_rating = stars | round
+        %}
+        <template data-review-template data-review-index="{{ forloop.index0 }}">
+          <span data-review-gid>{{ review.system.id }}</span>
+          <span data-review-author>
+            {%- if review.reviewer_name.value != blank -%}
+              {{- review.reviewer_name.value | escape -}}
+            {%- endif -%}
+          </span>
+          <span data-review-verified>{% if review.order_id.value != blank %}true{% endif %}</span>
+          {% if review.submitted_at.value != blank %}
+            <time
+              data-review-timestamp
+              datetime="{{ review.submitted_at.value | date: '%Y-%m-%dT%H:%M:%S%z' }}"
+            ></time>
+          {% endif %}
+          <span data-review-stars aria-label="{{ 'products.rating_label' | t: rating: stars }}">
+            {% render 'product-reviews-stars', rating: stars %}
+          </span>
+          <span data-review-helpful-count>{{ review.helpful_count.value | default: 0 }}</span>
+          <span data-review-not-helpful-count>{{ review.not_helpful_count.value | default: 0 }}</span>
+          {% if review.title.value != blank %}
+            <span data-review-title>{{ review.title.value | escape }}</span>
+          {% endif %}
+          {% if review.body.value != blank %}
+            <span data-review-body>{{ review.body.value }}</span>
+          {% endif %}
+          {% if review.momo_response.value != blank %}
+            <span data-review-response>{{ review.momo_response.value }}</span>
+          {% endif %}
+          {% if review.media.value != blank %}
+            <span data-review-media-count>{{ review.media.value.size }}</span>
+            {% for asset in review.media.value %}
+              {% liquid
+                assign is_video = false
+                if asset.media_type == 'video'
+                  assign is_video = true
+                endif
+              %}
+              <span
+                data-review-media-thumb
+                data-media-index="{{ forloop.index0 }}"
+                data-is-video="{{ is_video }}"
+              >
+                {% if is_video %}
+                  {{
+                    asset.preview_image
+                    | image_url: width: 120
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '60,120',
+                      sizes: '60px',
+                      alt: review.title.value | default: 'Review video'
+                  }}
+                {% else %}
+                  {{
+                    asset
+                    | image_url: width: 120
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '60,120',
+                      sizes: '60px',
+                      alt: review.title.value | default: 'Review photo'
+                  }}
+                {% endif %}
+              </span>
+            {% endfor %}
+          {% endif %}
+        </template>
+      {% endfor %}
+    </dialog>
+  </product-reviews-gallery-component>
+{% endif %}

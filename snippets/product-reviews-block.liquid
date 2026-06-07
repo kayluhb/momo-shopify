@@ -15,6 +15,11 @@
   assign rating_sum = 0
   assign rating_count = 0
   assign review_count = 0
+  assign count_5 = 0
+  assign count_4 = 0
+  assign count_3 = 0
+  assign count_2 = 0
+  assign count_1 = 0
 %}
 
 {% if published_reviews != blank %}
@@ -25,19 +30,32 @@
       if rating_value == blank
         assign rating_value = review.rating.rating | default: 0
       endif
+      assign star_bucket = rating_value | round
     %}
     {% assign review_count = review_count | plus: 1 %}
     {% if rating_value and rating_value != 0 %}
       {% assign rating_sum = rating_sum | plus: rating_value %}
       {% assign rating_count = rating_count | plus: 1 %}
     {% endif %}
+    {% case star_bucket %}
+      {% when 5 %}
+        {% assign count_5 = count_5 | plus: 1 %}
+      {% when 4 %}
+        {% assign count_4 = count_4 | plus: 1 %}
+      {% when 3 %}
+        {% assign count_3 = count_3 | plus: 1 %}
+      {% when 2 %}
+        {% assign count_2 = count_2 | plus: 1 %}
+      {% when 1 %}
+        {% assign count_1 = count_1 | plus: 1 %}
+    {% endcase %}
   {% endfor %}
 {% endif %}
 
 {% liquid
   assign average_rating = 0
   if rating_count > 0
-    assign average_rating = rating_sum | times: 1.0 | divided_by: rating_count | round: 1
+    assign average_rating = rating_sum | times: 1.0 | divided_by: rating_count | round: 2
   endif
 %}
 
@@ -66,30 +84,46 @@
     </p>
   {% endif %}
 {% else %}
-  {% if review_count > 0 %}
-    <div class="product-reviews__summary">
-      <span
-        class="product-reviews__summary-stars"
-        aria-label="{{ 'products.rating_label' | t: rating: average_rating, count: review_count }}"
-      >
-        {% render 'product-reviews-stars', rating: average_rating %}
-      </span>
-      <span class="product-reviews__summary-meta">
-        {{ average_rating }}
-        ·
-        {%- if review_count == 1 -%}
-          {{ 'products.reviews.review_count' | t: count: review_count }}
-        {%- else -%}
-          {{ 'products.reviews.review_count_other' | t: count: review_count }}
-        {%- endif -%}
-      </span>
-    </div>
-  {% endif %}
-
   {% if review_count == 0 %}
     <p class="product-reviews__empty">{{ 'products.reviews.no_reviews' | t }}</p>
   {% else %}
-    <ul class="product-reviews__list list-none p-0" role="list">
+    {% assign media_count = 0 %}
+    {% for review in published_reviews %}
+      {% if review.media.value != blank %}
+        {% assign media_count = media_count | plus: review.media.value.size %}
+      {% endif %}
+    {% endfor %}
+
+    {% render 'product-reviews-overview',
+      average_rating: average_rating,
+      review_count: review_count,
+      count_5: count_5,
+      count_4: count_4,
+      count_3: count_3,
+      count_2: count_2,
+      count_1: count_1
+    %}
+
+    {% render 'product-reviews-gallery',
+      published_reviews: published_reviews,
+      product: product
+    %}
+
+    {% render 'product-reviews-toolbar', review_count: review_count %}
+
+    <p class="product-reviews__filter-empty" data-filter-empty role="status" aria-live="polite" hidden>
+      {{ 'products.reviews.filter_empty' | t }}
+    </p>
+
+    <p class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-review-results-status></p>
+
+    <ul
+      class="product-reviews__list list-none p-0"
+      role="list"
+      data-product-reviews-list
+      aria-label="{{ 'products.reviews.reviews_list_label' | t }}"
+    >
+      {% assign global_media_index = 0 %}
       {% for review in published_reviews %}
         {% liquid
           assign rating_data = review.rating.value
@@ -97,19 +131,32 @@
           if stars == blank
             assign stars = review.rating.rating | default: 0
           endif
+          assign review_rating = stars | round
+          assign has_media_value = 'false'
+          if review.media.value != blank
+            assign has_media_value = 'true'
+          endif
+          assign submitted_at = review.submitted_at.value
+          assign submitted_at_unix = 0
+          if submitted_at != blank
+            assign submitted_at_unix = submitted_at | date: '%s'
+          endif
+          assign search_text = review.reviewer_name.value | append: ' ' | append: review.title.value | append: ' ' | append: review.body.value | strip_html | downcase | strip
+          assign review_author_label = review.reviewer_name.value | default: 'Anonymous'
         %}
-        <li class="product-reviews__item">
-          <div class="product-reviews__item-header">
-            <span
-              class="product-reviews__item-stars"
-              aria-label="{{ 'products.rating_label' | t: rating: stars }}"
-            >
-              {% render 'product-reviews-stars', rating: stars %}
-            </span>
-            {% if review.reviewer_name.value != blank %}
-              <span class="product-reviews__author">{{ review.reviewer_name.value | escape }}</span>
-            {% endif %}
-          </div>
+        <li
+          class="product-reviews__item"
+          data-review-rating="{{ review_rating }}"
+          data-review-gid="{{ review.system.id }}"
+          data-review-submitted-at="{{ submitted_at_unix }}"
+          data-review-has-media="{{ has_media_value }}"
+          data-review-search="{{ search_text | escape }}"
+        >
+          <article
+            class="product-reviews__article"
+            aria-label="{{ 'products.reviews.review_by_label' | t: author: review_author_label, rating: review_rating }}"
+          >
+          {% render 'product-review-meta', review: review, stars: stars %}
 
           {% if review.title.value != blank %}
             <h3 class="product-reviews__title">{{ review.title.value | escape }}</h3>
@@ -120,42 +167,70 @@
           {% endif %}
 
           {% if review.media.value != blank %}
-            <div class="product-reviews__media">
+            <div class="product-reviews__media" role="group" aria-label="{{ 'products.reviews.review_media_label' | t }}">
               {% for asset in review.media.value %}
-                {% if asset.media_type == 'video' %}
-                  {{
-                    asset
-                    | video_tag:
-                      class: 'product-reviews__media-video',
-                      image_size: '480x480',
-                      controls: true
-                  }}
-                {% else %}
-                  {{
-                    asset
-                    | image_url: width: 480
-                    | image_tag:
-                      class: 'product-reviews__media-image',
-                      loading: 'lazy',
-                      widths: '160,320,480',
-                      sizes: '160px',
-                      alt: review.title.value | default: 'Review photo'
-                  }}
-                {% endif %}
+                {% liquid
+                  assign is_video = false
+                  if asset.media_type == 'video'
+                    assign is_video = true
+                  endif
+                %}
+                <button
+                  type="button"
+                  class="product-reviews__media-item{% if is_video %} product-reviews__media-item--video{% endif %}"
+                  data-gallery-open
+                  data-global-index="{{ global_media_index }}"
+                  aria-label="{% if is_video %}{{ 'products.reviews.open_review_video' | t: index: global_media_index | plus: 1, count: media_count }}{% else %}{{ 'products.reviews.open_review_media' | t: index: global_media_index | plus: 1, count: media_count }}{% endif %}"
+                >
+                  {% if is_video %}
+                    {{
+                      asset.preview_image
+                      | image_url: width: 480
+                      | image_tag:
+                        class: 'product-reviews__media-image',
+                        loading: 'lazy',
+                        widths: '160,320,480',
+                        sizes: '160px',
+                        alt: ''
+                    }}
+                    <span class="product-reviews__media-play" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </span>
+                  {% else %}
+                    {{
+                      asset
+                      | image_url: width: 480
+                      | image_tag:
+                        class: 'product-reviews__media-image',
+                        loading: 'lazy',
+                        widths: '160,320,480',
+                        sizes: '160px',
+                        alt: ''
+                    }}
+                  {% endif %}
+                </button>
+                {% assign global_media_index = global_media_index | plus: 1 %}
               {% endfor %}
             </div>
           {% endif %}
 
+          <div class="product-reviews__item-footer">
+            {% render 'product-review-votes', review: review %}
+          </div>
+
           {% if review.momo_response.value != blank %}
-            <div class="product-reviews__response">
+            <aside class="product-reviews__response" aria-label="{{ 'products.reviews.merchant_response_region' | t }}">
               <p class="product-reviews__response-label">
                 {{ 'products.reviews.momo_response_label' | t }}
               </p>
               <div class="product-reviews__response-body rte">
                 {{ review.momo_response.value }}
               </div>
-            </div>
+            </aside>
           {% endif %}
+          </article>
         </li>
       {% endfor %}
     </ul>

@@ -8,7 +8,7 @@
 {% render 'storefront-components' %}
 
 {% liquid
-  assign theme_module_files = 'back-in-stock.js,cart-icon.js,cart-items.js,cart-sections.js,collection-facets.js,component.js,dialog.js,events.js,morph.js,product-cart.js,product-purchase-options.js,product-recommendations.js,photoswipe.esm.min.js,photoswipe-lightbox.esm.min.js,product-gallery.js,product-card-swatches.js,section-hydration.js,section-renderer.js,utilities.js,variant-picker.js' | split: ','
+  assign theme_module_files = 'back-in-stock.js,cart-icon.js,cart-items.js,cart-sections.js,collection-facets.js,component.js,dialog.js,events.js,morph.js,product-cart.js,product-purchase-options.js,product-recommendations.js,photoswipe.esm.min.js,photoswipe-lightbox.esm.min.js,product-gallery.js,product-reviews.js,product-card-swatches.js,section-hydration.js,section-renderer.js,utilities.js,variant-picker.js' | split: ','
   assign theme_preload_files = 'utilities.js,component.js,morph.js,section-renderer.js,section-hydration.js,events.js,dialog.js,cart-sections.js,cart-items.js,cart-icon.js'
   assign collection_module_files = 'collection-facets.js,product-card-swatches.js'
 %}
@@ -37,12 +37,13 @@
 
 {% if template.name == 'product' %}
   {{ 'photoswipe.css' | asset_url | stylesheet_tag }}
-  {% assign product_preload_files = 'back-in-stock.js,photoswipe.esm.min.js,photoswipe-lightbox.esm.min.js,product-cart.js,product-gallery.js,product-purchase-options.js,product-recommendations.js,product-card-swatches.js,variant-picker.js' | split: ',' %}
+  {% assign product_preload_files = 'back-in-stock.js,photoswipe.esm.min.js,photoswipe-lightbox.esm.min.js,product-cart.js,product-gallery.js,product-reviews.js,product-purchase-options.js,product-recommendations.js,product-card-swatches.js,variant-picker.js' | split: ',' %}
   {% for preload_file in product_preload_files %}
     <link rel="modulepreload" href="{{ preload_file | asset_url }}" fetchpriority="low">
   {% endfor %}
   <script src="{{ 'back-in-stock.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'product-gallery.js' | asset_url }}" type="module" fetchpriority="low"></script>
+  <script src="{{ 'product-reviews.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'product-cart.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'product-purchase-options.js' | asset_url }}" type="module" fetchpriority="low"></script>
   <script src="{{ 'product-recommendations.js' | asset_url }}" type="module" fetchpriority="low"></script>
@@ -77,6 +78,9 @@
       add_to_cart_loading: {{ 'products.add_to_cart.loading' | t | json }},
       add_to_cart_success: {{ 'products.add_to_cart.success' | t | json }},
       add_to_cart_error: {{ 'products.add_to_cart.error' | t | json }},
+      preorder_add_to_cart: {{ 'products.preorder.add_to_cart_deposit' | t: deposit: '[deposit]' | json }},
+      preorder_checkout: {{ 'products.preorder.checkout_deposit' | t: deposit: '[deposit]' | json }},
+      preorder_disclosure: {{ 'products.preorder.disclosure' | t: deposit: '[deposit]', balance: '[balance]' | json }},
       back_in_stock_submit: {{ 'products.back_in_stock.submit' | t | json }},
       back_in_stock_submitting: {{ 'products.back_in_stock.submitting' | t | json }},
       back_in_stock_error: {{ 'products.back_in_stock.error' | t | json }},

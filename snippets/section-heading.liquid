@@ -8,6 +8,7 @@
   @param {string} [link_url] - Optional CTA link URL
   @param {string} [alignment] - left or center (default: left)
   @param {boolean} [heading_display] - Use larger display heading size
+  @param {string} [heading_id] - Optional id for the heading element
   @param {string} [class] - Additional CSS classes on the wrapper
 
   @example
@@ -38,7 +39,12 @@
     {% endif %}
 
     {% if heading != blank %}
-      <h2 class="section-heading__title{% if heading_display %} section-heading__title--display{% endif %}">
+      <h2
+        class="section-heading__title{% if heading_display %} section-heading__title--display{% endif %}"
+        {% if heading_id != blank %}
+          id="{{ heading_id }}"
+        {% endif %}
+      >
         {{ heading | escape }}
       </h2>
     {% endif %}

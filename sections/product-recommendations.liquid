@@ -106,7 +106,19 @@
   }
 
   .product-recommendations__tabs--single {
-    display: none;
+    justify-content: flex-start;
+    border-bottom: 0;
+  }
+
+  .product-recommendations__tabs--single .product-recommendations__tab {
+    pointer-events: none;
+    cursor: default;
+    opacity: 1;
+    padding-bottom: 0;
+  }
+
+  .product-recommendations__tabs--single .product-recommendations__tab::after {
+    content: none;
   }
 
   .product-recommendations__tab {

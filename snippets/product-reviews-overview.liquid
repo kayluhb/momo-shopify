@@ -1,0 +1,80 @@
+{% doc %}
+  Ratings overview with average score and clickable distribution bars.
+
+  @param {number} average_rating - Average rating
+  @param {number} review_count - Total approved reviews
+  @param {number} count_5 - Five-star review count
+  @param {number} count_4 - Four-star review count
+  @param {number} count_3 - Three-star review count
+  @param {number} count_2 - Two-star review count
+  @param {number} count_1 - One-star review count
+{% enddoc %}
+
+{% if review_count > 0 %}
+  <div class="product-reviews__overview" data-product-reviews-overview role="region" aria-label="{{ 'products.reviews.overview_region_label' | t }}">
+    <div class="product-reviews__overview-score">
+      <p class="product-reviews__overview-average">
+        <span class="sr-only">{{ 'products.reviews.average_rating_label' | t: rating: average_rating }}</span>
+        <span aria-hidden="true">{{ average_rating }}</span>
+      </p>
+      <span
+        class="product-reviews__overview-stars"
+        aria-label="{{ 'products.rating_label' | t: rating: average_rating, count: review_count }}"
+      >
+        {% render 'product-reviews-stars', rating: average_rating %}
+      </span>
+      <p class="product-reviews__overview-count">
+        {%- if review_count == 1 -%}
+          {{- 'products.reviews.review_count' | t: count: review_count -}}
+        {%- else -%}
+          {{- 'products.reviews.review_count_other' | t: count: review_count -}}
+        {%- endif -%}
+      </p>
+    </div>
+
+    <div
+      class="product-reviews__distribution"
+      role="group"
+      aria-label="{{ 'products.reviews.filter_by_rating' | t }}"
+    >
+      {% for star_level in (1..5) reversed %}
+        {% liquid
+          case star_level
+            when 5
+              assign star_count = count_5
+            when 4
+              assign star_count = count_4
+            when 3
+              assign star_count = count_3
+            when 2
+              assign star_count = count_2
+            when 1
+              assign star_count = count_1
+          endcase
+          assign fill_percent = 0
+          if review_count > 0
+            assign fill_percent = star_count | times: 100.0 | divided_by: review_count | round: 1
+          endif
+        %}
+        <button
+          type="button"
+          class="product-reviews__distribution-row"
+          data-rating-filter="{{ star_level }}"
+          aria-pressed="false"
+          {% if star_count == 0 %}
+            disabled
+          {% endif %}
+          aria-label="{{ 'products.reviews.filter_star_label' | t: star: star_level, count: star_count }}"
+        >
+          <span class="product-reviews__distribution-label">{{ star_level }}</span>
+          <span class="product-reviews__distribution-track" aria-hidden="true">
+            <span
+              class="product-reviews__distribution-fill"
+              style="--fill-percentage: {{ fill_percent }}%"
+            ></span>
+          </span>
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

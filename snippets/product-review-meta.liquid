@@ -1,0 +1,52 @@
+{% doc %}
+  Renders reviewer identity, verified badge, stars, and submission timestamp.
+
+  @param {object} review - Product review metaobject
+  @param {number} stars - Star rating (1-5)
+{% enddoc %}
+
+{% liquid
+  assign is_verified = false
+  if review.order_id.value != blank
+    assign is_verified = true
+  endif
+
+  assign submitted_at = review.submitted_at.value
+%}
+
+<div class="product-review-meta">
+  <div class="product-review-meta__primary">
+    <div class="product-review-meta__name-row">
+      {% if review.reviewer_name.value != blank %}
+        <span class="product-review-meta__author">{{ review.reviewer_name.value | escape }}</span>
+      {% endif %}
+      {% if is_verified %}
+        <span class="product-review-meta__verified">
+          <span class="product-review-meta__verified-icon" aria-hidden="true">
+            {{- 'icon-verified.svg' | inline_asset_content -}}
+          </span>
+          <span class="product-review-meta__verified-label">
+            {{- 'products.reviews.verified_buyer' | t -}}
+          </span>
+        </span>
+      {% endif %}
+    </div>
+
+    <span
+      class="product-review-meta__stars"
+      aria-label="{{ 'products.rating_label' | t: rating: stars }}"
+    >
+      {% render 'product-reviews-stars', rating: stars %}
+    </span>
+  </div>
+
+  {% if submitted_at != blank %}
+    <time
+      class="product-review-meta__timestamp"
+      datetime="{{ submitted_at | date: '%Y-%m-%dT%H:%M:%S%z' }}"
+      data-relative-time
+    >
+      {{ submitted_at | date: format: 'abbreviated_date' }}
+    </time>
+  {% endif %}
+</div>

@@ -49,15 +49,6 @@
                 {% unless item.variant.title == 'Default Title' %}
                   <p class="cart-items__variant">{{ item.variant.title | escape }}</p>
                 {% endunless %}
-                {% if item.selling_plan_allocation %}
-                  <p class="cart-items__selling-plan">
-                    {{ item.selling_plan_allocation.selling_plan.name | escape }}
-                  </p>
-                  <p class="cart-items__preorder-note">
-                    {% capture deposit_amount %}{{ unit_checkout_amount | money }}{% endcapture %}
-                    {{ 'products.preorder.deposit_today' | t: amount: deposit_amount }}
-                  </p>
-                {% endif %}
               </div>
             </div>
           </div>
@@ -90,6 +81,17 @@
               {{ 'cart.remove' | t }}
             </button>
           </div>
+          {% if item.selling_plan_allocation %}
+            <div class="cart-items__disclaimer">
+              <p class="cart-items__selling-plan">
+                {{ item.selling_plan_allocation.selling_plan.name | escape }}
+              </p>
+              <p class="cart-items__preorder-note">
+                {% capture deposit_amount %}{{ unit_checkout_amount | money }}{% endcapture %}
+                {{ 'products.preorder.deposit_today' | t: amount: deposit_amount }}
+              </p>
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
@@ -159,13 +161,19 @@
 
   .cart-items__selling-plan,
   .cart-items__preorder-note {
-    margin: 0.25rem 0 0;
+    margin: 0;
     font-size: 0.8125rem;
     line-height: 1.45;
   }
 
   .cart-items__preorder-note {
+    margin-top: 0.125rem;
     opacity: 0.85;
+  }
+
+  .cart-items__disclaimer {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
   }
 
   .cart-items__line-total {

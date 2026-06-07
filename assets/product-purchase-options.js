@@ -1,5 +1,6 @@
 /**
- * Syncs pre-order purchase option radios with the selling_plan form field and price display.
+ * Syncs pre-order purchase option radios with the selling_plan form field,
+ * price display, CTA labels, and disclosure copy.
  */
 class ProductPurchaseOptions {
   /** @param {HTMLElement} root */
@@ -11,8 +12,46 @@ class ProductPurchaseOptions {
     this.variantSelect = document.querySelector(
       `#product-variant-${this.sectionId}`,
     );
+    this.addToCartButton = document.querySelector(
+      '.product-buy__add-to-cart',
+    );
+    this.paymentButton = null;
+    this.disclosureEl = document.querySelector('[data-preorder-disclosure]');
+    this.defaultAddToCartLabel =
+      this.addToCartButton?.textContent?.trim() ?? '';
+    this.defaultPaymentLabel = '';
     this.bindEvents();
+    this.observePaymentButton();
     this.syncFromSelection();
+  }
+
+  observePaymentButton() {
+    const paymentRoot = document.querySelector('.product-buy__payment');
+    if (!paymentRoot) return;
+
+    const capturePaymentButton = () => {
+      const button = paymentRoot.querySelector(
+        '.shopify-payment-button__button--unbranded',
+      );
+      if (!(button instanceof HTMLButtonElement)) return false;
+
+      this.paymentButton = button;
+      if (!this.defaultPaymentLabel) {
+        this.defaultPaymentLabel = button.textContent?.trim() ?? '';
+      }
+
+      this.syncFromSelection();
+      return true;
+    };
+
+    if (capturePaymentButton()) return;
+
+    const observer = new MutationObserver(() => {
+      if (!capturePaymentButton()) return;
+      observer.disconnect();
+    });
+
+    observer.observe(paymentRoot, { childList: true, subtree: true });
   }
 
   bindEvents() {
@@ -82,6 +121,55 @@ class ProductPurchaseOptions {
     });
   }
 
+  /** @param {string} template @param {Record<string, string>} values */
+  fillTemplate(template, values) {
+    return Object.entries(values).reduce(
+      (text, [key, value]) => text.replaceAll(`[${key}]`, value),
+      template,
+    );
+  }
+
+  /** @param {HTMLInputElement | undefined} selected */
+  updateCallToActions(selected) {
+    const isPreorder =
+      selected instanceof HTMLInputElement &&
+      selected.dataset.purchaseOption === 'preorder';
+    const depositAmount = selected?.dataset.depositAmount ?? '';
+    const balanceAmount = selected?.dataset.balanceAmount ?? '';
+
+    if (this.addToCartButton) {
+      this.addToCartButton.textContent = isPreorder
+        ? this.fillTemplate(Theme.translations.preorder_add_to_cart, {
+            deposit: depositAmount,
+          })
+        : this.defaultAddToCartLabel;
+    }
+
+    if (this.paymentButton) {
+      this.paymentButton.textContent = isPreorder
+        ? this.fillTemplate(Theme.translations.preorder_checkout, {
+            deposit: depositAmount,
+          })
+        : this.defaultPaymentLabel;
+    }
+
+    if (this.disclosureEl) {
+      if (isPreorder && depositAmount && balanceAmount) {
+        this.disclosureEl.textContent = this.fillTemplate(
+          Theme.translations.preorder_disclosure,
+          {
+            deposit: depositAmount,
+            balance: balanceAmount,
+          },
+        );
+        this.disclosureEl.hidden = false;
+      } else {
+        this.disclosureEl.textContent = '';
+        this.disclosureEl.hidden = true;
+      }
+    }
+  }
+
   syncFromSelection() {
     const selected = this.getVisibleInputs().find((input) => input.checked);
 
@@ -89,12 +177,17 @@ class ProductPurchaseOptions {
 
     if (!selected || selected.dataset.purchaseOption === 'one_time') {
       this.sellingPlanInput.value = '';
-      this.updatePrice(selected?.closest('label')?.querySelector('[data-one-time-price]')?.textContent);
+      this.updatePrice(
+        selected?.closest('label')?.querySelector('[data-one-time-price]')
+          ?.textContent,
+      );
+      this.updateCallToActions(selected);
       return;
     }
 
     this.sellingPlanInput.value = selected.dataset.sellingPlanId ?? '';
     this.updatePrice(selected.dataset.displayPrice);
+    this.updateCallToActions(selected);
   }
 
   /** @param {string | null | undefined} priceText */

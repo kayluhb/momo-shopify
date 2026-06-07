@@ -75,19 +75,32 @@
 
         {% render 'product-purchase-options',
           product: product,
-          form: form,
           section_id: section_id,
           current_variant: current_variant
         %}
 
         <div class="product-buy__submit">
           {% assign add_to_cart_label = 'products.add_to_cart.label' | t %}
-          {% render 'button', label: add_to_cart_label, tag: 'button', button_type: 'submit', style: 'primary' %}
+          {% render 'button',
+            label: add_to_cart_label,
+            tag: 'button',
+            button_type: 'submit',
+            style: 'primary',
+            class: 'product-buy__add-to-cart'
+          %}
         </div>
 
         <div class="product-buy__payment">
           {{ form | payment_button }}
         </div>
+
+        {% if product.selling_plan_groups.size > 0 %}
+          <p
+            class="product-buy__preorder-disclosure"
+            data-preorder-disclosure
+            hidden
+          ></p>
+        {% endif %}
       {% endform %}
     {% else %}
       <div class="product-buy__sold-out" data-product-sold-out>
@@ -282,6 +295,14 @@
   .product-buy__payment .shopify-payment-button__button--unbranded:hover:not([disabled]) {
     background-color: color-mix(in srgb, currentColor 12%, transparent) !important;
     opacity: 1 !important;
+  }
+
+  .product-buy__preorder-disclosure {
+    margin: 0;
+    max-width: 20rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: color-mix(in srgb, currentColor 82%, transparent);
   }
 
   @media (max-width: 749px) {

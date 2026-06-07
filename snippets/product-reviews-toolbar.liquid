@@ -1,0 +1,256 @@
+{% doc %}
+  Filter, sort, and search controls for the product reviews list.
+
+  @param {number} review_count - Total approved reviews
+{% enddoc %}
+
+{% if review_count > 0 %}
+  <div class="product-reviews__toolbar" role="group" aria-label="{{ 'products.reviews.filters_group_label' | t }}">
+    <div class="product-reviews__toolbar-controls">
+      <div class="product-reviews__toolbar-field product-reviews__toolbar-sort">
+        <label class="sr-only" for="ProductReviewsSort">{{ 'products.reviews.sort_label' | t }}</label>
+        <select id="ProductReviewsSort" class="product-reviews__toolbar-select" data-review-sort>
+          <option value="latest">{{ 'products.reviews.sort_latest' | t }}</option>
+          <option value="oldest">{{ 'products.reviews.sort_oldest' | t }}</option>
+          <option value="highest">{{ 'products.reviews.sort_highest' | t }}</option>
+          <option value="lowest">{{ 'products.reviews.sort_lowest' | t }}</option>
+        </select>
+        <span class="product-reviews__toolbar-chevron" aria-hidden="true"></span>
+      </div>
+
+      <div class="product-reviews__toolbar-field product-reviews__toolbar-rating">
+        <label class="sr-only" for="ProductReviewsRating">{{ 'products.reviews.rating_filter_label' | t }}</label>
+        <select id="ProductReviewsRating" class="product-reviews__toolbar-select" data-review-rating-filter>
+          <option value="">{{ 'products.reviews.rating_all' | t }}</option>
+          <option value="5">{{ 'products.reviews.rating_stars' | t: count: 5 }}</option>
+          <option value="4">{{ 'products.reviews.rating_stars' | t: count: 4 }}</option>
+          <option value="3">{{ 'products.reviews.rating_stars' | t: count: 3 }}</option>
+          <option value="2">{{ 'products.reviews.rating_stars' | t: count: 2 }}</option>
+          <option value="1">{{ 'products.reviews.rating_stars' | t: count: 1 }}</option>
+        </select>
+        <span class="product-reviews__toolbar-chevron" aria-hidden="true"></span>
+      </div>
+
+      <label class="product-reviews__toolbar-media">
+        <input type="checkbox" class="product-reviews__toolbar-media-input" data-review-media-filter>
+        <span class="product-reviews__toolbar-media-box" aria-hidden="true"></span>
+        <span class="product-reviews__toolbar-media-label">{{ 'products.reviews.photos_videos' | t }}</span>
+      </label>
+    </div>
+
+    <div class="product-reviews__toolbar-search">
+      <label class="sr-only" for="ProductReviewsSearch">{{ 'products.reviews.search_label' | t }}</label>
+      <input
+        id="ProductReviewsSearch"
+        type="search"
+        class="product-reviews__toolbar-search-input"
+        data-review-search
+        placeholder="{{ 'products.reviews.search_placeholder' | t }}"
+        autocomplete="off"
+      >
+      <span class="product-reviews__toolbar-search-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="7" cy="7" r="4.75" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M10.75 10.75L14 14" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .product-reviews__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--product-reviews-rule);
+  }
+
+  .product-reviews__toolbar-controls {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .product-reviews__toolbar-field {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .product-reviews__toolbar-select {
+    appearance: none;
+    min-width: 9rem;
+    padding: 0.625rem 2rem 0.625rem 0.875rem;
+    border: 1px solid var(--product-reviews-rule);
+    border-radius: var(--style-border-radius, 0.25rem);
+    background: #fff;
+    color: inherit;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+
+  .product-reviews__toolbar-select:focus-visible {
+    outline: 2px solid var(--product-reviews-accent);
+    outline-offset: 2px;
+  }
+
+  .product-reviews__toolbar-chevron {
+    position: absolute;
+    top: 50%;
+    right: 0.875rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-right: 1.5px solid currentcolor;
+    border-bottom: 1.5px solid currentcolor;
+    pointer-events: none;
+    opacity: 0.65;
+    transform: rotate(45deg) translateY(calc(-50% - 1px));
+  }
+
+  .product-reviews__toolbar-media {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .product-reviews__toolbar-media-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .product-reviews__toolbar-media-box {
+    position: relative;
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--product-reviews-rule);
+    border-radius: 2px;
+    background: #fff;
+  }
+
+  .product-reviews__toolbar-media-box::after {
+    content: '';
+    position: absolute;
+    top: 0.125rem;
+    left: 0.3125rem;
+    width: 0.3125rem;
+    height: 0.5625rem;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+    opacity: 0;
+  }
+
+  .product-reviews__toolbar-media-input:checked + .product-reviews__toolbar-media-box {
+    border-color: var(--product-reviews-verified);
+    background: var(--product-reviews-verified);
+  }
+
+  .product-reviews__toolbar-media-input:checked + .product-reviews__toolbar-media-box::after {
+    opacity: 1;
+  }
+
+  .product-reviews__toolbar-media-input:focus-visible + .product-reviews__toolbar-media-box {
+    outline: 2px solid var(--product-reviews-accent);
+    outline-offset: 2px;
+  }
+
+  .product-reviews__toolbar-media-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .product-reviews__toolbar-search {
+    position: relative;
+    flex: 0 1 14rem;
+    min-width: 10rem;
+    margin-left: auto;
+  }
+
+  .product-reviews__toolbar-search-input {
+    width: 100%;
+    padding: 0.625rem 2.25rem 0.625rem 0.875rem;
+    border: 1px solid var(--product-reviews-rule);
+    border-radius: var(--style-border-radius, 0.25rem);
+    background: #fff;
+    color: inherit;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .product-reviews__toolbar-search-input::placeholder {
+    color: var(--product-reviews-muted);
+    opacity: 1;
+  }
+
+  .product-reviews__toolbar-search-input:focus-visible {
+    outline: 2px solid var(--product-reviews-accent);
+    outline-offset: 2px;
+  }
+
+  .product-reviews__toolbar-search-icon {
+    position: absolute;
+    top: 50%;
+    right: 0.875rem;
+    display: grid;
+    width: 1rem;
+    height: 1rem;
+    color: var(--product-reviews-muted);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .product-reviews__toolbar-search-icon :where(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 749px) {
+    .product-reviews__toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .product-reviews__toolbar-controls {
+      width: 100%;
+    }
+
+    .product-reviews__toolbar-field,
+    .product-reviews__toolbar-select {
+      width: 100%;
+    }
+
+    .product-reviews__toolbar-search {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+{% endstylesheet %}

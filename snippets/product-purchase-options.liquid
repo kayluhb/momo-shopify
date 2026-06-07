@@ -2,12 +2,11 @@
   Renders pre-order purchase options for products with selling plans.
 
   @param {product} product - The product to display purchase options for
-  @param {form} form - Product form object for payment terms
   @param {string} section_id - Section ID for unique field names
   @param {object} current_variant - Selected variant
 
   @example
-  {% render 'product-purchase-options', product: product, form: form, section_id: section.id, current_variant: current_variant %}
+  {% render 'product-purchase-options', product: product, section_id: section.id, current_variant: current_variant %}
 {% enddoc %}
 
 {% liquid
@@ -84,6 +83,8 @@
                         data-selling-plan-id="{{ selling_plan.id }}"
                         data-variant-id="{{ variant.id }}"
                         data-display-price="{{ allocation.checkout_price | money }}"
+                        data-deposit-amount="{{ deposit_amount | strip }}"
+                        data-balance-amount="{{ balance_amount | strip }}"
                         {% if product.requires_selling_plan and forloop.first and variant == selected_variant %}
                           checked
                         {% endif %}
@@ -125,9 +126,6 @@
       {% endif %}
     >
 
-    <div class="product-purchase-options__terms" data-payment-terms>
-      {{ form | payment_terms }}
-    </div>
   </div>
 {% endif %}
 
@@ -196,9 +194,4 @@
     line-height: 1.5;
   }
 
-  .product-purchase-options__terms {
-    margin-top: 0.75rem;
-    font-size: 0.8125rem;
-    line-height: 1.5;
-  }
 {% endstylesheet %}

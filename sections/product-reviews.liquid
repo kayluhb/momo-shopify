@@ -1,4 +1,14 @@
 {% liquid
+  assign reviews_namespace = shop.metafields.custom.momo_storefront_namespace.value
+  assign published_reviews = blank
+  assign review_count = 0
+  if reviews_namespace != blank
+    assign published_reviews = product.metafields[reviews_namespace].published_reviews.value
+  endif
+  if published_reviews != blank
+    assign review_count = published_reviews.size
+  endif
+
   capture section_bg
     render 'section-color-scheme', scheme: section.settings.color_scheme
   endcapture
@@ -7,6 +17,7 @@
   endcapture
 %}
 
+{% if review_count > 0 %}
 <section
   id="product-reviews"
   class="product-reviews full-width section-padding {{ section_bg }} {{ section_font }}"
@@ -40,6 +51,7 @@
     {% render 'product-reviews-block', product: product, variant: 'section' %}
   </div>
 </section>
+{% endif %}
 
 {% stylesheet %}
   .product-reviews {

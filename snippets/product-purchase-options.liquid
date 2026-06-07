@@ -11,6 +11,10 @@
 
 {% liquid
   assign selected_variant = current_variant | default: product.selected_or_first_available_variant
+  assign purchase_option_count = selected_variant.selling_plan_allocations.size
+  unless product.requires_selling_plan
+    assign purchase_option_count = purchase_option_count | plus: 1
+  endunless
 %}
 
 {% if product.selling_plan_groups.size > 0 %}
@@ -20,7 +24,7 @@
     data-section-id="{{ section_id }}"
   >
     <fieldset class="product-purchase-options__fieldset">
-      <legend class="product-purchase-options__legend">
+      <legend class="product-purchase-options__legend{% if purchase_option_count == 1 %} sr-only{% endif %}">
         {{ 'products.preorder.purchase_options' | t }}
       </legend>
 
@@ -66,25 +70,78 @@
                   {% for allocation in allocations %}
                     {% liquid
                       assign selling_plan = allocation.selling_plan
-                      assign balance_due = allocation.price | minus: allocation.checkout_price
+                      assign deposit_cents = allocation.checkout_charge_amount
+                      assign balance_cents = allocation.remaining_balance_charge_amount
+
+                      if deposit_cents == blank or deposit_cents == 0
+                        assign checkout_charge = selling_plan.checkout_charge
+                        if checkout_charge.value_type == 'percentage'
+                          assign deposit_cents = variant.price | times: checkout_charge.value | divided_by: 100
+                        else
+                          assign deposit_cents = checkout_charge.value
+                        endif
+                      endif
+
+                      if balance_cents == blank or balance_cents == 0
+                        assign balance_cents = allocation.price | minus: deposit_cents
+                      endif
+
                       capture deposit_amount
-                        echo allocation.checkout_price | money
+                        echo deposit_cents | money
                       endcapture
                       capture balance_amount
-                        echo balance_due | money
+                        echo balance_cents | money
                       endcapture
+
+                      assign plan_type = 'standard'
+                      if plan_group.name == 'Momo pre-order'
+                        assign plan_type = 'preorder'
+                      elsif selling_plan.recurring_deliveries
+                        assign plan_type = 'subscription'
+                      elsif balance_cents > 0
+                        assign plan_type = 'preorder'
+                      endif
+
+                      assign subscription_cadence = ''
+                      if plan_type == 'subscription'
+                        for option in selling_plan.options
+                          if option.value != blank
+                            if option.value contains 'Deliver' or option.value contains 'deliver' or option.value contains 'every'
+                              assign subscription_cadence = option.value
+                              break
+                            endif
+                          endif
+                        endfor
+
+                        if subscription_cadence == blank and selling_plan.description != blank
+                          assign subscription_cadence = selling_plan.description
+                        endif
+
+                        if subscription_cadence == blank
+                          assign name_parts = selling_plan.name | split: ','
+                          if name_parts.size > 1
+                            assign subscription_cadence = name_parts.last | strip
+                          else
+                            assign subscription_cadence = selling_plan.name
+                          endif
+                        endif
+                      endif
                     %}
                     <label class="product-purchase-options__choice">
                       <input
                         type="radio"
                         name="purchase_option_{{ section_id }}"
                         value="{{ selling_plan.id }}"
-                        data-purchase-option="preorder"
+                        data-purchase-option="selling_plan"
+                        data-plan-type="{{ plan_type }}"
                         data-selling-plan-id="{{ selling_plan.id }}"
                         data-variant-id="{{ variant.id }}"
-                        data-display-price="{{ allocation.checkout_price | money }}"
+                        data-full-price="{{ variant.price | money }}"
                         data-deposit-amount="{{ deposit_amount | strip }}"
                         data-balance-amount="{{ balance_amount | strip }}"
+                        {% if plan_type == 'subscription' %}
+                          data-subscription-cadence="{{ subscription_cadence | escape }}"
+                        {% endif %}
                         {% if product.requires_selling_plan and forloop.first and variant == selected_variant %}
                           checked
                         {% endif %}
@@ -97,12 +154,18 @@
                           {{ selling_plan.description }}
                         </span>
                       {% endif %}
-                      <span class="product-purchase-options__choice-price">
-                        {{ 'products.preorder.deposit_today' | t: amount: deposit_amount }}
-                      </span>
-                      <span class="product-purchase-options__choice-balance">
-                        {{ 'products.preorder.balance_on_ship' | t: amount: balance_amount }}
-                      </span>
+                      {% if balance_cents > 0 %}
+                        <span class="product-purchase-options__choice-price">
+                          {{ 'products.preorder.preorder_deposit_today' | t: amount: deposit_amount }}
+                        </span>
+                        <span class="product-purchase-options__choice-balance">
+                          {{ 'products.preorder.balance_on_ship' | t: amount: balance_amount }}
+                        </span>
+                      {% else %}
+                        <span class="product-purchase-options__choice-price">
+                          {{ 'products.preorder.price_at_checkout' | t: amount: deposit_amount }}
+                        </span>
+                      {% endif %}
                     </label>
                   {% endfor %}
                 </div>
@@ -166,6 +229,7 @@
   }
 
   .product-purchase-options__choice {
+    position: relative;
     display: grid;
     gap: 0.25rem;
     padding: 0.875rem 1rem;
@@ -179,8 +243,16 @@
     background: color-mix(in srgb, currentColor 6%, transparent);
   }
 
-  .product-purchase-options__choice input {
-    margin-right: 0.5rem;
+  .product-purchase-options__choice input[type='radio'] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .product-purchase-options__choice-label {

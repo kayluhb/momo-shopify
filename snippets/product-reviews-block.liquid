@@ -84,9 +84,7 @@
     </p>
   {% endif %}
 {% else %}
-  {% if review_count == 0 %}
-    <p class="product-reviews__empty">{{ 'products.reviews.no_reviews' | t }}</p>
-  {% else %}
+  {% if review_count > 0 %}
     {% assign media_count = 0 %}
     {% for review in published_reviews %}
       {% if review.media.value != blank %}
@@ -104,12 +102,14 @@
       count_1: count_1
     %}
 
-    {% render 'product-reviews-gallery',
-      published_reviews: published_reviews,
-      product: product
-    %}
+    {% if review_count > 1 %}
+      {% render 'product-reviews-gallery',
+        published_reviews: published_reviews,
+        product: product
+      %}
 
-    {% render 'product-reviews-toolbar', review_count: review_count %}
+      {% render 'product-reviews-toolbar', review_count: review_count %}
+    {% endif %}
 
     <p class="product-reviews__filter-empty" data-filter-empty role="status" aria-live="polite" hidden>
       {{ 'products.reviews.filter_empty' | t }}

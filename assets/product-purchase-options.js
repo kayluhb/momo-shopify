@@ -22,6 +22,7 @@ class ProductPurchaseOptions {
     this.defaultPaymentLabel = '';
     this.bindEvents();
     this.observePaymentButton();
+    this.updateLegendVisibility();
     this.syncFromSelection();
   }
 
@@ -106,6 +107,24 @@ class ProductPurchaseOptions {
     return null;
   }
 
+  /** @returns {HTMLInputElement | undefined} */
+  getSelectedInput() {
+    const selected = this.root.querySelector('[data-purchase-option]:checked');
+    if (!(selected instanceof HTMLInputElement)) return undefined;
+
+    const variantId = this.getSelectedVariantId();
+    if (
+      selected.dataset.purchaseOption === 'selling_plan' &&
+      selected.dataset.variantId &&
+      variantId &&
+      selected.dataset.variantId !== variantId
+    ) {
+      return undefined;
+    }
+
+    return selected;
+  }
+
   /** @returns {HTMLInputElement[]} */
   getVisibleInputs() {
     const variantId = this.getSelectedVariantId();
@@ -121,72 +140,136 @@ class ProductPurchaseOptions {
     });
   }
 
+  updateLegendVisibility() {
+    const legend = this.root.querySelector('.product-purchase-options__legend');
+    if (!(legend instanceof HTMLElement)) return;
+
+    legend.classList.toggle('sr-only', this.getVisibleInputs().length <= 1);
+  }
+
   /** @param {string} template @param {Record<string, string>} values */
   fillTemplate(template, values) {
-    return Object.entries(values).reduce(
-      (text, [key, value]) => text.replaceAll(`[${key}]`, value),
+    const text = Object.entries(values).reduce(
+      (result, [key, value]) => result.replaceAll(`[${key}]`, value),
       template,
     );
+
+    return text
+      .replaceAll('&amp;', '&')
+      .replaceAll('&#39;', "'")
+      .replaceAll('&quot;', '"');
   }
 
   /** @param {HTMLInputElement | undefined} selected */
   updateCallToActions(selected) {
-    const isPreorder =
+    const isSellingPlan =
       selected instanceof HTMLInputElement &&
-      selected.dataset.purchaseOption === 'preorder';
+      selected.dataset.purchaseOption === 'selling_plan';
+    const planType = isSellingPlan ? selected.dataset.planType : null;
+    const isDeferredPreorder = planType === 'preorder';
+    const isSubscription = planType === 'subscription';
     const depositAmount = selected?.dataset.depositAmount ?? '';
-    const balanceAmount = selected?.dataset.balanceAmount ?? '';
+    const subscriptionCadence = selected?.dataset.subscriptionCadence ?? '';
 
     if (this.addToCartButton) {
-      this.addToCartButton.textContent = isPreorder
-        ? this.fillTemplate(Theme.translations.preorder_add_to_cart, {
-            deposit: depositAmount,
-          })
-        : this.defaultAddToCartLabel;
+      if (isDeferredPreorder) {
+        this.addToCartButton.textContent = this.fillTemplate(
+          Theme.translations.preorder_add_to_cart,
+          { deposit: depositAmount },
+        );
+      } else if (isSubscription) {
+        this.addToCartButton.textContent = this.fillTemplate(
+          Theme.translations.subscription_add_to_cart,
+          { price: depositAmount, cadence: subscriptionCadence },
+        );
+      } else {
+        this.addToCartButton.textContent = this.defaultAddToCartLabel;
+      }
     }
 
     if (this.paymentButton) {
-      this.paymentButton.textContent = isPreorder
-        ? this.fillTemplate(Theme.translations.preorder_checkout, {
-            deposit: depositAmount,
-          })
-        : this.defaultPaymentLabel;
-    }
-
-    if (this.disclosureEl) {
-      if (isPreorder && depositAmount && balanceAmount) {
-        this.disclosureEl.textContent = this.fillTemplate(
-          Theme.translations.preorder_disclosure,
-          {
-            deposit: depositAmount,
-            balance: balanceAmount,
-          },
+      if (isDeferredPreorder) {
+        this.paymentButton.textContent = this.fillTemplate(
+          Theme.translations.preorder_checkout,
+          { deposit: depositAmount },
         );
-        this.disclosureEl.hidden = false;
+      } else if (isSubscription) {
+        this.paymentButton.textContent = this.fillTemplate(
+          Theme.translations.subscription_checkout,
+          { price: depositAmount, cadence: subscriptionCadence },
+        );
       } else {
-        this.disclosureEl.textContent = '';
-        this.disclosureEl.hidden = true;
+        this.paymentButton.textContent = this.defaultPaymentLabel;
       }
     }
+
+    this.updateDisclosure(selected);
+  }
+
+  /** @param {HTMLInputElement | undefined} selected */
+  updateDisclosure(selected) {
+    if (!this.disclosureEl) return;
+
+    const planType =
+      selected instanceof HTMLInputElement &&
+      selected.dataset.purchaseOption === 'selling_plan'
+        ? selected.dataset.planType
+        : null;
+
+    if (planType !== 'preorder' && planType !== 'subscription') {
+      this.disclosureEl.hidden = true;
+      return;
+    }
+
+    this.disclosureEl.hidden = false;
+    this.disclosureEl
+      .querySelectorAll('[data-disclosure-content]')
+      .forEach((element) => {
+        if (!(element instanceof HTMLElement)) return;
+        element.hidden = element.dataset.disclosureContent !== planType;
+      });
+  }
+
+  getFullVariantPrice() {
+    const variantId = this.getSelectedVariantId();
+    const preorderInput = this.root.querySelector(
+      `[data-purchase-option="selling_plan"][data-variant-id="${variantId}"]`,
+    );
+
+    if (preorderInput instanceof HTMLInputElement && preorderInput.dataset.fullPrice) {
+      return preorderInput.dataset.fullPrice;
+    }
+
+    const oneTimePrice = this.root
+      .querySelector('[data-one-time-price]')
+      ?.textContent?.trim();
+    if (oneTimePrice) return oneTimePrice;
+
+    if (this.variantSelect instanceof HTMLSelectElement) {
+      const option =
+        this.variantSelect.options[this.variantSelect.selectedIndex];
+      const match = option?.textContent?.match(/-\s*(.+)$/);
+      if (match?.[1]) return match[1].trim();
+    }
+
+    return null;
   }
 
   syncFromSelection() {
-    const selected = this.getVisibleInputs().find((input) => input.checked);
+    const selected = this.getSelectedInput();
 
     if (!this.sellingPlanInput) return;
 
+    this.updateLegendVisibility();
+    this.updatePrice(this.getFullVariantPrice());
+
     if (!selected || selected.dataset.purchaseOption === 'one_time') {
       this.sellingPlanInput.value = '';
-      this.updatePrice(
-        selected?.closest('label')?.querySelector('[data-one-time-price]')
-          ?.textContent,
-      );
       this.updateCallToActions(selected);
       return;
     }
 
     this.sellingPlanInput.value = selected.dataset.sellingPlanId ?? '';
-    this.updatePrice(selected.dataset.displayPrice);
     this.updateCallToActions(selected);
   }
 

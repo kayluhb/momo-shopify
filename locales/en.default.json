@@ -40,10 +40,18 @@
       "purchase_options": "Purchase options",
       "one_time_purchase": "Buy now",
       "deposit_today": "{{ amount }} due today",
+      "preorder_deposit_today": "{{ amount }} deposit due today",
+      "price_at_checkout": "{{ amount }}",
       "balance_on_ship": "Remaining {{ amount }} charged when your order ships",
       "add_to_cart_deposit": "Pay {{ deposit }} deposit",
-      "checkout_deposit": "Pay {{ deposit }} deposit & checkout",
-      "disclosure": "This is a pre-order. You pay {{ deposit }} today and {{ balance }} when your order ships. By continuing, you authorize us to charge your payment method for both amounts."
+      "checkout_deposit": "Pay {{ deposit }} deposit and checkout",
+      "add_to_cart_subscription": "Add to cart — {{ price }}, {{ cadence }}",
+      "checkout_subscription": "Checkout — {{ price }}, {{ cadence }}",
+      "cancellation_policy": "cancellation policy",
+      "disclosure_before_policy": "This item is a deferred purchase. By continuing, I agree to the ",
+      "disclosure_after_policy": " and authorize you to charge my payment method at the prices, frequency and dates listed on this page until my order is fulfilled or I cancel, if permitted.",
+      "subscription_disclosure_before_policy": "This is a subscription. By continuing, I agree to the ",
+      "subscription_disclosure_after_policy": " and authorize you to charge my payment method at the prices and frequency listed on this page until I cancel, if permitted."
     },
     "back_in_stock": {
       "open": "Notify me when available",

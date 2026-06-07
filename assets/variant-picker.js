@@ -28,12 +28,15 @@ class VariantPickerComponent extends Component {
   /** @param {Event} event */
   #onVariantChange = async (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLSelectElement) && !(target instanceof HTMLInputElement)) return;
 
-    const variantId =
-      target instanceof HTMLSelectElement
-        ? target.options[target.selectedIndex]?.value
-        : target.value;
+    let variantId = null;
+    if (target instanceof HTMLSelectElement && target.name === 'id') {
+      variantId = target.options[target.selectedIndex]?.value ?? null;
+    } else if (target instanceof HTMLInputElement && target.name === 'id') {
+      variantId = target.value;
+    } else {
+      return;
+    }
 
     if (!variantId) return;
 

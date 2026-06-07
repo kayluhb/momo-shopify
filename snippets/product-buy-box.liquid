@@ -65,7 +65,7 @@
                   disabled
                 {% endunless %}
               >
-                {{ variant.title }} - {{ variant.price | money }}
+                {{ variant.title }}
               </option>
             {% endfor %}
           </select>
@@ -99,7 +99,30 @@
             class="product-buy__preorder-disclosure"
             data-preorder-disclosure
             hidden
-          ></p>
+          >
+            <span data-disclosure-content="preorder" hidden>
+              {{- 'products.preorder.disclosure_before_policy' | t -}}
+              {%- if shop.subscription_policy -%}
+                <a href="{{ shop.subscription_policy.url }}">
+                  {{- 'products.preorder.cancellation_policy' | t -}}
+                </a>
+              {%- else -%}
+                {{- 'products.preorder.cancellation_policy' | t -}}
+              {%- endif -%}
+              {{- 'products.preorder.disclosure_after_policy' | t -}}
+            </span>
+            <span data-disclosure-content="subscription" hidden>
+              {{- 'products.preorder.subscription_disclosure_before_policy' | t -}}
+              {%- if shop.subscription_policy -%}
+                <a href="{{ shop.subscription_policy.url }}">
+                  {{- 'products.preorder.cancellation_policy' | t -}}
+                </a>
+              {%- else -%}
+                {{- 'products.preorder.cancellation_policy' | t -}}
+              {%- endif -%}
+              {{- 'products.preorder.subscription_disclosure_after_policy' | t -}}
+            </span>
+          </p>
         {% endif %}
       {% endform %}
     {% else %}
@@ -299,10 +322,21 @@
 
   .product-buy__preorder-disclosure {
     margin: 0;
-    max-width: 20rem;
+    width: 100%;
     font-size: 0.8125rem;
     line-height: 1.5;
     color: color-mix(in srgb, currentColor 82%, transparent);
+  }
+
+  .product-buy__preorder-disclosure a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .product-buy #shopify-buyer-consent,
+  .product-buy shopify-payment-terms {
+    display: none !important;
   }
 
   @media (max-width: 749px) {

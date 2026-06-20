@@ -42,7 +42,7 @@
       "deposit_today": "{{ amount }} due today",
       "preorder_deposit_today": "{{ amount }} deposit due today",
       "price_at_checkout": "{{ amount }}",
-      "balance_on_ship": "Remaining {{ amount }} charged when your order ships",
+      "balance_in_production": "Remaining {{ amount }} charged when your order goes into production",
       "add_to_cart_deposit": "Pay {{ deposit }} deposit",
       "checkout_deposit": "Pay {{ deposit }} deposit and checkout",
       "add_to_cart_subscription": "Add to cart — {{ price }}, {{ cadence }}",

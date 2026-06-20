@@ -49,7 +49,6 @@
       ],
       "settings": {
         "color_scheme": "earth",
-        "font_scheme": "display",
         "autoplay": true,
         "autoplay_interval": 5,
         "show_dots": true
@@ -59,7 +58,6 @@
       "type": "featured-collection",
       "settings": {
         "color_scheme": "steel",
-        "font_scheme": "editorial",
         "eyebrow": "Eyebrow",
         "heading": "New Arrivals",
         "subheading": "<p>Discover pieces crafted with intention and designed to endure.</p>",
@@ -128,7 +126,6 @@
       ],
       "settings": {
         "color_scheme": "earth",
-        "font_scheme": "display",
         "min_height": 520,
         "eyebrow": "",
         "heading": "",
@@ -140,7 +137,6 @@
       "type": "promo-banner",
       "settings": {
         "color_scheme": "heart",
-        "font_scheme": "soft",
         "use_gradient": false,
         "overlay_opacity": 0,
         "heading": "Free shipping on orders over $100",
@@ -187,7 +183,6 @@
       ],
       "settings": {
         "color_scheme": "canvas",
-        "font_scheme": "soft",
         "columns": 3,
         "card_aspect_ratio": "4 / 5",
         "overlay_opacity": 55
@@ -197,7 +192,6 @@
       "type": "image-with-text",
       "settings": {
         "color_scheme": "canvas",
-        "font_scheme": "editorial",
         "image_position": "left",
         "image": "shopify://shop_images/coffee-beans-from-above.jpg",
         "eyebrow": "Eyebrow",
@@ -247,7 +241,6 @@
       ],
       "settings": {
         "color_scheme": "steel",
-        "font_scheme": "editorial",
         "eyebrow": "Eyebrow",
         "heading": "About Momo",
         "subheading": "<p>subheading</p>",
@@ -294,7 +287,6 @@
       ],
       "settings": {
         "color_scheme": "canvas",
-        "font_scheme": "display",
         "eyebrow": "",
         "heading": "What customers say",
         "subheading": "",
@@ -352,7 +344,6 @@
       "disabled": true,
       "settings": {
         "color_scheme": "canvas",
-        "font_scheme": "display",
         "grayscale": true,
         "eyebrow": "",
         "heading": "As seen in",
@@ -417,7 +408,6 @@
       ],
       "settings": {
         "color_scheme": "canvas",
-        "font_scheme": "editorial",
         "heading": "Have a question ? We are here to help.",
         "subheading": "<p>Check out the most common questions our customers asked. Still have questions ? Contact our customer support.</p>",
         "show_online_status": true,
@@ -431,7 +421,6 @@
       "type": "rich-text",
       "settings": {
         "color_scheme": "steel",
-        "font_scheme": "editorial",
         "use_gradient": false,
         "text_alignment": "center",
         "eyebrow": "Eyebrow",

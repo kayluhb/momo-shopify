@@ -1,11 +1,13 @@
 {
-  "$comment": "Reference fragment for section font_scheme settings. Copy into section schema settings arrays; Shopify does not load this file automatically.",
+  "$comment": "Reference fragment for theme-level font_scheme in config/settings_schema.json.",
   "type": "select",
   "id": "font_scheme",
-  "label": "t:sections.shared.font_scheme_label",
+  "label": "t:labels.font_scheme",
   "default": "display",
+  "info": "t:labels.font_scheme_info",
   "options": [
     { "value": "display", "label": "t:options.font_scheme.display" },
+    { "value": "body", "label": "t:options.font_scheme.body" },
     { "value": "editorial", "label": "t:options.font_scheme.editorial" },
     { "value": "soft", "label": "t:options.font_scheme.soft" },
     { "value": "bold", "label": "t:options.font_scheme.bold" },

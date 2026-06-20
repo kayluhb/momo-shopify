@@ -64,17 +64,6 @@ class ProductPurchaseOptions {
       if (target.name !== `purchase_option_${this.sectionId}`) return;
       this.syncFromSelection();
     });
-
-    document.querySelector('variant-picker')?.addEventListener(
-      ThemeEvents.variantUpdate,
-      () => {
-        this.variantSelect = document.querySelector(
-          `#product-variant-${this.sectionId}`,
-        );
-        this.syncVariantGroups();
-        this.syncFromSelection();
-      },
-    );
   }
 
   syncVariantGroups() {
@@ -269,6 +258,14 @@ class ProductPurchaseOptions {
   }
 }
 
+function resetProductPurchaseOptions() {
+  document.querySelectorAll('[data-product-purchase-options]').forEach((root) => {
+    if (root instanceof HTMLElement) {
+      delete root.dataset.purchaseOptionsInit;
+    }
+  });
+}
+
 function initProductPurchaseOptions() {
   document.querySelectorAll('[data-product-purchase-options]').forEach((root) => {
     if (!(root instanceof HTMLElement)) return;
@@ -278,12 +275,30 @@ function initProductPurchaseOptions() {
   });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initProductPurchaseOptions);
-} else {
+function reinitProductPurchaseOptions() {
+  resetProductPurchaseOptions();
   initProductPurchaseOptions();
 }
 
-document.addEventListener('shopify:section:load', initProductPurchaseOptions);
+let variantUpdateListenerBound = false;
+
+function ensureVariantUpdateListener() {
+  if (variantUpdateListenerBound) return;
+  variantUpdateListenerBound = true;
+
+  document.addEventListener(ThemeEvents.variantUpdate, reinitProductPurchaseOptions);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initProductPurchaseOptions();
+    ensureVariantUpdateListener();
+  });
+} else {
+  initProductPurchaseOptions();
+  ensureVariantUpdateListener();
+}
+
+document.addEventListener('shopify:section:load', reinitProductPurchaseOptions);
 
 export {};

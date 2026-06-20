@@ -179,13 +179,16 @@
     <input
       type="hidden"
       name="selling_plan"
-      value=""
       data-selling-plan-input
       {% if product.requires_selling_plan %}
         {% assign first_allocation = selected_variant.selling_plan_allocations | first %}
         {% if first_allocation %}
           value="{{ first_allocation.selling_plan.id }}"
+        {% else %}
+          value=""
         {% endif %}
+      {% else %}
+        value=""
       {% endif %}
     >
 

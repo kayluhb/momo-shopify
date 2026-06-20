@@ -843,7 +843,10 @@ function bindVoteDelegation() {
     });
 
     try {
-      const response = await fetch(context.voteApiUrl, {
+      const voteUrl = new URL(context.voteApiUrl);
+      voteUrl.searchParams.set('shop', context.shop);
+
+      const response = await fetch(voteUrl.toString(), {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

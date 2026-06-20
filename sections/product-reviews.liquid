@@ -12,15 +12,12 @@
   capture section_bg
     render 'section-color-scheme', scheme: section.settings.color_scheme
   endcapture
-  capture section_font
-    render 'section-font-scheme', scheme: section.settings.font_scheme
-  endcapture
 %}
 
 {% if review_count > 0 %}
 <section
   id="product-reviews"
-  class="product-reviews full-width section-padding {{ section_bg }} {{ section_font }}"
+  class="product-reviews full-width section-padding {{ section_bg }}"
   data-product-reviews-root
   data-shop="{{ shop.permanent_domain }}"
   {% if shop.metafields.custom.momo_app_url.value != blank %}
@@ -800,19 +797,6 @@
       ]
     },
     {
-      "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
-      ]
-    },
-    {
       "type": "header",
       "content": "t:sections.shared.content_header"
     },
@@ -836,7 +820,6 @@
         "eyebrow": "Reviews",
         "heading": "Customer reviews",
         "color_scheme": "canvas",
-        "font_scheme": "display"
       }
     }
   ]

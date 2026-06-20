@@ -28,11 +28,10 @@
   endif
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
-{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="about-momo full-width section-padding {{ section_bg }} {{ section_font }}{% if has_image %} about-momo--has-image{% endif %} about-momo--image-{{ image_position }}"
+  class="about-momo full-width section-padding {{ section_bg }}{% if has_image %} about-momo--has-image{% endif %} about-momo--image-{{ image_position }}"
   {{ section.shopify_attributes }}
 >
   <div class="section-inner about-momo__frame">
@@ -159,7 +158,7 @@
   }
 
   .about-momo__headline {
-    margin: 0;
+    margin: 0 0 var(--about-headline-margin-bottom, 0);
     max-width: 11ch;
     font-size: var(--about-momo-headline-size, clamp(2.5rem, 7.5vw, 4.25rem));
     font-weight: var(--font-heading-weight, var(--font-weight-bold, 700));
@@ -309,19 +308,6 @@
       ]
     },
     {
-      "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
-      ]
-    },
-    {
       "type": "header",
       "content": "t:sections.shared.content_header"
     },
@@ -395,7 +381,6 @@
         "text": "<p>Momo is our founder's grandmother — the woman whose table brought everyone together. Her spirit of warmth, fellowship, and legacy is woven into everything we make.</p><p>We bridge the vibrant heritage of modern Mexico with the clean, functional silhouettes of mid-century design — crafting the backdrop for the moments you share around your hearth.</p>",
         "image_position": "left",
         "color_scheme": "steel",
-        "font_scheme": "display"
       }
     }
   ]

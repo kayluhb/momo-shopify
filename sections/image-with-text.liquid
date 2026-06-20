@@ -2,11 +2,10 @@
   assign image_position = section.settings.image_position
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
-{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="image-with-text full-width section-padding {{ section_bg }} {{ section_font }}"
+  class="image-with-text full-width section-padding {{ section_bg }}"
 >
   <div class="section-inner image-with-text__inner image-with-text__inner--image-{{ image_position }}">
     <div class="image-with-text__media">
@@ -125,19 +124,6 @@
     },
     {
       "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
-      ]
-    },
-    {
-      "type": "select",
       "id": "image_position",
       "label": "t:sections.image_with_text.image_position_label",
       "default": "left",
@@ -202,7 +188,6 @@
         "button_label": "Our story",
         "image_position": "left",
         "color_scheme": "white",
-        "font_scheme": "editorial"
       }
     }
   ]

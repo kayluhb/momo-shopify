@@ -1,9 +1,8 @@
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
-{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="faq full-width section-padding {{ section_bg }} {{ section_font }}"
+  class="faq full-width section-padding {{ section_bg }}"
 >
   <div class="section-inner faq__inner">
     <div class="faq__card">
@@ -353,19 +352,6 @@
       ]
     },
     {
-      "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
-      ]
-    },
-    {
       "type": "header",
       "content": "t:sections.shared.content_header"
     },
@@ -468,7 +454,6 @@
         "support_response_time": "Average answer time: 24h",
         "show_online_status": true,
         "color_scheme": "white",
-        "font_scheme": "editorial"
       },
       "blocks": [
         {

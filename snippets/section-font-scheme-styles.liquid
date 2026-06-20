@@ -35,6 +35,28 @@
     --collection-hero-heading-size: clamp(2.5rem, 5vw, 3.5rem);
   }
 
+  .font-scheme-body {
+    --font-display--family: "degular-thin", "degular", sans-serif;
+    --font-body--family: "degular-thin", "degular", sans-serif;
+    --font-brand--family: var(--font-body--family);
+    --font-display--weight: 400;
+    --font-display--weight-bold: 700;
+    --font-body--weight: 400;
+    --font-body--weight-bold: 700;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+    --font-heading-weight: 400;
+    --font-heading-font-style: normal;
+    --font-heading-text-transform: none;
+    --font-heading-letter-spacing: 0.02em;
+    --font-heading-line-height: 1.25;
+    --type-eyebrow-letter-spacing: 0.1em;
+    --font-body-size: 1rem;
+    --font-body-line-height: 1.6;
+    --font-body-letter-spacing: 0.015em;
+    --section-heading-title-size: clamp(1.75rem, 3.5vw, 2.375rem);
+  }
+
   .font-scheme-editorial {
     --font-display--family: "degular-thin", "degular", sans-serif;
     --font-body--family: "degular-thin", "degular", sans-serif;
@@ -124,7 +146,7 @@
     --font-body-letter-spacing: 0.015em;
   }
 
-  :where(.font-scheme-display, .font-scheme-editorial, .font-scheme-soft, .font-scheme-bold, .font-scheme-uniform) {
+  :where(.font-scheme-display, .font-scheme-body, .font-scheme-editorial, .font-scheme-soft, .font-scheme-bold, .font-scheme-uniform) {
     font-family: var(--font-body--family, var(--font-display--family));
     font-weight: var(--font-body--weight, 400);
     line-height: var(--font-body-line-height, 1.6);

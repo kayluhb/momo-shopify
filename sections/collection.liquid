@@ -3,9 +3,8 @@
   assign columns = section.settings.columns
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
-{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
-<div class="collection-page full-width {{ section_bg }} {{ section_font }}" {{ section.shopify_attributes }}>
+<div class="collection-page full-width {{ section_bg }}" {{ section.shopify_attributes }}>
   <div class="section-inner">
   <facets-form-component data-section-id="{{ section.id }}" class="collection-page__facets">
     <form ref="facetsForm" class="collection-page__form">
@@ -111,19 +110,6 @@
         { "value": "canvas", "label": "t:options.color_scheme.canvas" },
         { "value": "earth", "label": "t:options.color_scheme.earth" },
         { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
       ]
     },
     {

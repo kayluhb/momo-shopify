@@ -81,6 +81,26 @@
     ]
   },
   {
+    "name": "t:general.typography",
+    "settings": [
+      {
+        "type": "select",
+        "id": "font_scheme",
+        "label": "t:labels.font_scheme",
+        "default": "display",
+        "info": "t:labels.font_scheme_info",
+        "options": [
+          { "value": "display", "label": "t:options.font_scheme.display" },
+          { "value": "body", "label": "t:options.font_scheme.body" },
+          { "value": "editorial", "label": "t:options.font_scheme.editorial" },
+          { "value": "soft", "label": "t:options.font_scheme.soft" },
+          { "value": "bold", "label": "t:options.font_scheme.bold" },
+          { "value": "uniform", "label": "t:options.font_scheme.uniform" }
+        ]
+      }
+    ]
+  },
+  {
     "name": "t:general.cart",
     "settings": [
       {

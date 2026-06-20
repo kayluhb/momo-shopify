@@ -3,11 +3,10 @@
   assign logo_height = section.settings.logo_height
 %}
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
-{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="logo-list full-width section-padding {{ section_bg }} {{ section_font }}{% if section.settings.grayscale %} logo-list--grayscale{% endif %}"
+  class="logo-list full-width section-padding {{ section_bg }}{% if section.settings.grayscale %} logo-list--grayscale{% endif %}"
   style="--logo-height: {{ logo_height }}px"
 >
   <div class="section-inner">
@@ -130,19 +129,6 @@
       ]
     },
     {
-      "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
-      ]
-    },
-    {
       "type": "checkbox",
       "id": "grayscale",
       "label": "t:sections.logo_list.grayscale_label",
@@ -214,7 +200,6 @@
         "columns": 5,
         "grayscale": true,
         "color_scheme": "white",
-        "font_scheme": "editorial"
       },
       "blocks": [
         { "type": "logo" },

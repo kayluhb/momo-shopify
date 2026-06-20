@@ -5,11 +5,10 @@
 {% endcomment %}
 
 {% capture section_bg %}{% render 'section-color-scheme', scheme: section.settings.color_scheme %}{% endcapture %}
-{% capture section_font %}{% render 'section-font-scheme', scheme: section.settings.font_scheme %}{% endcapture %}
 
 <section
   id="shopify-section-{{ section.id }}"
-  class="page-content full-width section-padding {{ section_bg }} {{ section_font }}"
+  class="page-content full-width section-padding {{ section_bg }}"
 >
   <div class="section-inner page-content__inner">
     {% if section.settings.show_title %}
@@ -31,7 +30,7 @@
   }
 
   .page-content__title {
-    margin: 0 0 clamp(1.25rem, 3vw, 2rem);
+    margin: 0 0 var(--page-heading-margin-bottom, 1.5rem);
     font-size: var(--page-heading-size, clamp(2rem, 5vw, 3rem));
     font-weight: var(--font-heading-weight, var(--font-weight-bold, 700));
     font-style: var(--font-heading-font-style, normal);
@@ -45,7 +44,7 @@
   }
 
   .page-content__body :where(p) {
-    margin: 0 0 1rem;
+    margin: 0 0 var(--body-paragraph-margin-bottom, 1rem);
   }
 
   .page-content__body :where(p:last-child) {
@@ -108,19 +107,6 @@
         { "value": "canvas", "label": "t:options.color_scheme.canvas" },
         { "value": "earth", "label": "t:options.color_scheme.earth" },
         { "value": "steel", "label": "t:options.color_scheme.steel" }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "font_scheme",
-      "label": "t:sections.shared.font_scheme_label",
-      "default": "display",
-      "options": [
-        { "value": "display", "label": "t:options.font_scheme.display" },
-        { "value": "editorial", "label": "t:options.font_scheme.editorial" },
-        { "value": "soft", "label": "t:options.font_scheme.soft" },
-        { "value": "bold", "label": "t:options.font_scheme.bold" },
-        { "value": "uniform", "label": "t:options.font_scheme.uniform" }
       ]
     },
     {
